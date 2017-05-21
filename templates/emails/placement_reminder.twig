@@ -1,0 +1,17 @@
+<html>
+<table width='480' style='font-size: 14px; color: #4a4a4a;'>
+    <tr>
+        <td>
+            <p>Dear {{ first_name }},</p>
+            <p>It's easy to forget, so we wanted to give you a reminder.</p>
+            <p>Please enter your placements for the following shift(s) <a href='http://cartbooking.com/placements'>here</a>:</p>
+            <ul>
+                {% for booking in bookings %}
+                <li> {{ booking.location_name }} - {{ booking.display_date }}, {{ booking.display_time }}</li>
+                {% endfor %}
+            </ul>
+            <p>Thanks for your help with keeping our information up to date.</p>
+        </td>
+    </tr>
+</table>
+</html>

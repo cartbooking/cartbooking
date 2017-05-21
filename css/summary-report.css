@@ -1,0 +1,45 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: Roboto, sans-serif; color: #333; font-size: 14px; line-height: 20px; font-weight: 400; -webkit-font-smoothing: antialiased; padding-bottom: 10px; max-width: 600px; margin-left: auto; margin-right: auto; background-color: #efefef; overflow: auto;
+}
+a {
+    text-decoration: none;
+}
+.name-heading  {
+    width: 45%; height: 40px; padding-top: 5px; padding-left: 5px; font-size: 20px; float: left; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipses;
+}
+.name {
+    width: 45%; height: 30px; padding-top: 5px; padding-left: 5px; background-color: #fafafa; border-bottom: 1px solid #efefef; float: left; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipses; color: black;
+}
+.chart {
+    margin-right: 7px; margin-left: 7px; font-size: 14px; padding-top: 4px; padding-bottom: 3px; text-align: center; border-radius: 4px; border: 1px solid #eb5424; color: #eb5424;
+}
+.month-heading {
+    width: 11%; height: 40px; padding-top: 10px; font-size: 18px; float: left; display: block; text-align: center;
+}
+.month {
+    width: 11%; height: 30px; padding-top: 5px; background-color: #fafafa; border-bottom: 1px solid #efefef; float: left; display: block; text-align: center;
+}
+.top {
+    position: fixed; z-index: 3; width: 100%; height: 40px; background-color: #efefef; max-width: 600px; margin-left: auto; margin-right: auto;
+}
+.month-hidden {
+    width: 11%; height: 40px; padding-top: 10px; font-size: 18px; float: left; display: block; text-align: center; color: #efefef;
+}
+.block {
+    width: 100%; height: 40px; display: block; max-width: 600px;
+}
+.space {
+    width: 100%; height: 30px; padding-top: 5px; padding-left: 2px; font-size: 20px; color: #fff; background-color: #a0a0a0; float: left; display: block; max-width: 600px;
+}
+.hidden {
+    width: 100%; height: 100%; display: none; position: absolute; z-index: 2; padding: 15px;
+}
+.display {
+    width: 100%; height: 100%; position: fixed; z-index: 2; background-color: #fafafa; padding: 15px; max-width: 600px; margin-left: auto; margin-right: auto;
+}
+.graphic {
+    height: 85%; margin-left: auto; margin-right: auto; border: 1px solid #efefef; padding-left: 20%; padding-right: 20%; padding-top: 15px; padding-bottom: 15px; position: relative; text-align: center;
+}

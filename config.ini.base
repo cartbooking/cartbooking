@@ -1,0 +1,34 @@
+[db_section]
+db[name] = ""
+db[username] = ""
+db[host] = ""
+db[password] = ""
+
+[google_api]
+google_api_key = ""
+
+[email]
+email[from_email] = ''
+email[from_name] = ''
+email[reply_to] = ''
+email[reply_to] = ''
+
+[smtp]
+smtp[host] = 'localhost'
+smtp[port] = 1025
+
+[logger]
+logger[stream] = '/tmp/cartbooking.log'
+
+[timezone]
+timezone = 'UTC'
+
+[cache]
+cache = '/tmp/'
+
+[communication]
+communication[from_email] = ''
+communication[from_name] = ''
+
+[twig]
+twig[debug] = true

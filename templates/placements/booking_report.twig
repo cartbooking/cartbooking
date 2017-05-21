@@ -1,0 +1,27 @@
+{% extends "base.twig" %}
+{% block title %}Metropolitan Witnessing{% endblock %}
+{% block content %}
+    <div class="w-section section">
+        <div class="content-mobile-number"><img class="carty" src="/images/happy-13.svg">
+            <div class="login-div" id="container"><img class="leaf" src="/images/leaf-11.svg">
+                <img class="leaf" src="/images/leaf-11.svg">
+                <div class="sign-in-text">Placements</div>
+                <form method="post" action="/placements/" id="submit-placements">
+                    <div class="w-dropdown locations" data-delay="0">
+                        <div class="w-dropdown-toggle dropdown">
+                            <div>{{ display_date }}, {{ location_name }} {{ display_time }}</div>
+                        </div>
+                    </div>
+                    <div class="w-form placement-form-wrapper">
+                        <input class="w-input mobile-text-filled" id="placements" type="num" placeholder="Placements" name="placements" data-name="placements">
+                        <input class="w-input mobile-text-filled" id="videos" type="num" placeholder="Videos shown" name="videos" data-name="videos">
+                        <input class="w-input mobile-text-filled" id="requests" type="num" placeholder="Study requests" name="requests" data-name="requests">
+                        <textarea form="submit-placements" class="w-input comments" id="Comments" placeholder="Comments..." name="comments" data-name="Comments"></textarea>
+                        <input type="hidden" name="booking_id" value="{{ booking_id }}" />
+                        <input class="w-button submit-mobile-number sign-in" type="submit" value="Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

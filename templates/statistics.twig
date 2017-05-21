@@ -1,0 +1,25 @@
+{% extends "base.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class='w-section section'>
+    <div class='content-mobile-number'>
+        <div class='login-div alt'>
+
+            <div class="shift-info-text">
+                {% for month, statistic in statistics %}
+                    <br>{{ month|date('F') }}<br>
+                    <p>
+                        Confirmed shifts: {{ statistic.confirmed_bookings }}<br>
+                        Unconfirmed shifts: {{ statistic.unconfirmed_bookings }}<br>
+                        {#some IF condition here#}
+                        Placements: {{ statistic.placements }}<br>
+                        Video showings: {{ statistic.videos }}<br>
+                        Study requests: {{ statistic.requests }}<br>
+                    </p>
+                    <br>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

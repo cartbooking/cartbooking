@@ -1,0 +1,287 @@
+{% extends "base.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block js %}<script src="/js/booking.js"></script> {% endblock %}
+{% block content %}
+    <div class="w-nav nav-global" data-collapse="all" data-animation="default" data-duration="400" data-contain="1">
+        <div class="w-container">
+            <nav class="w-nav-menu menu-background" role="navigation">
+                <a class="w-nav-link nav-link" href="/placements">Record placements</a>
+                <a class="w-nav-link nav-link" href="/map">Maps</a>
+                <a class="w-nav-link nav-link" href="/statistics">Statistics</a>
+                <a class="w-nav-link nav-link" href="/experiences">Experiences</a>
+                <a class="w-nav-link nav-link" href="/logout.php">Sign out</a>
+            </nav>
+            <div class="w-nav-button menu-bt">
+                <div class="w-icon-nav-menu"></div>
+            </div>
+            {% if month == "now"|date('F') %}
+                <img class="arrow-back" width="20" src="/images/arrow-right-02.svg">
+                <a class="arrow-month" href="/index.php?m={{ new_month }}">{{ month }}</a>
+            {% else %}
+                <a class="arrow-month" href="/index.php?m={{ new_month }}">{{ month }}</a>
+                <img class="arrow-back" width="20" src="/images/arrow-left-02.svg">
+            {% endif %}
+        </div>
+
+        <div class="mobile-section non">
+            <div class="w-clearfix content-cal dt">
+                <div class="calendar-date">
+                    <div class="wekk-day-dt">S</div>
+                </div>
+                <div class="calendar-date">
+                    <div class="wekk-day-dt">M</div>
+                </div>
+                <div class="calendar-date">
+                    <div class="wekk-day-dt">T</div>
+                </div>
+                <div class="calendar-date">
+                    <div class="wekk-day-dt">W</div>
+                </div>
+                <div class="calendar-date">
+                    <div class="wekk-day-dt">T</div>
+                </div>
+                <div class="calendar-date">
+                    <div class="wekk-day-dt">F</div>
+                </div>
+                <div class="calendar-date">
+                    <div class="wekk-day-dt">S</div>
+                </div>
+            </div>
+        </div>
+        <div class="w-clearfix content-cal dt">
+            {% set counter = 1 %}
+            {% for day in 1..first_day_of_month %}
+                <div class="calendar-date"></div>
+                {% set counter = counter + 1 %}
+            {% endfor %}
+            {% for day in 1..days %}
+            <div class="calendar-date">
+                <a id="{{ day }}" href="/booking/?select_date={{ year }}{{ month|date('m') }}{{ day }}" class="
+                date-dt
+                {% if day == select_day|date('d') %}
+                date-selected
+                {% endif %}
+                {% if day == "now"|date('d') %}
+                current-date
+                {% endif %}
+                " data-ix="pull-menu">
+                    {{ day  }}
+                </a>
+                {% if shifts[day]['has_booking'] == true %}
+                    {% if day < "now"|date('d') %}
+                        {% if shifts[day]['is_recorded'] == true %}
+                            <div class="myshift placements-recorded"></div>
+                        {% else %}
+                            <div class="myshift placements-reminder"></div>
+                        {% endif %}
+                    {% else %}
+                        <div class="myshift"></div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            {% if counter % 7 == 0 %}
+        </div>
+        <div class="w-clearfix content-cal dt">
+            {% endif %}
+            {% set counter = counter + 1 %}
+            {% endfor %}
+        </div>
+        {#END CALENDAR#}
+        <div class="w-section content-section no-par" id="content">
+            <!--    CARDS  -->
+            <div class="w-container" id="cards-data">
+                <h1 class="date-show"><span class="date-color">{{ select_date|date('j') }}</span> {{ select_date|date('F') }}</h1>
+                <div class="div-movile-cards-container">
+                {% for location in locations %}
+                    <div class="acc-sectionwrapper" id="{{ location.id }}">
+                        <div class="acc-header">
+                            <div class="locatin-heading"><div>{{ location.name }}</div></div>
+                            {% for shift in location.shifts %}
+                            <div class="div-time">
+
+                                <a class="w-clearfix w-inline-block user-link" data-ix="accordion" onclick="accordion(20{{ shift.id }}); changeImage(30{{ shift.id }})">
+                                    <div class="tim-div">
+                                        <div class="time-of-day">{{ shift.start_time|date('g:ia') }}</div>
+                                    </div>
+                                    <div class="user-div">
+                                        {% if shift.booking.overseer.id > 0 %}
+                                            {% if shift.booking.overseer.id == user_id %}
+                                                <div class="my-shift-dot"></div>
+                                            {% endif %}
+                                            <img class="male" width="32" src="/images/male-02.svg">
+                                        {% else %}
+                                            <img class="empty" width="32" src="/images/empty-02.svg">
+                                        {% endif %}
+                                    </div>
+                                    <div class="user-div">
+                                        {% if shift.booking.pioneer.id > 0 %}
+                                            {% if shift.booking.pioneer.id == user_id %}
+                                                <div class="my-shift-dot"></div>
+                                            {% endif %}
+                                            {% if shift.booking.pioneer.gender == 'm' %}
+                                                <img class="male" width="32" src="/images/male-02.svg">
+                                            {% else %}
+                                                <img class="female" width="32" src="/images/female-02.svg">
+                                            {% endif %}
+                                        {% else %}
+                                            <img class="empty" width="32" src="/images/empty-02.svg">
+                                        {% endif %}
+                                    </div>
+                                    <div class="user-div">
+                                        {% if shift.booking.pioneer_b.id > 0 %}
+                                            {% if shift.booking.pioneer_b.id == user_id %}
+                                                <div class="my-shift-dot"></div>
+                                            {% endif %}
+                                            {% if shift.booking.pioneer_b.gender == 'm' %}
+                                                <img class="male" width="32" src="/images/male-02.svg">
+                                            {% else %}
+                                                <img class="female" width="32" src="/images/female-02.svg">
+                                            {% endif %}
+                                        {% else %}
+                                            <img class="empty" width="32" src="/images/empty-02.svg">
+                                        {% endif %}
+                                    </div>
+                                    <div class="user-div">
+                                        {% if shift.booking.confirmed == true %}
+                                            <img id="30{{ shift.id }}" width="32" alt="confirmed" src="/images/confirmed-02.svg">
+                                        {% else %}
+                                            <img id="30{{ shift.id }}" width="32" alt="unconfirmed" src="/images/unconfirmed-02.svg">
+                                        {% endif %}
+                                    </div>
+                                </a>
+                                <div id="20{{ shift.id }}" class="w-form form-confirm">
+                                    <div class="heightWrapper" id = "heightWrapper20{{ shift.id }}">
+                                        <form class="form" method="post" action="/assets/booking_result.php" id="form{{ shift.id }}" name="{{ shift.id }}">
+
+
+                                            {% if shift.booking.overseer.id > 0 %}
+                                            <div class="user-details">
+                                                <div class="user-name">{{ shift.booking.overseer.name }}</div>
+                                                <div class="mobile">
+                                                    <a href="tel:{{ shift.booking.overseer.phone }}">{{ shift.booking.overseer.phone }}</a>
+                                                </div>
+                                                {% if select_day > cancel_time or shift.booking.overseer.is_admin == true %}
+                                                    <input type="hidden" name="shift" value="{{ shift.id }}" />
+                                                    <input type="hidden" name="date" value="{{ select_day|date('Y-m-d') }}" />
+                                                    <button class="w-inline-block delete-shift" type="submit" name="delete_overseer" value="delete_overseer">
+                                                        <div>Delete</div>
+                                                    </button>
+                                                {% endif %}
+                                                {% if select_day > cancel_time %}
+                                                <a href="tel:{{ admin.phone }}">
+                                                    <div class="w-inline-block delete-shift">
+                                                        Call to change
+                                                    </div>
+                                                </a>
+                                                {% endif %}
+                                                {% if true or false %}
+                                                    <a href="mailto:canadabay@cartbooking.com?cc=example@example.com&subject=Shift%20Change%20Needed&body=%0A%0A%2A%2A%2A%2AType%20your%20message%20above%20this%20line%2A%2A%2A%2A%0AShift%20ID:%20{{ shift.id }}%0ADate:%20{{ select_day|date('Y-m-d') }}%0AUser%20ID:%20{{ user_id }}">
+                                                        <div class="w-inline-block delete-shift">
+                                                            Email to change
+                                                        </div>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                            {% endif %}
+
+
+
+                                            {% if shift.booking.pioneer.id > 0 %}
+                                                <div class="user-details">
+                                                    <div class="user-name">{{ shift.booking.pioneer.name }}</div>
+                                                    <div class="mobile"><a href="tel:{{ shift.booking.pioneer.phone }}">{{ shift.booking.pioneer.phone }}</a></div>
+                                                    {% if select_day > cancel_time  %}
+                                                    <input type="hidden" name="shift" value="{{ shift.id }}" />
+                                                    <input type="hidden" name="date" value="{{ select_day|date('Y-m-d') }}" />
+                                                    <button class="w-inline-block delete-shift" type="submit" name="delete_pioneer" value="delete_pioneer">
+                                                        <div>Delete</div>
+                                                    </button>
+                                                    {% endif %}
+                                                    {% if select_day > cancel_time  %}
+                                                    <a href="tel:{{ admin_phone }}">
+                                                        <div class="w-inline-block delete-shift">
+                                                            Call to change
+                                                        </div>
+                                                    </a>
+                                                    {% endif %}
+                                                    {% if select_day > cancel_time  %}
+                                                    <a href="mailto:canadabay@cartbooking.com?cc=sydmwp@gmail.com&subject=Shift%20Change%20Needed&body=%0A%0A%2A%2A%2A%2AType%20your%20message%20above%20this%20line%2A%2A%2A%2A%0AShift%20ID:%20{{ shift.id }}%0ADate:%20{{ select_day|date('Y-m-d') }}%0AUser%20ID:%20{{ user_id }}">
+                                                        <div class="w-inline-block delete-shift">
+                                                            Email to change
+                                                        </div>
+                                                    </a>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+
+
+
+                                            {% if shift.booking.pioneer_b.id > 0 %}
+                                                <div class="user-details">
+                                                    <div class="user-name">{{ shift.booking.pioneer_b.name }}</div>
+                                                    <div class="mobile"><a href="tel:{{ shift.booking.pioneer_b.phone }}">{{ shift.booking.pioneer_b.phone }}</a></div>
+                                                    {% if select_day > cancel_time  %}
+                                                    <input type="hidden" name="shift" value="{{ shift.id }}" />
+                                                    <input type="hidden" name="date" value="{{ select_day|date('Y-m-d') }}" />
+                                                    <button class="w-inline-block delete-shift" type="submit" name="delete_pioneer_b" value="delete_pioneer_b">
+                                                        <div>Delete</div>
+                                                    </button>
+                                                    {% endif %}
+                                                    {% if select_day > cancel_time  %}
+                                                    <a href="tel:{{ admin_phone }}">
+                                                        <div class="w-inline-block delete-shift">
+                                                            Call to change
+                                                        </div>
+                                                    </a>
+                                                    {% endif %}
+                                                    {% if select_day > cancel_time  %}
+                                                    <a href="mailto:canadabay@cartbooking.com?cc=sydmwp@gmail.com&subject=Shift%20Change%20Needed&body=%0A%0A%2A%2A%2A%2AType%20your%20message%20above%20this%20line%2A%2A%2A%2A%0AShift%20ID:%20{{ shift.id }}%0ADate:%20{{ select_day|date('Y-m-d') }}%0AUser%20ID:%20{{ user_id }}">
+                                                        <div class="w-inline-block delete-shift">
+                                                            Email to change
+                                                        </div>
+                                                    </a>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+
+
+
+                                            {% if select_day >= date() %}
+                                                <div class="text-field-div">
+                                                    <div class="label">Add another person?</div>
+                                                    <input class="w-input mobile-text-filled" type="tel" placeholder="Enter mobile number" name="'.$spots.'_volunteer">
+                                                </div>
+
+                                                {% if true or admin %}
+                                                    <div class="text-field-div">
+                                                        <div class="label">Add another person?</div>
+                                                        <input class="w-input mobile-text-filled" type="tel" placeholder="Enter mobile number" name="'.$spots.'_volunteer">
+                                                    </div>
+                                                    <input type="hidden" name="shift" value="{{ shift.id }}" />
+                                                    <input type="hidden" name="date" value="{{ select_day|date('Y-m-d') }}" />
+                                                    <button class="w-button submit-mobile-number proceed" type="submit" name="add" value="add">Add</button>
+                                                {% endif %}
+
+                                                <input type="hidden" name="shift" value="'.$shift_id.'" />
+                                                <input type="hidden" name="date" value="'.$date.'" />
+                                                <input type="hidden" name="user" value="'.$user.'" />
+                                                <button class="w-button submit-mobile-number proceed" type="submit" name="add" value="volunteer">Volunteer</button>
+
+                                            {% elseif shift.booking.confirmed == true and shift.booking.recorded == false %}
+                                                <a href="/placements" class="w-button submit-mobile-number report" type="submit">Record Placements</a>
+                                            {% endif %}
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="{{ shift.id }}" class="w-form form-confirm"></div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+            <!--    END CARDS -->
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,165 @@
+<?php
+
+namespace CartBooking\Location;
+
+class Location
+{
+    /**
+     * @var int
+     */
+    private $id;
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var int
+     */
+    private $volunteers;
+
+    /**
+     * @var string
+     */
+    private $centre;
+
+    /**
+     * @var string
+     */
+    private $path;
+
+    /**
+     * @var string
+     */
+    private $markers;
+
+    /**
+     * @var string
+     */
+    private $description;
+
+    /**
+     * @var int
+     */
+    private $zoom;
+
+    public function __construct(int $id, string $name)
+    {
+        $this->id = $id;
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVolunteers(): int
+    {
+        return $this->volunteers;
+    }
+
+    /**
+     * @param int $volunteers
+     */
+    public function setVolunteers(int $volunteers)
+    {
+        $this->volunteers = $volunteers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCentre(): string
+    {
+        return $this->centre;
+    }
+
+    /**
+     * @param string $centre
+     */
+    public function setCentre(string $centre)
+    {
+        $this->centre = $centre;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param string $path
+     */
+    public function setPath(string $path)
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMarkers(): string
+    {
+        return $this->markers;
+    }
+
+    /**
+     * @param string $markers
+     */
+    public function setMarkers(string $markers)
+    {
+        $this->markers = $markers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription(string $description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return int
+     */
+    public function getZoom(): int
+    {
+        return $this->zoom;
+    }
+
+    /**
+     * @param int $zoom
+     */
+    public function setZoom(int $zoom)
+    {
+        $this->zoom = $zoom;
+    }
+
+
+}

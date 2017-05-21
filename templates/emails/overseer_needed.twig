@@ -1,0 +1,21 @@
+<html>
+<table width="480" style="font-size: 14px; color: #4a4a4a;">
+    <tr>
+        <td>
+            <p>Dear {{ first_name }},</p>
+            <p>There are some shifts over the next two weeks that require a brother to serve as overseer.</p>
+            <p>Please take some time to consider whether you can help with any of the following:</p>
+            <ul>
+                {% for data in context %}
+                <li>{{ data.display_date }} - {{ data.location_name }}, {{ data.display_time }}</li>
+                {% endfor %}
+            </ul>
+            <p>
+                Priority should be given to shifts with two sisters and no brother. Bookings can be entered at
+                <a href="http://cartbooking.com">cartbooking.com</a>.
+            </p>
+            <p>Thank you for your willing spirit!</p>
+        </td>
+    </tr>
+</table>
+</html>

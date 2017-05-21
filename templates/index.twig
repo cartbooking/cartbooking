@@ -1,0 +1,23 @@
+{% extends "base.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="w-nav nav-global" data-collapse="all" data-animation="default" data-duration="400" data-contain="1">
+    <div class="w-container">
+        <nav class="w-nav-menu menu-background" role="navigation">
+            <a class="w-nav-link nav-link" href="/placements">Record placements</a>
+            <a target="_blank" class="w-nav-link nav-link" href="/map">Maps</a>
+            <a class="w-nav-link nav-link" href="/logout.php">Sign out</a>
+        </nav>
+        <div class="w-nav-button menu-bt">
+            <div class="w-icon-nav-menu"></div>
+        </div>
+        {% if month == date('F') %}
+            <img class="arrow-back" width="20" src="/images/arrow-right-02.svg">
+            <a class="arrow-month" href="/index.php?m={{ new_month }}">{{ month }}</a>
+        {% else %}
+            <a class="arrow-month" href="/index.php?m={{ new_month }}">{{ month }}</a>
+            <img class="arrow-back" width="20" src="/images/arrow-left-02.svg">
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

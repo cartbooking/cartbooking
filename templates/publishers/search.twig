@@ -1,0 +1,33 @@
+{% extends "base.twig" %}
+{% block title %}Publisher Details{% endblock %}
+{% block content %}
+    <div class="w-section section">
+        <div class="content-mobile-number">
+            <img class="carty" src="/images/happy-13.svg">
+            <div class="login-div" id="container">
+                <img class="leaf" src="/images/leaf-11.svg">
+                <div class="sign-in-text">Publishers</div>
+                <form method="post" action="/publishers/">
+                    <div class="textSearch">
+                        <input type="hidden" name="action" value="search">
+                        <input type="text" id="name" placeholder="Enter a name" name="name">
+                        <button class="search" type="submit">
+                            <img src="/images/search.svg">
+                        </button>
+                    </div>
+                </form>
+                <hr><br>
+                {% for publisher in publishers %}
+                    <div class='searchResults'>
+                        <div>{{ publisher.getFirstName }} {{ publisher.getLastName }}</div><div>{{ publisher.getPhone }}</div>
+                    </div>
+                {% else %}
+                    <div class='searchResults'>
+                        No results
+                    </div>
+                {% endfor %}
+                <div class="data" id="results"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

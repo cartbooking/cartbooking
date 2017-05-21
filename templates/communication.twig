@@ -1,0 +1,29 @@
+{% extends "base.twig" %}
+{% block title %}Metropolitan Witnessing{% endblock %}
+{% block content %}
+    <div class="w-section section">
+        <div class="content-mobile-number"><img class="carty" src="/images/happy-13.svg">
+            <div class="login-div"><img class="leaf" src="/images/leaf-11.svg">
+                <div class="sign-in-text"></div>
+                <div class="w-form">
+                    <form method="post" action="/communication/" id="email-reminders" name="email-form" data-name="Email Form">
+                        <input type="hidden" name="action" value="placement_reminder">
+                        <input class="w-button submit-mobile-number sign-in" type="submit" name="login_button" value="EMAIL REMINDERS">
+                    </form>
+                </div>
+                <div class="w-form">
+                    <form method="post" action="/communication/" id="email-volunteers" name="email-form" data-name="Email Form">
+                        <input type="hidden" name="action" value="volunteer_needed">
+                        <input class="w-button submit-mobile-number sign-in" type="submit" name="login_button" value="VOLUNTEERS NEEDED">
+                    </form>
+                </div>
+                <div class="w-form">
+                    <form method="post" action="/communication/" id="email-volunteers" name="email-form" data-name="Email Form">
+                        <input type="hidden" name="action" value="overseer_needed">
+                        <input class="w-button submit-mobile-number sign-in" type="submit" name="login_button" value="OVERSEERS NEEDED">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

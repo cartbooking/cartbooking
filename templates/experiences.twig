@@ -1,0 +1,21 @@
+{% extends "base.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+    <div class='w-section section'>
+        <div class="login-div alt">
+            <div class="shift-info-text">
+                {% if view_data is empty %}No bookings found with unread comments{% endif %}
+                {% for data in view_data %}
+                    <form method="post" action="/experiences/" id="form" name="form" data-name="Form">
+                        <br>
+                        {{ data.date | date('Y-m-d') }} - {{ data.overseer_first_name}} {{ data.overseer_last_name }}<br>
+                        {{ data.booking_comments }}<br><br>
+                        <input type="hidden" name="dismissed" value="{{ data.booking_id }}" />
+                        <input class="w-button" type="submit" name="submit" value="DISMISS">
+                        <br><br>
+                    </form>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

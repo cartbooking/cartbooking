@@ -1,0 +1,78 @@
+{% extends "base.twig" %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="low_participants.twig">
+{% endblock %}
+{% block title %}Publisher Details{% endblock %}
+{% block content %}
+    <div class="w-section section">
+        <div class="content-mobile-number">
+            <img class="carty" src="/images/happy-13.svg">
+            <div class="login-div" id="container">
+                <img class="leaf" src="/images/leaf-11.svg">
+                <div class="sign-in-text">Publishers</div>
+
+                <div class="top" id="top">
+                    <div class="name-heading">
+                        <a href = "#">
+                            <div class="chart" id="button" >
+                                Show Chart
+                            </div>
+                        </a>
+                    </div>
+                    <div class="month-heading" id="one">
+
+                    </div>
+                    <div class="month-heading" id="two">
+
+                    </div>
+                    <div class="month-heading" id="three">
+
+                    </div>
+                    <div class="month-heading" id="four">
+                    </div>
+                    <div class="month-heading" id="five">
+                        TOT
+                    </div>
+                </div>
+                <div class="block">
+                </div>
+                <div class="space">
+                    {{ alpha }}
+                </div>
+                <div class="name">
+                    {{ first_name }} {{ last_name }}
+                </div>
+                <div class="month" style="color: '{{ textcolour }}'">
+                    {{ bookings }}
+                </div>
+                <div class="month" style="background-color: '{{ bgcolour }}'; color: '{{ textcolour }}';">
+                    {{ total }}
+                </div>
+                <div class="hidden" id="hideShow">
+                    <div style="width: 100%; height: 30px; text-align: center; margin-top: 35px; font-size: 18px;">
+                        Participants ({{ participants }})
+                    </div>
+                    <div class="graphic">
+                        <div style="width: 33.33%; float: left; height: 100%; background-color: #eb5424;">
+                            <div style="width: 100%; height: {{ low }}%; background-color: #fafafa; padding-top: 50px;">
+                                Zero<br>{{ red }}
+                            </div>
+                        </div>
+                        <div style="width: 33.33%; float: left; height: 100%; background-color: #ffe80f;">
+                            <div style="width: 100%; height: {{ mid }}%; background-color: #fafafa; padding-top: 50px;">
+                                < 5 <br>{{ yellow }}
+                            </div>
+                        </div>
+                        <div style="width: 33.33%; float: left; height: 100%; background-color: #0bce88;">
+                            <div style="width: 100%; height: {{ high }}%; background-color: #fafafa; padding-top: 50px;">
+                                5+ <br>{{ green }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="clear:both"></div>
+                <div class="data" id="results"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

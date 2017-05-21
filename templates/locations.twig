@@ -1,0 +1,22 @@
+{% extends "base.twig" %}
+
+{% block title %}Location Maps{% endblock %}
+{% block content %}
+    <div class="w-section section">
+        <div class="content-mobile-number"><img class="carty" src="../images/happy-13.svg">
+            <div class="login-div"><img class="leaf" src="../images/leaf-11.svg">
+                {% for location in locations %}
+                <div class="w-form">
+                    {#<form method="get" action="/map">#}
+                        {#<input type="hidden" name="location" value="{{ location.getId }}">#}
+                        {#<input class="w-button submit-mobile-number sign-in" type="submit" value="{{ location.getName }}">#}
+                    {#</form>#}
+                    <a href="/map?location={{ location.getId }}" class="w-button submit-mobile-number sign-in">
+                        {{ location.getName }}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
