@@ -11,7 +11,8 @@
     },
     "autoload": {
         "psr-4": {
-            "CartBooking\\" : "src/"
+            "CartBooking\\" : "src/",
+            "Test\\": "test"
         }
     },
     "require-dev": {

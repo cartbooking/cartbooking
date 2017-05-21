@@ -7,6 +7,7 @@ use CartBooking\Booking\BookingRepository;
 use CartBooking\Publisher\PioneerRepository;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
 
 class PublishersControllerTest extends TestCase
@@ -26,6 +27,6 @@ class PublishersControllerTest extends TestCase
 
     public function testIndexAction()
     {
-        static::assertInstanceOf(Request::class, $this->controller->indexAction());
+        static::assertInstanceOf(Response::class, $this->controller->indexAction());
     }
 }
