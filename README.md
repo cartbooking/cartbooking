@@ -1,3 +1,6 @@
+#status
+[![Build Status](https://travis-ci.org/serroba/cartbooking.svg?branch=master)](https://travis-ci.org/serroba/cartbooking)
+
 # cartbooking
 Booking platform for cart witnessing
 
