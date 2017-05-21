@@ -1,4 +1,14 @@
 {
+    "name": "sebastian.machuca/cartbooking",
+    "description": "Booking system for public ministry",
+    "type": "project",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Sebastian Machuca",
+            "email": "serroba@gmail.com"
+        }
+    ],
     "require": {
         "mailgun/mailgun-php": "^2.1",
         "php-http/curl-client": "^1.7",
