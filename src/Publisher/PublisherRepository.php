@@ -4,18 +4,18 @@ namespace CartBooking\Publisher;
 
 use CartBooking\Lib\Db\Db;
 
-class PioneerRepository
+class PublisherRepository
 {
     /**
      * @var Db
      */
     private $db;
     /**
-     * @var PioneerHydrator
+     * @var PublisherHydrator
      */
     private $pioneerHydrator;
 
-    public function __construct(Db $db, PioneerHydrator $pioneerHydrator)
+    public function __construct(Db $db, PublisherHydrator $pioneerHydrator)
     {
         $this->db = $db;
         $this->pioneerHydrator = $pioneerHydrator;
@@ -23,7 +23,7 @@ class PioneerRepository
 
     /**
      * @param string $gender
-     * @return Pioneer[]|\Generator
+     * @return Publisher[]|\Generator
      */
     public function findByGender(string $gender)
     {
@@ -38,7 +38,7 @@ class PioneerRepository
     }
 
     /**
-     * @return \Generator|Pioneer[]
+     * @return \Generator|Publisher[]
      */
     public function findAll()
     {
@@ -47,13 +47,21 @@ class PioneerRepository
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
+            $query = "SELECT * FROM relationships WHERE publisher_id_1 = ?";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param('i', $row['id']);
+            $stmt->execute();
+            $relativesResult = $stmt->get_result();
+            if($relativesResult->num_rows > 0) {
+                $row['relatives'] = $relativesResult->fetch_all(MYSQLI_ASSOC);
+            }
             yield $this->pioneerHydrator->hydrate($row);
         }
     }
 
     /**
      * @param int $id
-     * @return \CartBooking\Publisher\Pioneer|null
+     * @return \CartBooking\Publisher\Publisher|null
      */
     public function findById(int $id)
     {
@@ -65,12 +73,22 @@ class PioneerRepository
         if ($result->num_rows === 0) {
             return null;
         }
-        return $this->pioneerHydrator->hydrate($result->fetch_array(MYSQLI_ASSOC));
+        $data = $result->fetch_array(MYSQLI_ASSOC);
+        $query = "SELECT * FROM relationships WHERE publisher_id_1 = ?";
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $relativesResult = $stmt->get_result();
+        if($relativesResult->num_rows > 0) {
+            $data['relatives'] = $relativesResult->fetch_all(MYSQLI_ASSOC);
+        }
+
+        return $this->pioneerHydrator->hydrate($data);
     }
 
     /**
      * @param int $phone
-     * @return Pioneer|null
+     * @return Publisher|null
      */
     public function findByPhone(int $phone)
     {
@@ -87,7 +105,7 @@ class PioneerRepository
 
     /**
      * @param $name
-     * @return Pioneer[]
+     * @return Publisher[]
      */
     public function findByName($name)
     {
@@ -104,7 +122,7 @@ class PioneerRepository
     }
 
     /**
-     * @return Pioneer[]|\Generator
+     * @return Publisher[]|\Generator
      */
     public function findActive()
     {

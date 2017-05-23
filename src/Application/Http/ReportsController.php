@@ -3,7 +3,7 @@
 namespace CartBooking\Application\Http;
 
 use CartBooking\Lib\Utilities\FileSystem;
-use CartBooking\Publisher\PioneerRepository;
+use CartBooking\Publisher\PublisherRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
@@ -16,12 +16,12 @@ class ReportsController
     private $response;
     /** @var Twig_Environment */
     private $twig;
-    /** @var PioneerRepository */
+    /** @var PublisherRepository */
     private $pioneerRepository;
     /** @var FileSystem */
     private $fileSystem;
 
-    public function __construct(Request $request, Response $response, Twig_Environment $twig, PioneerRepository $pioneerRepository, FileSystem $fileSystem)
+    public function __construct(Request $request, Response $response, Twig_Environment $twig, PublisherRepository $pioneerRepository, FileSystem $fileSystem)
     {
         $this->request = $request;
         $this->response = $response;

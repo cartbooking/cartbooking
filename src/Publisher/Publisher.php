@@ -2,7 +2,7 @@
 
 namespace CartBooking\Publisher;
 
-class Pioneer
+class Publisher
 {
     /**
      * @var int
@@ -27,6 +27,9 @@ class Pioneer
 
     /** @var  bool */
     private $inactive;
+
+    /** int[] */
+    private $relatives = [];
 
     public function __construct(int $id)
     {
@@ -180,5 +183,26 @@ class Pioneer
     public function setPassword(string $password)
     {
         $this->password = $password;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getRelatives(): array
+    {
+        return $this->relatives;
+    }
+
+    /**
+     * @param int[] $relatives
+     */
+    public function setRelatives(array $relatives)
+    {
+        $this->relatives = $relatives;
+    }
+
+    public function isRelativeTo(Publisher $pioneer): bool
+    {
+        return in_array($pioneer->getId(), $this->relatives, true);
     }
 }

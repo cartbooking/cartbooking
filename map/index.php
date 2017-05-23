@@ -1,6 +1,6 @@
 <?php
-require_once APP_ROOT . '/vendor/autoload.php';
-require_once APP_ROOT . '/app.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../app.php';
 $user = $_COOKIE['login'];
 if (!$user) {
     header('Location:login.php');

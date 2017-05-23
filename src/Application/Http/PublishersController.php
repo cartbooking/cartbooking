@@ -3,7 +3,7 @@
 namespace CartBooking\Application\Http;
 
 use CartBooking\Booking\BookingRepository;
-use CartBooking\Publisher\PioneerRepository;
+use CartBooking\Publisher\PublisherRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
@@ -12,14 +12,14 @@ class PublishersController
 {
     /** @var Request */
     private $request;
-    /** @var PioneerRepository */
+    /** @var PublisherRepository */
     private $pioneerRepository;
     /** @var Twig_Environment */
     private $twig;
     /** @var BookingRepository */
     private $bookingRepository;
 
-    public function __construct(Request $request, BookingRepository $bookingRepository, PioneerRepository $pioneerRepository, Twig_Environment $twig)
+    public function __construct(Request $request, BookingRepository $bookingRepository, PublisherRepository $pioneerRepository, Twig_Environment $twig)
     {
         $this->request = $request;
         $this->pioneerRepository = $pioneerRepository;

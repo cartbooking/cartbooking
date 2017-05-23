@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\Application\Http;
+namespace Test\Unit\Application\Http;
 
 use CartBooking\Application\Http\PublishersController;
 use Symfony\Component\HttpFoundation\Response;

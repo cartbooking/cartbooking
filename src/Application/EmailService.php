@@ -3,7 +3,7 @@
 namespace CartBooking\Application;
 
 use CartBooking\Lib\Email\Recipient;
-use CartBooking\Publisher\Pioneer;
+use CartBooking\Publisher\Publisher;
 use Swift_Mailer;
 use Swift_Message;
 
@@ -24,7 +24,7 @@ class EmailService
         $this->message = $message;
     }
 
-    public function sendEmailTo(Pioneer $recipient, string $subject, string $message)
+    public function sendEmailTo(Publisher $recipient, string $subject, string $message)
     {
         $this->message->addTo($recipient->getEmail(), $recipient->getFirstName());
         $this->message->setSubject($subject);
