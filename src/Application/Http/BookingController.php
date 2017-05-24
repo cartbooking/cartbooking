@@ -4,7 +4,7 @@ namespace CartBooking\Application\Http;
 
 use CartBooking\Booking\BookingRepository;
 use CartBooking\Location\LocationRepository;
-use CartBooking\Publisher\PioneerRepository;
+use CartBooking\Publisher\PublisherRepository;
 use CartBooking\Shift\Shift;
 use CartBooking\Shift\ShiftRepository;
 use DateInterval;
@@ -22,7 +22,7 @@ class BookingController
     private $bookingRepository;
     /** @var LocationRepository */
     private $locationRepository;
-    /** @var PioneerRepository */
+    /** @var PublisherRepository */
     private $pioneerRepository;
     /** @var ShiftRepository */
     private $shiftRepository;
@@ -33,7 +33,7 @@ class BookingController
         Request $request,
         BookingRepository $bookingRepository,
         LocationRepository $locationRepository,
-        PioneerRepository $pioneerRepository,
+        PublisherRepository $pioneerRepository,
         ShiftRepository $shiftRepository,
         Twig_Environment $twig
     ) {
@@ -139,6 +139,7 @@ class BookingController
                         'overseer' => ['id' => 0, 'gender' => '', 'name' => '', 'phone' => ''],
                         'pioneer' => ['id' => 0, 'gender' => '', 'name' => '', 'phone' => ''],
                         'pioneer_b' => ['id' => 0, 'gender' => '', 'name' => '', 'phone' => ''],
+                        'amount_publishers' => 0,
                     ];
                     if ($booking !== null) {
                         $bookingData['confirmed'] = $booking->isConfirmed();
@@ -151,6 +152,7 @@ class BookingController
                                 'name' => $overseer->getFirstName() . ' ' . $overseer->getLastName(),
                                 'phone' => $overseer->getPhone(),
                             ];
+                            $bookingData['amount_publishers']++;
                         }
                         $pioneer = $this->pioneerRepository->findById($booking->getPioneerId());
                         if ($pioneer) {
@@ -160,6 +162,7 @@ class BookingController
                                 'name' => $pioneer->getFirstName() . ' ' . $pioneer->getLastName(),
                                 'phone' => $pioneer->getPhone(),
                             ];
+                            $bookingData['amount_publishers']++;
                         }
                         $pioneerB = $this->pioneerRepository->findById($booking->getPioneerBId());
                         if ($pioneerB) {
@@ -169,6 +172,7 @@ class BookingController
                                 'name' => $pioneerB->getFirstName() . ' ' . $pioneerB->getLastName(),
                                 'phone' => $pioneerB->getPhone(),
                             ];
+                            $bookingData['amount_publishers']++;
                         }
                     }
                     return [
@@ -180,5 +184,10 @@ class BookingController
             ];
         }
         return $locations;
+    }
+
+    public function postAction(): Response
+    {
+        return (new Response())->setContent($this->twig->render('booking/result.twig', []));
     }
 }

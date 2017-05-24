@@ -5,7 +5,7 @@ namespace CartBooking\Application\Http;
 use CartBooking\Application\EmailService;
 use CartBooking\Booking\BookingRepository;
 use CartBooking\Location\LocationRepository;
-use CartBooking\Publisher\PioneerRepository;
+use CartBooking\Publisher\PublisherRepository;
 use CartBooking\Shift\ShiftRepository;
 use DateInterval;
 use DateTimeImmutable;
@@ -23,7 +23,7 @@ class CommunicationController
     private $response;
     /** @var Twig_Environment */
     private $twig;
-    /** @var PioneerRepository */
+    /** @var PublisherRepository */
     private $pioneerRepository;
     /** @var BookingRepository */
     private $bookingRepository;
@@ -39,7 +39,7 @@ class CommunicationController
         Twig_Environment $twig,
         BookingRepository $bookingRepository,
         LocationRepository $locationRepository,
-        PioneerRepository $pioneerRepository,
+        PublisherRepository $pioneerRepository,
         ShiftRepository $shiftRepository
     ) {
         $this->emailService = $emailService;

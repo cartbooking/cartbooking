@@ -1,0 +1,24 @@
+{% extends "base.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+    <div class="w-section section">
+        <div class='content-mobile-number'>
+            {% if result == 'fail' %}
+            <img class='sad-carty' src='/images/sad-10.svg'>
+            {% elseif result == 'deleted' %}
+            <img class="carty" src="/images/happy-13.svg">
+            {% else %}
+                <img class="carty" src="/images/happy-13.svg">
+            {% endif %}
+            <div class='login-div alt'><img class='leaf' src='/images/water-12.svg'>
+                <div class='sign-in-text'>{{ display }}</div>
+                <div class='shift-info-text'>{{ description }}</div>
+                <div class='w-clearfix backhome'>
+                    <a class='w-inline-block next alt' href= '/booking/?m={{ month }}&d={{ day }}'>
+                        <div>Back</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

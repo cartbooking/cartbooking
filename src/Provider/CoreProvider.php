@@ -19,7 +19,7 @@ use CartBooking\Application\Http\StatisticsController;
 use CartBooking\Booking\BookingRepository;
 use CartBooking\Lib\Utilities\FileSystem;
 use CartBooking\Location\LocationRepository;
-use CartBooking\Publisher\PioneerRepository;
+use CartBooking\Publisher\PublisherRepository;
 use CartBooking\Shift\ShiftRepository;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -30,6 +30,7 @@ use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
 use Twig_Environment;
+use Twig_Extension_Core;
 use Twig_Extension_Debug;
 use Twig_Loader_Filesystem;
 
@@ -96,7 +97,7 @@ class CoreProvider implements ServiceProviderInterface
         };
 
         $app['repository.pioneer'] = function (Container $app) {
-            return new PioneerRepository($app['db'], new \CartBooking\Publisher\PioneerHydrator());
+            return new PublisherRepository($app['db'], new \CartBooking\Publisher\PublisherHydrator());
         };
 
         $app['repository.booking'] = function (Container $app) {
@@ -117,6 +118,7 @@ class CoreProvider implements ServiceProviderInterface
                 'auto_reload' => true,
                 'debug' => true,
             ]);
+            $twig->getExtension(Twig_Extension_Core::class)->setDateFormat('Y-m-d', '%d days');
             $twig->addExtension(new Twig_Extension_Debug());
             return $twig;
         };

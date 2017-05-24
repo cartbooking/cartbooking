@@ -3,7 +3,7 @@
 namespace CartBooking\Application\Http;
 
 use CartBooking\Booking\BookingRepository;
-use CartBooking\Publisher\PioneerRepository;
+use CartBooking\Publisher\PublisherRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,10 +19,10 @@ class ExperiencesController
     private $twig;
     /** @var BookingRepository */
     private $bookingRepository;
-    /** @var PioneerRepository */
+    /** @var PublisherRepository */
     private $pioneerRepository;
 
-    public function __construct(Request $request, Response $response, Twig_Environment $twig, BookingRepository $bookingRepository, PioneerRepository $pioneerRepository)
+    public function __construct(Request $request, Response $response, Twig_Environment $twig, BookingRepository $bookingRepository, PublisherRepository $pioneerRepository)
     {
         $this->request = $request;
         $this->response = $response;

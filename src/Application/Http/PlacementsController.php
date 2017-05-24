@@ -6,7 +6,7 @@ use CartBooking\Application\EmailService;
 use CartBooking\Application\ServiceLocator;
 use CartBooking\Booking\BookingRepository;
 use CartBooking\Location\LocationRepository;
-use CartBooking\Publisher\PioneerRepository;
+use CartBooking\Publisher\PublisherRepository;
 use CartBooking\Shift\ShiftRepository;
 use DateInterval;
 use DateTimeImmutable;
