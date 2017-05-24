@@ -248,4 +248,13 @@ class BookingRepository
             yield $this->bookingHydrator->hydrate($row);
         }
     }
+
+    public function getNextId()
+    {
+        $query = 'SELECT max(id) FROM bookings';
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_array(MYSQLI_ASSOC)['id'];
+    }
 }

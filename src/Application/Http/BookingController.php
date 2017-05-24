@@ -3,6 +3,8 @@
 namespace CartBooking\Application\Http;
 
 use CartBooking\Booking\BookingRepository;
+use CartBooking\Booking\BookingService;
+use CartBooking\Booking\Command\CreateBookingCommand;
 use CartBooking\Location\LocationRepository;
 use CartBooking\Publisher\PublisherRepository;
 use CartBooking\Shift\Shift;
@@ -28,10 +30,13 @@ class BookingController
     private $shiftRepository;
     /** @var Twig_Environment */
     private $twig;
+    /** @var BookingService */
+    private $bookingService;
 
     public function __construct(
         Request $request,
         BookingRepository $bookingRepository,
+        BookingService $bookingService,
         LocationRepository $locationRepository,
         PublisherRepository $pioneerRepository,
         ShiftRepository $shiftRepository,
@@ -43,6 +48,7 @@ class BookingController
         $this->pioneerRepository = $pioneerRepository;
         $this->shiftRepository = $shiftRepository;
         $this->twig = $twig;
+        $this->bookingService = $bookingService;
     }
 
     public function indexAction(int $userId): Response
@@ -188,6 +194,16 @@ class BookingController
 
     public function postAction(): Response
     {
+        $booking = $this->bookingService->createBooking(new CreateBookingCommand(
+            $this->request->get('user'),
+            $this->request->get('shift'),
+            $this->request->get('date')
+        ));
+        foreach ((array)$this->request->get('volunteers', []) as $volunteerPhone) {
+            $publisher = $this->pioneerRepository->findByPhone((int)$volunteerPhone);
+            $booking->setPioneerBId($publisher->getId());
+        }
+
         return (new Response())->setContent($this->twig->render('booking/result.twig', []));
     }
 }
