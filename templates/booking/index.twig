@@ -249,13 +249,13 @@
                                                 {% for i in 1..(2 - shift.booking.amount_publishers) %}
                                                 <div class="text-field-div">
                                                     <div class="label">Add another person?</div>
-                                                    <input class="w-input mobile-text-filled" type="tel" placeholder="Enter mobile number" name="'.$spots.'_volunteer">
+                                                    <input class="w-input mobile-text-filled" type="tel" placeholder="Enter mobile number" name="volunteers[]">
                                                 </div>
                                                 {% endfor %}
                                                 {% if false and admin %}
                                                     <div class="text-field-div">
                                                         <div class="label">Add another person?</div>
-                                                        <input class="w-input mobile-text-filled" type="tel" placeholder="Enter mobile number" name="'.$spots.'_volunteer">
+                                                        <input class="w-input mobile-text-filled" type="tel" placeholder="Enter mobile number" name="volunteers[]">
                                                     </div>
                                                     <input type="hidden" name="shift" value="{{ shift.id }}" />
                                                     <input type="hidden" name="date" value="{{ select_day|date() }}" />
