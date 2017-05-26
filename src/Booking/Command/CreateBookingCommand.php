@@ -2,30 +2,32 @@
 
 namespace CartBooking\Booking\Command;
 
+use CartBooking\Booking\Exception\InvalidArgumentException;
 use DateTimeImmutable;
 
 class CreateBookingCommand
 {
     /** @var int */
-    private $publisherId;
-    /** @var int */
     private $shiftId;
     /** @var DateTimeImmutable */
     private $date;
+    /** @var array */
+    private $publishersIds;
 
-    public function __construct(int $publisherId, int $shiftId, string $date)
+    public function __construct(int $shiftId, string $date, array $publishersIds)
     {
-        $this->publisherId = $publisherId;
+        $publishersIds = array_map(function ($id) {
+            if ((int) $id < 1) {
+                throw new InvalidArgumentException();
+            }
+            return (int) $id;
+            }, $publishersIds);
+        if ($shiftId < 1) {
+            throw new InvalidArgumentException();
+        }
         $this->shiftId = $shiftId;
         $this->date = DateTimeImmutable::createFromFormat('Y-m-d|', $date);
-    }
-
-    /**
-     * @return int
-     */
-    public function getPublisherId(): int
-    {
-        return $this->publisherId;
+        $this->publishersIds = $publishersIds;
     }
 
     /**
@@ -44,4 +46,11 @@ class CreateBookingCommand
         return $this->date;
     }
 
+    /**
+     * @return array
+     */
+    public function getPublishersIds(): array
+    {
+        return $this->publishersIds;
+    }
 }

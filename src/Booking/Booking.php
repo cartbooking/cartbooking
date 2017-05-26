@@ -2,6 +2,7 @@
 
 namespace CartBooking\Booking;
 
+use CartBooking\Publisher\Publisher;
 use DateTimeImmutable;
 
 class Booking
@@ -56,10 +57,9 @@ class Booking
     /** @var bool  */
     private $experience = false;
 
-    public function __construct(int $id, int $pioneerId, int $shiftId, DateTimeImmutable $date)
+    public function __construct(int $id, int $shiftId, DateTimeImmutable $date)
     {
         $this->id = $id;
-        $this->pioneerId = $pioneerId;
         $this->shiftId = $shiftId;
         $this->date = $date;
     }
@@ -90,6 +90,7 @@ class Booking
 
     /**
      * @param int $overseerId
+     * @internal
      */
     public function setOverseerId(int $overseerId)
     {
@@ -154,6 +155,7 @@ class Booking
 
     /**
      * @param int $pioneerBId
+     * @internal
      */
     public function setPioneerBId(int $pioneerBId)
     {
@@ -254,6 +256,47 @@ class Booking
     public function setExperience(bool $experience)
     {
         $this->experience = $experience;
+    }
+
+    /**
+     * @param int $pioneerId
+     * @internal
+     */
+    public function setPioneerId(int $pioneerId)
+    {
+        $this->pioneerId = $pioneerId;
+    }
+
+    /**
+     * @param Publisher[] $publishers
+     */
+    public function setPublishers(array $publishers)
+    {
+        foreach ($publishers as $publisher) {
+            if ($this->overseerId === 0 && $publisher->isMale()) {
+                $this->overseerId = $publisher->getId();
+            } elseif ($this->pioneerId === 0) {
+                $this->pioneerId = $publisher->getId();
+            } else {
+                $this->pioneerBId = $publisher->getId();
+            }
+        }
+        $this->updateStatus($publishers);
+    }
+
+    /**
+     * @param Publisher[] $publishers
+     */
+    private function updateStatus(array $publishers)
+    {
+        if (count($publishers) === 3) {
+            $this->confirmed = true;
+            return;
+        }
+        if (count($publishers) === 2 && count(array_filter($publishers, function (Publisher $publisher) { return $publisher->isMale();})) === 1) {
+            $this->confirmed = false;
+            return;
+        }
     }
 
 }
