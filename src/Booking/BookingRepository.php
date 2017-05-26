@@ -249,7 +249,7 @@ class BookingRepository
         }
     }
 
-    public function getNextId()
+    public function nextId()
     {
         $query = 'SELECT max(id) FROM bookings';
         $stmt = $this->db->prepare($query);

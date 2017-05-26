@@ -195,9 +195,9 @@ class BookingController
     public function postAction(): Response
     {
         $booking = $this->bookingService->createBooking(new CreateBookingCommand(
-            $this->request->get('user'),
-            $this->request->get('shift'),
-            $this->request->get('date')
+            (int)$this->request->get('shift'),
+            $this->request->get('date'),
+            array_merge([$this->request->get('user')], $this->request->get('volunteers', []))
         ));
         foreach ((array)$this->request->get('volunteers', []) as $volunteerPhone) {
             $publisher = $this->pioneerRepository->findByPhone((int)$volunteerPhone);

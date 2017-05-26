@@ -97,6 +97,11 @@ class Publisher
         return $this->gender;
     }
 
+    public function isMale()
+    {
+        return $this->getGender() === 'm';
+    }
+
     /**
      * @param mixed $gender
      */

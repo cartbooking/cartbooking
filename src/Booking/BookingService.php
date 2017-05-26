@@ -20,6 +20,11 @@ class BookingService
 
     public function createBooking(CreateBookingCommand $command)
     {
-        return new Booking($this->bookingRepository->getNextId(), $command->getPublisherId(), $command->getShiftId(), $command->getDate());
+        $publishers = [];
+        $booking = new Booking($this->bookingRepository->nextId(), $command->getShiftId(), $command->getDate());
+        foreach ($command->getPublishersIds() as $publishersId) {
+            $publishers[] = $this->bookingRepository->findById($publishersId);
+        }
+
     }
 }

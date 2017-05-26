@@ -6,12 +6,15 @@ class BookingHydrator
 {
     public function hydrate(array $row)
     {
-        $booking = new Booking($row['id'], $row['pioneer_id'], $row['shift_id'], new \DateTimeImmutable($row['date']));
+        $booking = new Booking($row['id'], $row['shift_id'], new \DateTimeImmutable($row['date']));
         $booking->setConfirmed($row['confirmed'] === 'y');
         $booking->setRecorded($row['recorded'] === 'y');
         $booking->setPlacements((int)$row['placements']);
         $booking->setVideos((int)$row['videos']);
         $booking->setRequests((int)$row['requests']);
+        if ($row['pioneer_id'] > 0) {
+            $booking->setPioneerBId($row['pioneer_id']);
+        }
         if ($row['overseer_id'] > 0) {
             $booking->setOverseerId($row['overseer_id']);
         }
