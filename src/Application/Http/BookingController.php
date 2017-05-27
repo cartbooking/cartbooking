@@ -5,6 +5,7 @@ namespace CartBooking\Application\Http;
 use CartBooking\Booking\BookingRepository;
 use CartBooking\Booking\BookingService;
 use CartBooking\Booking\Command\CreateBookingCommand;
+use CartBooking\Booking\Exception\InvalidArgumentException;
 use CartBooking\Booking\Exception\InvalidMobilePhone;
 use CartBooking\Location\LocationRepository;
 use CartBooking\Publisher\PublisherRepository;
@@ -104,9 +105,9 @@ class BookingController
             'year' => $year,
             'highlighted' => $highlighted,
             'shifts' => $this->populateShifts($userId, DateTimeImmutable::createFromFormat('FY|', $month . $year)),
-            'select_day' => new DateTimeImmutable("@$select_date"),
+            'select_day' => new DateTimeImmutable($select_date ? "@$select_date": 'now'),
             'cancel_time' => (new DateTimeImmutable('now'))->add(new DateInterval('P1D')),
-            'locations' => $this->populateLocations(new DateTimeImmutable("@$select_date")),
+            'locations' => $this->populateLocations(new DateTimeImmutable($select_date ? "@$select_date": 'now')),
             'user_id' => $userId
         ]));
     }
@@ -196,7 +197,7 @@ class BookingController
 
     public function postAction(): Response
     {
-        $booking = $this->bookingService->createBooking(new CreateBookingCommand(
+        $this->bookingService->createBooking(new CreateBookingCommand(
             (int)$this->request->get('shift'),
             $this->request->get('date'),
             array_merge(
@@ -205,7 +206,19 @@ class BookingController
             )
         ));
 
-        return (new Response())->setContent($this->twig->render('booking/result.twig', ['booking' => $booking]));
+        try {
+            return (new Response())->setContent($this->twig->render('booking/result.twig', [
+                'title' => 'Booking Accepted',
+                'display' => 'Thank You',
+                'description' => 'Your booking has been entered',
+                'select_date' => $this->request->get('date'),
+            ]));
+        } catch (InvalidArgumentException $e) {
+            return (new Response())->setContent($this->twig->render('booking/result.twig', [
+                'title' => 'Fail Results',
+                'select_date' => $this->request->get('date')
+            ]));
+        }
     }
 
     private function mapVolunteersPhoneToId(array $phones): array
