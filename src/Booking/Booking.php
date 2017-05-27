@@ -293,6 +293,10 @@ class Booking
             $this->confirmed = true;
             return;
         }
+        if (count($publishers) === 2 && $publishers[0]->isRelativeTo($publishers[1])) {
+            $this->confirmed = true;
+            return;
+        }
         if (count($publishers) === 2 && count(array_filter($publishers, function (Publisher $publisher) { return $publisher->isMale();})) === 1) {
             $this->confirmed = false;
             return;
