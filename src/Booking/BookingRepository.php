@@ -182,7 +182,8 @@ class BookingRepository
     {
         $query = 'SELECT id FROM bookings WHERE id = ?';
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('i', $booking->getId());
+        $bookingId = $booking->getId();
+        $stmt->bind_param('i', $bookingId);
         $stmt->execute();
         $result = $stmt->get_result();
         if ($result->num_rows === 0) {
@@ -201,20 +202,28 @@ class BookingRepository
         $recorded = $booking->isRecorded() ? 'y' : 'n';
         $experience = $booking->isExperience() ? 'y' : 'n';
         $stmt = $this->db->prepare($insert);
+        $shiftId = $booking->getShiftId();
+        $overseerId = $booking->getOverseerId();
+        $pioneerId = $booking->getPioneerId();
+        $pioneerBId = $booking->getPioneerBId();
+        $placements = $booking->getPlacements();
+        $videos = $booking->getVideos();
+        $requests = $booking->getRequests();
+        $comments = $booking->getComments();
         $stmt->bind_param(
             'isiiisssiiiss',
-            $booking->getShiftId(),
+            $shiftId,
             $format,
-            $booking->getOverseerId(),
-            $booking->getPioneerId(),
-            $booking->getPioneerBId(),
+            $overseerId,
+            $pioneerId,
+            $pioneerBId,
             $confirmed,
             $full,
             $recorded,
-            $booking->getPlacements(),
-            $booking->getVideos(),
-            $booking->getRequests(),
-            $booking->getComments(),
+            $placements,
+            $videos,
+            $requests,
+            $comments,
             $experience
         );
         $stmt->execute();
@@ -233,22 +242,31 @@ class BookingRepository
         $full = $booking->isFull() ? 'y' : 'n';
         $recorded = $booking->isRecorded() ? 'y' : 'n';
         $experience = $booking->isExperience() ? 'y' : 'n';
+        $shiftId = $booking->getShiftId();
+        $overseerId = $booking->getOverseerId();
+        $pioneerId = $booking->getPioneerId();
+        $pioneerBId = $booking->getPioneerBId();
+        $placements = $booking->getPlacements();
+        $videos = $booking->getVideos();
+        $requests = $booking->getRequests();
+        $comments = $booking->getComments();
+        $id = $booking->getId();
         $stmt->bind_param(
             'isiiisssiiissi',
-            $booking->getShiftId(),
+            $shiftId,
             $format,
-            $booking->getOverseerId(),
-            $booking->getPioneerId(),
-            $booking->getPioneerBId(),
+            $overseerId,
+            $pioneerId,
+            $pioneerBId,
             $confirmed,
             $full,
             $recorded,
-            $booking->getPlacements(),
-            $booking->getVideos(),
-            $booking->getRequests(),
-            $booking->getComments(),
+            $placements,
+            $videos,
+            $requests,
+            $comments,
             $experience,
-            $booking->getId()
+            $id
         );
         $stmt->execute();
         return $stmt->get_result();
