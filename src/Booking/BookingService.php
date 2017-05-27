@@ -25,6 +25,8 @@ class BookingService
         foreach ($command->getPublishersIds() as $publishersId) {
             $publishers[] = $this->bookingRepository->findById($publishersId);
         }
-
+        $booking->setPublishers($publishers);
+        $this->bookingRepository->save($booking);
+        return $booking->getId();
     }
 }

@@ -27,6 +27,7 @@ class BookingTest extends AutoMockingTest
         static::assertSame($overseerId, $this->booking->getOverseerId());
         static::assertSame(0, $this->booking->getPioneerId());
         static::assertSame(0, $this->booking->getPioneerBId());
+        static::assertFalse($this->booking->isConfirmed());
     }
 
     public function testSetPioneerOnly()
@@ -49,6 +50,7 @@ class BookingTest extends AutoMockingTest
         $pioneerId = 2;
         $overseer->isMale()->willReturn(true);
         $overseer->getId()->willReturn($overseerId);
+        $overseer->isRelativeTo($pioneer->reveal())->willReturn(false);
         $pioneer->isMale()->willReturn(false);
         $pioneer->getId()->willReturn($pioneerId);
         $this->booking->setPublishers([$overseer->reveal(), $pioneer->reveal()]);
@@ -76,5 +78,21 @@ class BookingTest extends AutoMockingTest
         static::assertSame($pioneerId, $this->booking->getPioneerId());
         static::assertSame($pioneerBId, $this->booking->getPioneerBId());
         static::assertTrue($this->booking->isConfirmed());
+    }
+
+    public function test2SingleRelativesAreAccepted()
+    {
+        $brotherId = 1;
+        $sisterId = 2;
+        $brother = $this->prophesize(Publisher::class);
+        $sister = $this->prophesize(Publisher::class);
+        $brother->isRelativeTo($sister->reveal())->willReturn(true);
+        $brother->getId()->willReturn($brotherId);
+        $brother->isMale()->willreturn(true);
+        $sister->getId()->willReturn($sisterId);
+        $sister->isMale()->willReturn(false);
+        $this->booking->setPublishers([$brother->reveal(), $sister->reveal()]);
+        static::assertTrue($this->booking->isConfirmed());
+
     }
 }

@@ -33,5 +33,7 @@ class ServiceProvider extends InjectorServiceProvider
         $app[FileSystem::class] = function () use ($initParams) {
             return new FileSystem($initParams);
         };
+
+        $this->autoBind(BookingService::class);
     }
 }
