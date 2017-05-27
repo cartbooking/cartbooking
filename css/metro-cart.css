@@ -571,7 +571,7 @@ p {
   margin-left: auto;
 }
 .section {
-  position: absolute;
+  /*position: absolute;*/
   left: 0px;
   top: 0px;
   right: 0px;
@@ -1099,4 +1099,8 @@ form {
   font-size: 20px;
   display: flex;
   justify-content: space-between
+}
+
+.footer {
+  text-align: center;
 }

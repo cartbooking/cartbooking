@@ -226,7 +226,7 @@ class BookingController
         $phones = array_filter(
             $phones,
             function ($id) {
-                return $id !== '';
+                return $id !== '' && $id !== $this->request->get('delete');
             }
         );
         $ids = [];
