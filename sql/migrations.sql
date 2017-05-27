@@ -5,3 +5,7 @@ CREATE TABLE IF NOT EXISTS `relationships` (
   FOREIGN KEY (publisher_id_1) REFERENCES `pioneers`(id) ON DELETE CASCADE ,
   FOREIGN KEY (publisher_id_2) REFERENCES `pioneers`(id) ON DELETE CASCADE
 );
+
+
+ALTER TABLE locations ADD COLUMN capacity INT NOT NULL DEFAULT 0;
+UPDATE locations SET capacity = 3;

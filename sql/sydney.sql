@@ -99,6 +99,7 @@ CREATE TABLE IF NOT EXISTS `locations` (
   `markers` varchar(500) NOT NULL DEFAULT '0',
   `description` varchar(500) NOT NULL DEFAULT '',
   `zoom` int(3),
+  `capacity` int NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;

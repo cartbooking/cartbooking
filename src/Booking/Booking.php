@@ -36,9 +36,9 @@ class Booking
     /** @var bool */
     private $isFull = false;
     /**
-     * @var bool
+     * @var bool If the Booking has been recorded the results
      */
-    private $recorded;
+    private $recorded = false;
 
     /** @var int */
     private $placements = 0;
@@ -134,7 +134,7 @@ class Booking
      */
     public function isRecorded(): bool
     {
-        return $this->recorded;
+        return $this->date > new DateTimeImmutable('now') && $this->recorded;
     }
 
     /**
@@ -289,7 +289,7 @@ class Booking
      */
     private function updateStatus(array $publishers)
     {
-        if (count($publishers) === 3) {
+        if (count($publishers) > 2) {
             $this->confirmed = true;
             return;
         }

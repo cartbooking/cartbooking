@@ -20,6 +20,7 @@ class LocationHydrator
         $location->setPath($row['path']);
         $location->setVolunteers($row['volunteers']);
         $location->setZoom($row['zoom']);
+        $location->setCapacity($row['capacity']);
         return $location;
     }
 }

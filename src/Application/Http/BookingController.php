@@ -138,6 +138,7 @@ class BookingController
             $locations[] = [
                 'id' => $location->getId(),
                 'name' => $location->getName(),
+                'capacity' => $location->getCapacity(),
                 'shifts' => array_map(function (Shift $shift) use ($dateTime) {
                     $booking = $this->bookingRepository->findByShiftAndDate($shift->getId(), $dateTime);
                     $bookingData = [

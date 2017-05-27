@@ -13,7 +13,7 @@ class BookingHydrator
         $booking->setVideos((int)$row['videos']);
         $booking->setRequests((int)$row['requests']);
         if ($row['pioneer_id'] > 0) {
-            $booking->setPioneerBId($row['pioneer_id']);
+            $booking->setPioneerId($row['pioneer_id']);
         }
         if ($row['overseer_id'] > 0) {
             $booking->setOverseerId($row['overseer_id']);
