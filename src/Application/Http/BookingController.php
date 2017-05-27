@@ -5,6 +5,7 @@ namespace CartBooking\Application\Http;
 use CartBooking\Booking\BookingRepository;
 use CartBooking\Booking\BookingService;
 use CartBooking\Booking\Command\CreateBookingCommand;
+use CartBooking\Booking\Exception\InvalidMobilePhone;
 use CartBooking\Location\LocationRepository;
 use CartBooking\Publisher\PublisherRepository;
 use CartBooking\Shift\Shift;
@@ -197,13 +198,31 @@ class BookingController
         $booking = $this->bookingService->createBooking(new CreateBookingCommand(
             (int)$this->request->get('shift'),
             $this->request->get('date'),
-            array_merge([$this->request->get('user')], $this->request->get('volunteers', []))
+            array_merge(
+                [$this->request->get('user')],
+                $this->mapVolunteersPhoneToId($this->request->get('volunteers', []))
+            )
         ));
-        foreach ((array)$this->request->get('volunteers', []) as $volunteerPhone) {
-            $publisher = $this->pioneerRepository->findByPhone((int)$volunteerPhone);
-            $booking->setPioneerBId($publisher->getId());
-        }
 
-        return (new Response())->setContent($this->twig->render('booking/result.twig', []));
+        return (new Response())->setContent($this->twig->render('booking/result.twig', ['booking' => $booking]));
+    }
+
+    private function mapVolunteersPhoneToId(array $phones): array
+    {
+        $phones = array_filter(
+            $phones,
+            function ($id) {
+                return $id !== '';
+            }
+        );
+        $ids = [];
+        foreach ($phones as $phone) {
+            $publisher = $this->pioneerRepository->findByPhone($phone);
+            if ($publisher === null) {
+                throw new InvalidMobilePhone();
+            }
+            $ids[] = $publisher->getId();
+        }
+        return $ids;
     }
 }
