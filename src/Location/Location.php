@@ -4,43 +4,23 @@ namespace CartBooking\Location;
 
 class Location
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var int
-     */
-    private $volunteers;
-
-    /**
-     * @var string
-     */
-    private $centre;
-
-    /**
-     * @var string
-     */
-    private $path;
-
-    /**
-     * @var string
-     */
-    private $markers;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     private $description;
-
-    /**
-     * @var int
-     */
+    /** @var int */
+    private $capacity = 0;
+    /** @var string */
+    private $centre;
+    /** @var string */
+    private $markers;
+    /** @var string */
+    private $name;
+    /** @var string */
+    private $path;
+    /**  @var int */
+    private $volunteers;
+    /** @var int */
     private $zoom;
 
     public function __construct(int $id, string $name)
@@ -159,6 +139,22 @@ class Location
     public function setZoom(int $zoom)
     {
         $this->zoom = $zoom;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCapacity(): int
+    {
+        return $this->capacity;
+    }
+
+    /**
+     * @param int $capacity
+     */
+    public function setCapacity(int $capacity)
+    {
+        $this->capacity = $capacity;
     }
 
 

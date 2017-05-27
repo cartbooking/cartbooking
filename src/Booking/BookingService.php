@@ -23,7 +23,7 @@ class BookingService
         $publishers = [];
         $booking = new Booking($this->bookingRepository->nextId(), $command->getShiftId(), $command->getDate());
         foreach ($command->getPublishersIds() as $publishersId) {
-            $publishers[] = $this->bookingRepository->findById($publishersId);
+            $publishers[] = $this->publisherRepository->findById($publishersId);
         }
         $booking->setPublishers($publishers);
         $this->bookingRepository->save($booking);

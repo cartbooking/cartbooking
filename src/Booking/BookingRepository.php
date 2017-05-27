@@ -180,6 +180,49 @@ class BookingRepository
 
     public function save(Booking $booking)
     {
+        $query = 'SELECT id FROM bookings WHERE id = ?';
+        $stmt = $this->db->prepare($query);
+        $stmt->bind_param('i', $booking->getId());
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows === 0) {
+            return $this->insert($booking);
+        }
+        return $this->update($booking);
+    }
+
+    private function insert(Booking $booking)
+    {
+        $insert = 'INSERT INTO bookings (shift_id, date, overseer_id, pioneer_id, pioneer_b_id, confirmed, full, recorded, placements, videos, requests, comments, experience) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        $format = $booking->getDate()->format(DATE_ATOM);
+        $confirmed = $booking->isConfirmed() ? 'y' : 'n';
+        $full = $booking->isFull() ? 'y' : 'n';
+        $recorded = $booking->isRecorded() ? 'y' : 'n';
+        $experience = $booking->isExperience() ? 'y' : 'n';
+        $stmt = $this->db->prepare($insert);
+        $stmt->bind_param(
+            'isiiisssiiiss',
+            $booking->getShiftId(),
+            $format,
+            $booking->getOverseerId(),
+            $booking->getPioneerId(),
+            $booking->getPioneerBId(),
+            $confirmed,
+            $full,
+            $recorded,
+            $booking->getPlacements(),
+            $booking->getVideos(),
+            $booking->getRequests(),
+            $booking->getComments(),
+            $experience
+        );
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    private function update(Booking $booking)
+    {
         $update = 'UPDATE bookings SET 
                   shift_id = ?, date = ?, overseer_id = ?, pioneer_id = ?, pioneer_b_id = ?, confirmed = ?, full = ?,
                   recorded = ?, placements = ?, videos = ?, requests = ?, comments = ?, experience = ?
@@ -251,10 +294,10 @@ class BookingRepository
 
     public function nextId()
     {
-        $query = 'SELECT max(id) FROM bookings';
+        $query = 'SELECT max(id) AS id FROM bookings';
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_array(MYSQLI_ASSOC)['id'];
+        return ++$result->fetch_array(MYSQLI_ASSOC)['id'];
     }
 }

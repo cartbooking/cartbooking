@@ -30,7 +30,7 @@ class CreateBookingCommand
         }
         $this->shiftId = $shiftId;
         $this->date = DateTimeImmutable::createFromFormat('Y-m-d|', $date);
-        $this->publishersIds = $publishersIds;
+        $this->publishersIds = array_unique($publishersIds);
     }
 
     /**
