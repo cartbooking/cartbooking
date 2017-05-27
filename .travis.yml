@@ -5,5 +5,3 @@ php:
 install:
   - composer validate
   - composer install --no-interaction
-notifications:
-  email: false
