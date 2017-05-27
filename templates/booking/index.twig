@@ -7,7 +7,6 @@
             <nav class="w-nav-menu menu-background" role="navigation">
                 <a class="w-nav-link nav-link" href="/placements">Record placements</a>
                 <a class="w-nav-link nav-link" href="/map">Maps</a>
-                <a class="w-nav-link nav-link" href="/statistics">Statistics</a>
                 <a class="w-nav-link nav-link" href="/experiences">Experiences</a>
                 <a class="w-nav-link nav-link" href="/logout.php">Sign out</a>
             </nav>
@@ -165,7 +164,7 @@
                                                             <input type="hidden" name="shift" value="{{ shift.id }}" />
                                                             <input type="hidden" name="volunteers[]" value="{{ shift.booking.overseer.phone }}"/>
                                                             <input type="hidden" name="date" value="{{ select_day|date() }}" />
-                                                            <button class="w-inline-block delete-shift" type="submit" name="delete_overseer" value="delete_overseer">
+                                                            <button class="w-inline-block delete-shift" type="submit" name="delete" value="{{ shift.booking.overseer.phone }}">
                                                                 <div>Delete</div>
                                                             </button>
                                                         {% endif %}
@@ -196,7 +195,7 @@
                                                             <input type="hidden" name="shift" value="{{ shift.id }}" />
                                                             <input type="hidden" name="volunteers[]" value="{{ shift.booking.pioneer.phone }}"/>
                                                             <input type="hidden" name="date" value="{{ select_day|date() }}" />
-                                                            <button class="w-inline-block delete-shift" type="submit" name="delete_pioneer" value="delete_pioneer">
+                                                            <button class="w-inline-block delete-shift" type="submit" name="delete" value="{{ shift.booking.pioneer.phone }}">
                                                                 <div>Delete</div>
                                                             </button>
                                                         {% endif %}
@@ -227,7 +226,7 @@
                                                             <input type="hidden" name="shift" value="{{ shift.id }}" />
                                                             <input type="hidden" name="volunteers[]" value="{{ shift.booking.pioneer_b.phone }}"/>
                                                             <input type="hidden" name="date" value="{{ select_day|date() }}" />
-                                                            <button class="w-inline-block delete-shift" type="submit" name="delete_pioneer_b" value="delete_pioneer_b">
+                                                            <button class="w-inline-block delete-shift" type="submit" name="delete" value="{{ shift.booking.pioneer_b.phone }}">
                                                                 <div>Delete</div>
                                                             </button>
                                                         {% endif %}
