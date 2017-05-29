@@ -5,7 +5,10 @@ namespace Test\Unit\Booking;
 use CartBooking\Booking\Booking;
 use CartBooking\Booking\BookingRepository;
 use CartBooking\Booking\BookingService;
+use CartBooking\Booking\Command\AddPublishersCommand;
 use CartBooking\Booking\Command\CreateBookingCommand;
+use CartBooking\Booking\Command\DeletePublisherFromBookingCommand;
+use CartBooking\Booking\Exception\NotFoundException;
 use CartBooking\Publisher\Publisher;
 use CartBooking\Publisher\PublisherRepository;
 use Prophecy\Argument;
@@ -34,5 +37,93 @@ class BookingServiceTest extends AutoMockingTest
         $this->injector->getProphecy(PublisherRepository::class)->findById($publisherId)->willReturn($publisher->reveal());
         $this->injector->getProphecy(BookingRepository::class)->save(Argument::type(Booking::class))->shouldBeCalled();
         static::assertSame($bookingId, $this->bookingService->createBooking($command));
+    }
+
+    public function testAddNoPublisher()
+    {
+        $bookingId = 123;
+        $publishersIds = [1];
+        $command = new AddPublishersCommand($bookingId, $publishersIds);
+        $booking = $this->prophesize(Booking::class);
+        $booking->getPublishersIds()->willReturn([2]);
+        $booking->setPublishers([])->shouldBeCalled();
+        $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn($booking->reveal());
+        $this->injector->getProphecy(BookingRepository::class)->save($booking->reveal())->shouldBeCalled();
+        $this->injector->getProphecy(PublisherRepository::class)->findById(1)->willReturn(null);
+        $this->injector->getProphecy(PublisherRepository::class)->findById(2)->willReturn(null);
+        $this->bookingService->addPublishers($command);
+    }
+
+    public function testAddPublisher()
+    {
+        $bookingId = 123;
+        $overseerId = 1;
+        $publisherId = 2;
+        $overseer = $this->prophesize(Publisher::class);
+        $publisher = $this->prophesize(Publisher::class);
+        $command = new AddPublishersCommand($bookingId, [$publisherId]);
+        $booking = $this->prophesize(Booking::class);
+        $booking->getPublishersIds()->willReturn([$overseerId]);
+        $booking->setPublishers(Argument::size(2))->shouldBeCalled();
+        $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn($booking->reveal());
+        $this->injector->getProphecy(BookingRepository::class)->save($booking->reveal())->shouldBeCalled();
+        $this->injector->getProphecy(PublisherRepository::class)->findById($overseerId)->willReturn($overseer->reveal());
+        $this->injector->getProphecy(PublisherRepository::class)->findById($publisherId)->willReturn($publisher->reveal());
+        $this->bookingService->addPublishers($command);
+    }
+
+    public function testRemovePublisherSimple()
+    {
+        $bookingId = 1;
+        $publisherId = 1;
+        $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->shouldBeCalled();
+        static::assertEmpty($this->bookingService->removePublishers(
+            new DeletePublisherFromBookingCommand($bookingId, $publisherId)
+        ));
+    }
+
+    public function testRemovingPublisherNonInBooking()
+    {
+        $bookingId = 1;
+        $publisherId = 1;
+        $booking = $this->prophesize(Booking::class);
+        $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn($booking->reveal());
+        $booking->getPublishersIds()->willReturn([]);
+        static::assertEmpty(
+            $this->bookingService->removePublishers(new DeletePublisherFromBookingCommand($bookingId, $publisherId))
+        );
+    }
+
+    public function testRemoveAPublisherFromBooking()
+    {
+        $overseerId = 1;
+        $publisherId = 2;
+        $overseer = $this->prophesize(Publisher::class);
+        $publisher = $this->prophesize(Publisher::class);
+        $bookingId = 1;
+        $booking = $this->prophesize(Booking::class);
+        $booking->getPublishersIds()->willReturn([$overseerId, $publisherId]);
+        $booking->setPublishers([$overseer->reveal()])->shouldBeCalled();
+        $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn($booking->reveal());
+        $this->injector->getProphecy(PublisherRepository::class)->findById($overseerId)->willReturn($overseer->reveal());
+        $this->injector->getProphecy(PublisherRepository::class)->findById($publisherId)->willReturn($publisher->reveal());
+        $this->injector->getProphecy(BookingRepository::class)->save($booking->reveal())->shouldBeCalled();
+        $this->bookingService->removePublishers(new DeletePublisherFromBookingCommand($bookingId, $publisherId));
+    }
+
+    public function testGetByIdThrowsException()
+    {
+        $bookingId = 1;
+        $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn(null);
+        $this->expectException(NotFoundException::class);
+        $this->bookingService->getById($bookingId);
+    }
+
+    public function testGetById()
+    {
+        $bookingId = 1;
+        $booking = $this->prophesize(Booking::class);
+        $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn($booking->reveal());
+        static::assertSame($booking->reveal(), $this->bookingService->getById($bookingId));
     }
 }

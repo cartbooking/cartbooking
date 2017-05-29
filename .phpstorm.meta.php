@@ -34,7 +34,7 @@ namespace PHPSTORM_META {
         \Prophecy\Argument::cetera('') => [
             "" == "mixed",
         ],
-        \PHPUnit_Framework_TestCase::prophesize('') => [
+        \PHPUnit\Framework\TestCase::prophesize('') => [
             "" == "@",
         ],
     ];
