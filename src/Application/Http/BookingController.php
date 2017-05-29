@@ -4,7 +4,9 @@ namespace CartBooking\Application\Http;
 
 use CartBooking\Booking\BookingRepository;
 use CartBooking\Booking\BookingService;
+use CartBooking\Booking\Command\AddPublishersCommand;
 use CartBooking\Booking\Command\CreateBookingCommand;
+use CartBooking\Booking\Command\DeletePublisherFromBookingCommand;
 use CartBooking\Booking\Exception\InvalidArgumentException;
 use CartBooking\Booking\Exception\InvalidMobilePhone;
 use CartBooking\Location\LocationRepository;
@@ -143,6 +145,7 @@ class BookingController
                 'shifts' => array_map(function (Shift $shift) use ($dateTime) {
                     $booking = $this->bookingRepository->findByShiftAndDate($shift->getId(), $dateTime);
                     $bookingData = [
+                        'id' => null,
                         'confirmed' => false,
                         'recorded' => false,
                         'overseer' => ['id' => 0, 'gender' => '', 'name' => '', 'phone' => ''],
@@ -151,6 +154,7 @@ class BookingController
                         'amount_publishers' => 0,
                     ];
                     if ($booking !== null) {
+                        $bookingData['id'] = $booking->getId();
                         $bookingData['confirmed'] = $booking->isConfirmed();
                         $bookingData['recorded'] = $booking->isRecorded();
                         $overseer = $this->pioneerRepository->findById($booking->getOverseerId());
@@ -197,14 +201,37 @@ class BookingController
 
     public function postAction(): Response
     {
-        $this->bookingService->createBooking(new CreateBookingCommand(
-            (int)$this->request->get('shift'),
-            $this->request->get('date'),
-            array_merge(
-                [$this->request->get('user')],
-                $this->mapVolunteersPhoneToId($this->request->get('volunteers', []))
-            )
-        ));
+        if (!empty($this->request->get('delete'))) {
+            $bookingId = (int)$this->request->get('booking_id');
+            $mobile = $this->request->get('delete');
+            $publisher = $this->pioneerRepository->findByPhone($mobile);
+            if ($publisher === null) {
+                throw new InvalidArgumentException();
+            }
+            $this->bookingService->removePublishers(new DeletePublisherFromBookingCommand(
+                $bookingId,
+                $publisher->getId()
+            ));
+        } else {
+            if (!empty($this->request->get('booking_id'))) {
+                $bookingId = (int)$this->request->get('booking_id');
+                $this->bookingService->addPublishers(new AddPublishersCommand($bookingId, array_merge(
+                    [$this->request->get('user')],
+                    $this->mapVolunteersPhoneToId($this->request->get('volunteers', []))
+                )));
+
+            } else {
+                $bookingId = $this->bookingService->createBooking(new CreateBookingCommand(
+                    (int)$this->request->get('shift'),
+                    $this->request->get('date'),
+                    array_merge(
+                        [$this->request->get('user')],
+                        $this->mapVolunteersPhoneToId($this->request->get('volunteers', []))
+                    )
+                ));
+            }
+        }
+        $booking = $this->bookingService->getById($bookingId);
 
         try {
             return (new Response())->setContent($this->twig->render('booking/result.twig', [
@@ -212,6 +239,7 @@ class BookingController
                 'display' => 'Thank You',
                 'description' => 'Your booking has been entered',
                 'select_date' => $this->request->get('date'),
+                'booking' => $booking
             ]));
         } catch (InvalidArgumentException $e) {
             return (new Response())->setContent($this->twig->render('booking/result.twig', [

@@ -131,7 +131,7 @@
                                     <div id="20{{ shift.id }}" class="w-form form-confirm">
                                         <div class="heightWrapper" id = "heightWrapper20{{ shift.id }}">
                                             <form class="form" method="post" action="/booking/" id="form{{ shift.id }}" name="{{ shift.id }}">
-
+                                                <input type="hidden" name="booking_id" value="{{ shift.booking.id }}">
 
                                                 {% if shift.booking.overseer.id > 0 %}
                                                     <div class="user-details">
