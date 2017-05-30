@@ -175,3 +175,11 @@ CREATE TABLE IF NOT EXISTS `shifts_archive` (
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+SELECT l.name, count(1) as count, EXTRACT(YEAR_MONTH FROM b.date) as month,
+  sum(placements) as placements, sum(videos) as videos, sum(requests) as requests
+FROM locations l LEFT JOIN shifts s ON l.id = s.location_id
+INNER JOIN bookings b ON s.id = b.shift_id
+GROUP BY l.name, EXTRACT(YEAR_MONTH FROM date)
+ORDER BY l.name, EXTRACT(YEAR_MONTH FROM date);

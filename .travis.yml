@@ -5,3 +5,9 @@ php:
 install:
   - composer validate
   - composer install --no-interaction
+addons:
+  code_climate:
+    repo_token: aac02991d604a1ff65525e8d5ef7f7e254d45e975f13bc22c81ab0aee3bf753c
+
+after_success:
+  - vendor/bin/test-reporter

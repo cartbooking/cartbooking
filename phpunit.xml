@@ -23,6 +23,14 @@
             <directory suffix=".php">./test</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src/</directory>
+        </whitelist>
+        <blacklist>
+            <directory suffix=".php">./vendor</directory>
+        </blacklist>
+    </filter>
 </phpunit>
 
 <!--<?xml version="1.0" encoding="UTF-8"?>-->
