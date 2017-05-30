@@ -3,7 +3,6 @@ echo '
     <a href="../">HOME</a>
     ';
 if (isset($_POST['login_button'])) {
-    require_once __DIR__ . '/db.php';
     $records = 0;
     $select_experiences = "SELECT date, overseer_id, comments FROM bookings WHERE date < ? and experience = ? ORDER BY date";
     $archive_experiences = "INSERT INTO experiences " .
