@@ -272,6 +272,9 @@ class Booking
      */
     public function setPublishers(array $publishers)
     {
+        $this->overseerId = 0;
+        $this->pioneerId = 0;
+        $this->pioneerBId = 0;
         foreach ($publishers as $publisher) {
             if ($this->overseerId === 0 && $publisher->isMale()) {
                 $this->overseerId = $publisher->getId();
@@ -284,11 +287,17 @@ class Booking
         $this->updateStatus($publishers);
     }
 
+    public function getPublishersIds()
+    {
+        return array_filter([$this->getOverseerId(), $this->getPioneerId(), $this->getPioneerBId()]);
+    }
+
     /**
      * @param Publisher[] $publishers
      */
     private function updateStatus(array $publishers)
     {
+        $this->confirmed = false;
         if (count($publishers) > 2) {
             $this->confirmed = true;
             return;
