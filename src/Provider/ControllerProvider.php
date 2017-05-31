@@ -12,7 +12,6 @@ use CartBooking\Application\Http\PlacementsController;
 use CartBooking\Application\Http\PublishersController;
 use CartBooking\Application\Http\ReportsController;
 use CartBooking\Application\Http\StatisticsController;
-use CartBooking\Booking\BookingService;
 use Pimple\Container;
 use Silex\Api\ControllerProviderInterface;
 use Silex\Application;
@@ -34,61 +33,6 @@ class ControllerProvider extends InjectorServiceProvider implements ControllerPr
      */
     public function register(Container $app)
     {
-        $initParams = $app['initParams'];
-        $app[MapsController::class] = function (Container $app) use ($initParams) {
-            return new MapsController($app['request'], $app['response'], $app['repository.location'], $initParams, $app['twig']);
-        };
-
-        $app[StatisticsController::class] = function (Container $app) {
-            return new StatisticsController($app['request'], $app['response'], $app['repository.booking'], $app['twig']);
-        };
-        $app[ExperiencesController::class] = function (Container $app) {
-            return new ExperiencesController($app['request'], $app['response'], $app['twig'], $app['repository.booking'], $app['repository.pioneer']);
-        };
-
-        $app[PlacementsController::class] = function (Container $app) {
-            return new PlacementsController(
-                $app['request'],
-                $app['response'],
-                $app['twig'],
-                $app['repository.booking'],
-                $app['repository.location'],
-                $app['repository.shift']
-            );
-        };
-
-        $app[CommunicationController::class] = function (Container $app) {
-            return new CommunicationController(
-                $app[EmailService::class],
-                $app['request'],
-                $app['response'],
-                $app['twig'],
-                $app['repository.booking'],
-                $app['repository.location'],
-                $app['repository.pioneer'],
-                $app['repository.shift']
-            );
-        };
-
-        $app[PublishersController::class] = function (Container $app) {
-            return new PublishersController($app['request'], $app['repository.booking'], $app['repository.pioneer'], $app['twig']);
-        };
-
-        $app[ReportsController::class] = function (Container $app) {
-            return new ReportsController($app['request'], $app['response'], $app['twig'], $app['repository.pioneer'], $app[FileSystem::class]);
-        };
-
-        $app[BookingController::class] = function (Container $app) {
-            return new BookingController(
-                $app['request'],
-                $app['repository.booking'],
-                $app[BookingService::class],
-                $app['repository.location'],
-                $app['repository.pioneer'],
-                $app['repository.shift'],
-                $app['twig']
-            );
-        };
     }
 
     /**
@@ -109,20 +53,70 @@ class ControllerProvider extends InjectorServiceProvider implements ControllerPr
             return new RedirectResponse('/booking');
         });
 
-        $controllers->get('/booking/', function (Application $app) use ($userId) {
-            return $this->get(BookingController::class)->indexAction($userId);
+        $controllers->get('/booking/', function () use ($userId) {
+            return $this->injector->create(BookingController::class)->indexAction($userId);
         });
-        $controllers->post('/booking/', function (Application $app) {
-            return $this->get(BookingController::class)->postAction();
+        $controllers->post('/booking/', function () {
+            return $this->injector->create(BookingController::class)->postAction();
         });
-        $controllers->post('/placements/', function (Application $app) {
-            return $this->get(PlacementsController::class)->submitAction();
+        $controllers->post('/placements/', function () {
+            return $this->injector->create(PlacementsController::class)->submitAction();
         });
-        $controllers->get('/placements/{bookingId}', function (Application $app, $bookingId) {
-            return $this->get(PlacementsController::class)->reportAction((int)$bookingId);
+        $controllers->get('/placements/{bookingId}', function ($bookingId) {
+            return $this->injector->create(PlacementsController::class)->reportAction((int)$bookingId);
         })->assert('bookingId', '\d+');
-        $controllers->get('/placements/', function (Application $app) use ($userId) {
-            return $this->get(PlacementsController::class)->indexAction($userId);
+        $controllers->get('/placements/', function () use ($userId) {
+            return $this->injector->create(PlacementsController::class)->indexAction($userId);
+        });
+        $controllers->get('/communication/', function () {
+            return $this->injector->create(CommunicationController::class)->indexAction();
+        });
+        $controllers->post('/communication/', function (Request $request) {
+            $controller = $this->injector->create(CommunicationController::class);
+            switch ($request->get('action')) {
+                case 'placement_reminder':
+                    return $controller->sendBookingReminderEmailsAction();
+                case 'volunteer_needed':
+                    return $controller->sendVolunteerNeededEmailsAction();
+                case 'overseer_needed':
+                    return $controller->sendOverseerNeededEmailsAction();
+            }
+        });
+        $controllers->get('/experiences/', function () {
+            return $this->injector->create(ExperiencesController::class)->indexAction();
+        });
+        $controllers->post('/experiences/', function (Request $request) {
+            return $this->injector->create(ExperiencesController::class)->postAction((int)$request->get('dismissed'));
+        });
+        $controllers->get('/locations/{locationId}', function ($locationId) {
+            return $this->injector->create(MapsController::class, ['settings' => $this->get('initParams')])->location($locationId);
+        });
+        $controllers->get('/locations/', function () {
+            return $this->injector->create(MapsController::class, ['settings' => $this->get('initParams')])->indexAction();
+        });
+        $controllers->get('/publishers/low-participation', function () {
+            return $this->injector->create(PublishersController::class)->lowParticipants();
+        });
+        $controllers->get('/publishers/', function () {
+            return $this->injector->create(PublishersController::class)->indexAction();
+        });
+        $controllers->post('/publishers/', function (Request $request) {
+            return $this->injector->create(PublishersController::class)->searchAction($request->get('name'));
+        });
+        $controllers->get('/statistics/', function () {
+            return $this->injector->create(StatisticsController::class)->indexAction();
+        });
+        $controllers->get('/reports', function () {
+            return $this->injector->create(ReportsController::class)->indexAction();
+        });
+        $controllers->post('/reports', function (Request $request) {
+            if ($request->get('action') === 'List Brothers') {
+                return $this->injector->create(ReportsController::class)->listBrothersAction()->send();
+            }
+            if ($request->get('action') === 'List Invitees') {
+                return $this->injector->create(ReportsController::class)->listInviteesAction()->send();
+            }
+            return new RedirectResponse('/');
         });
 
         return $controllers;

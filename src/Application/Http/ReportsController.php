@@ -4,16 +4,11 @@ namespace CartBooking\Application\Http;
 
 use CartBooking\Lib\Utilities\FileSystem;
 use CartBooking\Publisher\PublisherRepository;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
 
 class ReportsController
 {
-    /** @var Request */
-    private $request;
-    /** @var Response */
-    private $response;
     /** @var Twig_Environment */
     private $twig;
     /** @var PublisherRepository */
@@ -21,10 +16,8 @@ class ReportsController
     /** @var FileSystem */
     private $fileSystem;
 
-    public function __construct(Request $request, Response $response, Twig_Environment $twig, PublisherRepository $pioneerRepository, FileSystem $fileSystem)
+    public function __construct(Twig_Environment $twig, PublisherRepository $pioneerRepository, FileSystem $fileSystem)
     {
-        $this->request = $request;
-        $this->response = $response;
         $this->twig = $twig;
         $this->pioneerRepository = $pioneerRepository;
         $this->fileSystem = $fileSystem;
@@ -35,30 +28,40 @@ class ReportsController
      */
     public function indexAction(): Response
     {
-        return $this->response->setContent($this->twig->render('reports.twig'));
+        return (new Response($this->twig->render('reports.twig')));
     }
 
     public function listBrothersAction(): Response
     {
-        $this->response->headers->set('Content-Type',  'application/excel');
-        $this->response->headers->set('Content-Disposition', 'attachment; filename="listBrothers.csv"');
+        $headers = [
+            'Content-Type' => 'application/excel',
+            'Content-Disposition' => 'attachment; filename="listBrothers.csv"',
+        ];
+        $body = '';
         $file = $this->fileSystem->fopen('listBrothers.csv', 'w');
         foreach ($this->pioneerRepository->findByGender('m') as $pioneer) {
-            $this->fileSystem->fputcsv($file, [$pioneer->getFirstName(), $pioneer->getLastName()]);
+            $row = [$pioneer->getFirstName(), $pioneer->getLastName()];
+            $this->fileSystem->fputcsv($file, $row);
+            $body .= implode(',', $row) . PHP_EOL;
         }
         $this->fileSystem->fclose($file);
-        return $this->response;
+        return new Response($body, Response::HTTP_OK, $headers);
     }
 
     public function listInviteesAction(): Response
     {
-        $this->response->headers->set('Content-Type', 'application/excel');
-        $this->response->headers->set('Content-Disposition',  'attachment; filename="listInvitees.csv"');
+        $headers = [
+            'Content-Type' => 'application/excel',
+            'Content-Disposition' => 'attachment; filename="listInvitees.csv"',
+        ];
+        $body = '';
         $file = $this->fileSystem->fopen('listInvitees.csv', 'w');
         foreach ($this->pioneerRepository->findActive() as $pioneer) {
-            $this->fileSystem->fputcsv($file, [$pioneer->getFirstName(), $pioneer->getLastName()]);
+            $row = [$pioneer->getFirstName(), $pioneer->getLastName()];
+            $this->fileSystem->fputcsv($file, $row);
+            $body .= implode(',', $row) . PHP_EOL;
         }
         $this->fileSystem->fclose($file);
-        return $this->response;
+        return new Response($body, Response::HTTP_OK, $headers);
     }
 }

@@ -5,5 +5,4 @@ $userId = $_COOKIE['login'];
 if (!$userId) {
     return (new \Symfony\Component\HttpFoundation\RedirectResponse('/login.php'))->send();
 }
-
 $app->run();

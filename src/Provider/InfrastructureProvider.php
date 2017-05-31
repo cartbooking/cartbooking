@@ -61,7 +61,7 @@ class InfrastructureProvider extends InjectorServiceProvider
 
 
 
-        $this->alias('twig', Twig_Environment::class);
+        $this->alias(Twig_Environment::class, 'twig');
         $app['twig'] = function () {
             $twig = new Twig_Environment(new Twig_Loader_Filesystem(APP_ROOT . '/templates/'), [
                 'cache' => APP_ROOT  . '/cache',
