@@ -7,6 +7,7 @@ use CartBooking\Application\EmailService;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple\Container;
+use Silex\ControllerCollection;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
@@ -72,15 +73,15 @@ class InfrastructureProvider extends InjectorServiceProvider
             return $twig;
         };
 
-        $this->alias('request', Request::class);
+        $this->alias( Request::class, 'request');
         $app['request'] = function () {
             return new \Symfony\Component\HttpFoundation\Request($_GET, $_REQUEST, [], $_COOKIE, $_FILES, $_SERVER);
         };
 
-        $this->alias('response', Response::class);
+        $this->alias(Response::class, 'response');
         $app['response'] = function () {
             return new \Symfony\Component\HttpFoundation\Response();
         };
-
+        $this->alias(ControllerCollection::class, 'controllers_factory');
     }
 }

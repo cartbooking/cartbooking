@@ -8,8 +8,8 @@ use Bigcommerce\Injector\Injector;
 use Bigcommerce\Injector\InjectorInterface;
 use Bigcommerce\Injector\Reflection\ParameterInspector;
 use Bigcommerce\Injector\ServiceProvider\BindingClosureFactory;
-use Pimple\Container;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
+use Silex\Application;
 
 class CoreProvider
 {
@@ -20,9 +20,9 @@ class CoreProvider
      * This method should only be used to configure services and parameters.
      * It should not get services.
      *
-     * @param Container $app A container instance
+     * @param Application $app A container instance
      */
-    public function register(Container $app)
+    public function register(Application $app)
     {
         $injector = new Injector(
             new ArrayContainerAdapter($app),
@@ -41,11 +41,7 @@ class CoreProvider
             $app,
             new BindingClosureFactory(new LazyLoadingValueHolderFactory(), $app[Injector::class])
         );
-        $controllerProvider = new ControllerProvider(
-            $app[Injector::class],
-            $app,
-            new BindingClosureFactory(new LazyLoadingValueHolderFactory(), $app[Injector::class])
-        );
+
         $infrastructureProvider = new InfrastructureProvider(
             $app[Injector::class],
             $app,
@@ -54,8 +50,18 @@ class CoreProvider
 
         $serviceProvider->register($app);
         $repositoryProvider->register($app);
-        $controllerProvider->register($app);
         $infrastructureProvider->register($app);
+    }
+
+    public function mount(Application $app)
+    {
+        $controllerProvider = new ControllerProvider(
+            $app[Injector::class],
+            $app,
+            new BindingClosureFactory(new LazyLoadingValueHolderFactory(), $app[Injector::class])
+        );
+        $controllerProvider->register($app);
+        $app->mount('/', $controllerProvider);
     }
 
 }
