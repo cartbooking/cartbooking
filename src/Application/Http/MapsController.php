@@ -29,9 +29,8 @@ class MapsController
         $this->twig = $twig;
     }
 
-    public function location()
+    public function location($locationId)
     {
-        $locationId = $this->request->get('location');
         $location = $this->locationRepository->findById($locationId);
         $name = $location->getName();
         $center = $location->getCentre();
@@ -57,7 +56,7 @@ class MapsController
         return $this->response->send();
     }
 
-    public function allLocations()
+    public function indexAction()
     {
         $locations = $this->locationRepository->findAll();
         $this->response->setContent($this->twig->render('locations.twig', ['locations' => $locations]));
