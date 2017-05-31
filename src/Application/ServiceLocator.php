@@ -37,14 +37,6 @@ class ServiceLocator
     }
 
     /**
-     * @return Db
-     */
-    public static function getDb()
-    {
-        return self::$app['db'];
-    }
-
-    /**
      * @return Logger
      */
     public static function getLogger()
@@ -58,29 +50,5 @@ class ServiceLocator
     public static function getPioneerRepository()
     {
         return self::$app['repository.pioneer'];
-    }
-
-    /**
-     * @return BookingRepository
-     */
-    public static function getBookingRepository()
-    {
-        return self::$app['repository.booking'];
-    }
-
-    /**
-     * @return ShiftRepository
-     */
-    public static function getShiftRepository()
-    {
-        return self::$app['repository.shift'];
-    }
-
-    /**
-     * @return LocationRepository
-     */
-    public static function getLocationRepository()
-    {
-        return self::$app['repository.location'];
     }
 }
