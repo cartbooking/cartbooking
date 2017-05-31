@@ -14,8 +14,13 @@ use CartBooking\Application\Http\ReportsController;
 use CartBooking\Application\Http\StatisticsController;
 use CartBooking\Booking\BookingService;
 use Pimple\Container;
+use Silex\Api\ControllerProviderInterface;
+use Silex\Application;
+use Silex\ControllerCollection;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
-class ControllerProvider extends InjectorServiceProvider
+class ControllerProvider extends InjectorServiceProvider implements ControllerProviderInterface
 {
 
     /**
@@ -84,5 +89,42 @@ class ControllerProvider extends InjectorServiceProvider
                 $app['twig']
             );
         };
+    }
+
+    /**
+     * Returns routes to connect to the given application.
+     *
+     * @param Application $app An Application instance
+     *
+     * @return ControllerCollection A ControllerCollection instance
+     */
+    public function connect(Application $app)
+    {
+        $controllers = $this->get(ControllerCollection::class);
+        $userId = (int)$this->get(Request::class)->cookies->get('login');
+        $controllers->get('/', function (Application $app) use($userId) {
+            if (!$userId) {
+                return new RedirectResponse('/login.php');
+            }
+            return new RedirectResponse('/booking');
+        });
+
+        $controllers->get('/booking/', function (Application $app) use ($userId) {
+            return $this->get(BookingController::class)->indexAction($userId);
+        });
+        $controllers->post('/booking/', function (Application $app) {
+            return $this->get(BookingController::class)->postAction();
+        });
+        $controllers->post('/placements/', function (Application $app) {
+            return $this->get(PlacementsController::class)->submitAction();
+        });
+        $controllers->get('/placements/{bookingId}', function (Application $app, $bookingId) {
+            return $this->get(PlacementsController::class)->reportAction((int)$bookingId);
+        })->assert('bookingId', '\d+');
+        $controllers->get('/placements/', function (Application $app) use ($userId) {
+            return $this->get(PlacementsController::class)->indexAction($userId);
+        });
+
+        return $controllers;
     }
 }

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/cartbooking/cartbooking.svg?branch=master)](https://travis-ci.org/serroba/cartbooking)
+[![Build Status](https://travis-ci.org/cartbooking/cartbooking.svg?branch=master)](https://travis-ci.org/cartbooking/cartbooking)
 [![Code Climate](https://codeclimate.com/github/serroba/cartbooking.svg)](https://codeclimate.com/github/serroba/cartbooking)
 
 # cartbooking
