@@ -1,8 +1,14 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/app.php';
-$userId = $_COOKIE['login'];
-if (!$userId) {
-    return (new \Symfony\Component\HttpFoundation\RedirectResponse('/login.php'))->send();
-}
+
+define('APP_ROOT', __DIR__);
+$initParams = parse_ini_file(APP_ROOT . '/config.ini');
+date_default_timezone_set($initParams['timezone']);
+$app = new Silex\Application();
+$app['initParams'] = $initParams;
+$provider = new \CartBooking\Provider\CoreProvider($initParams);
+$provider->register($app);
+$provider->mount($app);
+$app->boot();
+\CartBooking\Application\ServiceLocator::setContainer($app);
 $app->run();
