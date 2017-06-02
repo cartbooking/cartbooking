@@ -10,6 +10,7 @@ use Bigcommerce\Injector\Reflection\ParameterInspector;
 use Bigcommerce\Injector\ServiceProvider\BindingClosureFactory;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 class CoreProvider
 {
@@ -62,6 +63,12 @@ class CoreProvider
         );
         $controllerProvider->register($app);
         $app->mount('/', $controllerProvider);
+        $app->get('/login', function(Request $request) use ($app) {
+            return $app['twig']->render('login.html', array(
+                'error'         => $app['security.last_error']($request),
+                'last_username' => $app['session']->get('_security.last_username'),
+            ));
+        });
     }
 
 }

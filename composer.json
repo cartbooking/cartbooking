@@ -17,13 +17,15 @@
         "mailgun/mailgun-php": "^2.1",
         "php-http/curl-client": "^1.7",
         "guzzlehttp/psr7": "^1.4",
-        "pimple/pimple": "~3.0",
         "silex/silex": "~2.0",
         "swiftmailer/swiftmailer": "^5.4",
         "monolog/monolog": "^1.22",
         "twig/twig": "^2.0",
         "bigcommerce/injector": "^2.0",
-        "doctrine/inflector": "^1.1"
+        "doctrine/inflector": "^1.1",
+        "symfony/security": "^3.0",
+        "doctrine/dbal": "~2.2",
+        "symfony/twig-bridge": "^3.3"
     },
     "autoload": {
         "psr-4": {
