@@ -1,6 +1,7 @@
 {% extends "base.twig" %}
 
 {% block title %}{{ title }}{% endblock %}
+{% block nav %}{% endblock %}
 {% block content %}
     <div class="w-section section">
         <div class="content-mobile-number"><img class="carty" src="/images/happy-13.svg">
@@ -10,14 +11,11 @@
                 {% endif %}
                 <div class="w-form">
                     <div data-delay="0" class="w-dropdown locations">
-                        <!--                                        <div class="w-dropdown-toggle dropdown">-->
-                        <!--                                            <div>Select your congregation</div>-->
-                        <!--                                            <div class="w-icon-dropdown-toggle"></div>-->
-                        <!--                                        </div>-->
                         <img class="leaf" src="/images/leaf-11.svg">
                         <div class="sign-in-text">Login</div>
                         <div class="w-form">
-                            <form method="post" action="/login.php" id="email-form" name="email-form" data-name="Email Form">
+                            <form method="post" action="{{ path('login_check') }}" id="email-form" name="email-form" data-name="Email Form">
+                              {{ error }}
                                 <div data-delay="0" class="w-dropdown locations">
                                     <div data-delay="0" class="w-dropdown locations">
                                         <div class="w-dropdown-toggle dropdown">
@@ -26,14 +24,11 @@
                                     </div>
                                 </div>
                                 <input type="hidden" name="city" value="Canada Bay" />
-                                <input class="w-input mobile-text-filled" id="Username" type="tel" placeholder="Username" name="user" data-name="Username" required="required">
-                                <input class="w-input mobile-text-filled" id="Password-2" type="password" placeholder="Password" name="pass" data-name="Password 2" required="required">
+                                <input type="tel" name="_username" value="{{ last_username }}" class="w-input mobile-text-filled" data-name="Username" required="required" />
+                                <input type="password" name="_password" value="" class="w-input mobile-text-filled" />
                                 <input class="w-button submit-mobile-number sign-in" type="submit" name="login_button" value="SIGN IN">
                             </form>
                         </div>
-                        <!--                                        <nav class="w-dropdown-list droplist">-->
-                        <!--                                            <a href="#" class="w-dropdown-link" onclick="selectCity('Canada Bay');">Canada Bay</a>-->
-                        <!--                                        </nav>-->
                     </div>
                 </div>
             </div>

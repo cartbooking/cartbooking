@@ -13,9 +13,9 @@
                         </div>
                     </div>
                     <div class="w-form placement-form-wrapper">
-                        <input class="w-input mobile-text-filled" id="placements" type="num" placeholder="Placements" name="placements" data-name="placements">
-                        <input class="w-input mobile-text-filled" id="videos" type="num" placeholder="Videos shown" name="videos" data-name="videos">
-                        <input class="w-input mobile-text-filled" id="requests" type="num" placeholder="Study requests" name="requests" data-name="requests">
+                        <input class="w-input mobile-text-filled" id="placements" type="number" min="0" step="1" placeholder="Placements" name="placements" data-name="placements">
+                        <input class="w-input mobile-text-filled" id="videos" type="number" min="0" step="1" placeholder="Videos shown" name="videos" data-name="videos">
+                        <input class="w-input mobile-text-filled" id="requests" type="number" min="0" step="1" placeholder="Study requests" name="requests" data-name="requests">
                         <textarea form="submit-placements" class="w-input comments" id="Comments" placeholder="Comments..." name="comments" data-name="Comments"></textarea>
                         <input type="hidden" name="booking_id" value="{{ booking_id }}" />
                         <input class="w-button submit-mobile-number sign-in" type="submit" value="Submit">

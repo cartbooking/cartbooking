@@ -134,7 +134,7 @@ class Booking
      */
     public function isRecorded(): bool
     {
-        return $this->date > new DateTimeImmutable('now') && $this->recorded;
+        return new DateTimeImmutable('now') > $this->date  && $this->recorded;
     }
 
     /**

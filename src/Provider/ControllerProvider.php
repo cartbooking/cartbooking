@@ -3,7 +3,6 @@
 namespace CartBooking\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
-use CartBooking\Application\EmailService;
 use CartBooking\Application\Http\BookingController;
 use CartBooking\Application\Http\CommunicationController;
 use CartBooking\Application\Http\ExperiencesController;
@@ -60,14 +59,14 @@ class ControllerProvider extends InjectorServiceProvider implements ControllerPr
             return $this->injector->create(BookingController::class)->postAction();
         });
         $controllers->post('/placements/', function () {
-            return $this->injector->create(PlacementsController::class)->submitAction();
+            return $this->injector->create(PlacementsController::class)->postAction();
         });
         $controllers->get('/placements/{bookingId}', function ($bookingId) {
             return $this->injector->create(PlacementsController::class)->reportAction((int)$bookingId);
         })->assert('bookingId', '\d+');
         $controllers->get('/placements/', function () use ($userId) {
             return $this->injector->create(PlacementsController::class)->indexAction($userId);
-        });
+        })->bind('/placements');
         $controllers->get('/communication/', function () {
             return $this->injector->create(CommunicationController::class)->indexAction();
         });
@@ -93,7 +92,7 @@ class ControllerProvider extends InjectorServiceProvider implements ControllerPr
         });
         $controllers->get('/locations/', function () {
             return $this->injector->create(MapsController::class, ['settings' => $this->get('initParams')])->indexAction();
-        });
+        })->bind('/locations');
         $controllers->get('/publishers/low-participation', function () {
             return $this->injector->create(PublishersController::class)->lowParticipants();
         });
@@ -117,6 +116,13 @@ class ControllerProvider extends InjectorServiceProvider implements ControllerPr
                 return $this->injector->create(ReportsController::class)->listInviteesAction()->send();
             }
             return new RedirectResponse('/');
+        });
+        $app->get('/login', function(Request $request) use ($app) {
+            return $app['twig']->render('login.twig', [
+                'error'         => $app['security.last_error']($request),
+                'last_username' => $app['session']->get('_security.last_username'),
+                'title' => 'Log in'
+            ]);
         });
 
         return $controllers;

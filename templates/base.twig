@@ -42,13 +42,7 @@
         <div class="w-nav-button menu-bt">
           <div class="w-icon-nav-menu"></div>
         </div>
-        {% if month == "now"|date('F') %}
-          <img class="arrow-back" width="20" src="/images/arrow-right-02.svg">
-          <a class="arrow-month" href="/booking/?m={{ new_month }}">{{ month }}</a>
-        {% else %}
-          <a class="arrow-month" href="/booking/?m={{ new_month }}">{{ month }}</a>
-          <img class="arrow-back" width="20" src="/images/arrow-left-02.svg">
-        {% endif %}
+        {% block month_nav %}{% endblock %}
       </div>
     </div>
   </div>

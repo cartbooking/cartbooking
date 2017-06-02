@@ -110,7 +110,8 @@ class BookingController
             'select_day' => new DateTimeImmutable($select_date ? "@$select_date": 'now'),
             'cancel_time' => (new DateTimeImmutable('now'))->add(new DateInterval('P1D')),
             'locations' => $this->populateLocations(new DateTimeImmutable($select_date ? "@$select_date": 'now')),
-            'user_id' => $userId
+            'user_id' => $userId,
+            'admin' => ['phone' => '0457406625']
         ]));
     }
 
@@ -239,7 +240,8 @@ class BookingController
                 'display' => 'Thank You',
                 'description' => 'Your booking has been entered',
                 'select_date' => $this->request->get('date'),
-                'booking' => $booking
+                'booking' => $booking,
+                'result' => true,
             ]));
         } catch (InvalidArgumentException $e) {
             return (new Response())->setContent($this->twig->render('booking/result.twig', [
