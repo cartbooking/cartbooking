@@ -9,6 +9,6 @@ $app['initParams'] = $initParams;
 $provider = new \CartBooking\Provider\CoreProvider($initParams);
 $provider->register($app);
 $provider->mount($app);
-$app->boot();
 \CartBooking\Application\ServiceLocator::setContainer($app);
+$app->boot();
 $app->run();

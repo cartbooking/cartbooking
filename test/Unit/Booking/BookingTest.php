@@ -93,6 +93,19 @@ class BookingTest extends AutoMockingTest
         $sister->isMale()->willReturn(false);
         $this->booking->setPublishers([$brother->reveal(), $sister->reveal()]);
         static::assertTrue($this->booking->isConfirmed());
+    }
 
+    public function testRecorded()
+    {
+        $booking = new Booking(1, 1, new \DateTimeImmutable('2000-01-01'));
+        $booking->setRecorded(true);
+        static::assertTrue($booking->isRecorded());
+    }
+
+    public function testRecordedInFuture()
+    {
+        $booking = new Booking(1, 1, (new \DateTimeImmutable('now'))->add(new \DateInterval('P1D')));
+        $booking->setRecorded(true);
+        static::assertFalse($booking->isRecorded());
     }
 }

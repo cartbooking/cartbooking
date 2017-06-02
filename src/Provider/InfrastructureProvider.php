@@ -129,7 +129,8 @@ class InfrastructureProvider extends InjectorServiceProvider
                 'cache' => APP_ROOT . '/cache',
                 'auto_reload' => true,
                 'debug' => true,
-            ]
+            ],
+            'twig.date.format' => 'Y-m-d',
         ));
         $app['debug'] = true;
 

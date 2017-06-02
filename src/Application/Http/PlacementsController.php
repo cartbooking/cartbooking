@@ -66,7 +66,7 @@ class PlacementsController
                 ];
             }
         }
-        return $this->response->setContent($this->twig->render('placements.twig', ['bookings' => $bookings]));
+        return $this->response->setContent($this->twig->render('placements/index.twig', ['bookings' => $bookings]));
     }
 
     /**
@@ -90,7 +90,7 @@ class PlacementsController
         ]));
     }
 
-    public function submitAction(): Response
+    public function postAction(): Response
     {
         $booking = $this->bookingRepository->findById((int)$this->request->get('booking_id'));
         if ($booking !== null && $booking->isConfirmed() && !$booking->isRecorded()) {
