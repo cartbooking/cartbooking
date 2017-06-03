@@ -72,6 +72,13 @@ class BookingServiceTest extends AutoMockingTest
         $this->bookingService->addPublishers($command);
     }
 
+    public function testAddPublisherDoesNothingIfNotBooking()
+    {
+        $bookingId = 1;
+        $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn(null);
+        static::assertEmpty($this->bookingService->addPublishers(new AddPublishersCommand($bookingId, [1])));
+    }
+
     public function testRemovePublisherSimple()
     {
         $bookingId = 1;
