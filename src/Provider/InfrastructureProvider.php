@@ -63,17 +63,6 @@ class InfrastructureProvider extends InjectorServiceProvider
 
 
         $this->alias(Twig_Environment::class, 'twig');
-//        $app['twig'] = function () {
-//            $twig = new Twig_Environment(new Twig_Loader_Filesystem(APP_ROOT . '/templates/'), [
-//                'cache' => APP_ROOT  . '/cache',
-//                'auto_reload' => true,
-//                'debug' => true,
-//            ]);
-//            $twig->getExtension(Twig_Extension_Core::class)->setDateFormat('Y-m-d', '%d days');
-//            $twig->addExtension(new Twig_Extension_Debug());
-//            return $twig;
-//        };
-
         $this->alias( Request::class, 'request');
         $app['request'] = function () {
             return new \Symfony\Component\HttpFoundation\Request($_GET, $_REQUEST, [], $_COOKIE, $_FILES, $_SERVER);
@@ -123,6 +112,9 @@ class InfrastructureProvider extends InjectorServiceProvider
         ]);
 
         $app->register(new SessionServiceProvider());
+        $app['session.storage.options'] = [
+            'cookie_lifetime' => (int) $initParams['session']['lifetime'],
+        ];
         $app->register(new TwigServiceProvider(), array(
             'twig.path' => APP_ROOT . '/templates',
             'twig.options' => [
@@ -132,7 +124,7 @@ class InfrastructureProvider extends InjectorServiceProvider
             ],
             'twig.date.format' => 'Y-m-d',
         ));
-        $app['debug'] = true;
+        $app['debug'] = (bool)$initParams['system']['debug'];
 
     }
 }
