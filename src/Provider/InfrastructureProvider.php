@@ -4,9 +4,12 @@ namespace CartBooking\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
 use CartBooking\Application\EmailService;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple\Container;
+use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
@@ -124,7 +127,17 @@ class InfrastructureProvider extends InjectorServiceProvider
             ],
             'twig.date.format' => 'Y-m-d',
         ));
-        $app['debug'] = (bool)$initParams['system']['debug'];
+        $this->bind(EntityManager::class,  function (Application $app) use ($initParams) {
+            $dbParams = [
+                'driver' => 'pdo_mysql',
+                'user' => $initParams['db']['username'],
+                'host' => $initParams['db']['host'],
+                'password' => $initParams['db']['password'],
+                'dbname' => $initParams['db']['name'],
+            ];
 
+            $config = Setup::createXMLMetadataConfiguration([APP_ROOT . '/config/doctrine'], $app['debug']);
+            return EntityManager::create($dbParams, $config);
+        });
     }
 }

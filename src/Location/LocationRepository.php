@@ -10,6 +10,7 @@ namespace CartBooking\Location;
 
 
 use CartBooking\Lib\Db\Db;
+use Doctrine\ORM\EntityManager;
 
 class LocationRepository
 {
@@ -21,11 +22,14 @@ class LocationRepository
      * @var LocationHydrator
      */
     private $locationHydrator;
+    /** @var EntityManager */
+    private $manager;
 
-    public function __construct(Db $db, LocationHydrator $locationHydrator)
+    public function __construct(Db $db, LocationHydrator $locationHydrator, EntityManager $manager)
     {
         $this->db = $db;
         $this->locationHydrator = $locationHydrator;
+        $this->manager = $manager;
     }
 
     /**
