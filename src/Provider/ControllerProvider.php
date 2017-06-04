@@ -6,7 +6,7 @@ use Bigcommerce\Injector\InjectorServiceProvider;
 use CartBooking\Application\Http\BookingController;
 use CartBooking\Application\Http\CommunicationController;
 use CartBooking\Application\Http\ExperiencesController;
-use CartBooking\Application\Http\MapsController;
+use CartBooking\Application\Http\LocationsController;
 use CartBooking\Application\Http\PlacementsController;
 use CartBooking\Application\Http\PublishersController;
 use CartBooking\Application\Http\ReportsController;
@@ -88,10 +88,16 @@ class ControllerProvider extends InjectorServiceProvider implements ControllerPr
             return $this->injector->create(ExperiencesController::class)->postAction((int)$request->get('dismissed'));
         });
         $controllers->get('/locations/{locationId}', function ($locationId) {
-            return $this->injector->create(MapsController::class, ['settings' => $this->get('initParams')])->location($locationId);
+            return $this->injector->create(
+                LocationsController::class,
+                ['settings' => $this->get('initParams')]
+            )->locationAction($locationId);
         });
         $controllers->get('/locations/', function () {
-            return $this->injector->create(MapsController::class, ['settings' => $this->get('initParams')])->indexAction();
+            return $this->injector->create(
+                LocationsController::class,
+                ['settings' => $this->get('initParams')]
+            )->indexAction();
         })->bind('/locations');
         $controllers->get('/publishers/low-participation', function () {
             return $this->injector->create(PublishersController::class)->lowParticipants();

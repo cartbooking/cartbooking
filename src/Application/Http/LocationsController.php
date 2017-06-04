@@ -7,12 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
 
-class MapsController
+class LocationsController
 {
-    /** @var Request */
-    private $request;
-    /** @var Response */
-    private $response;
     /** @var LocationRepository */
     private $locationRepository;
     /** @var array */
@@ -20,16 +16,14 @@ class MapsController
     /** @var Twig_Environment */
     private $twig;
 
-    public function __construct(Request $request, Response $response, LocationRepository $locationRepository, array $settings, Twig_Environment $twig)
+    public function __construct(LocationRepository $locationRepository, array $settings, Twig_Environment $twig)
     {
-        $this->request = $request;
-        $this->response = $response;
         $this->locationRepository = $locationRepository;
         $this->settings = $settings;
         $this->twig = $twig;
     }
 
-    public function location($locationId)
+    public function locationAction($locationId): Response
     {
         $location = $this->locationRepository->findById($locationId);
         $name = $location->getName();
@@ -46,29 +40,27 @@ class MapsController
                 'maptype' => 'roadmap',
                 'key' => $key
             ]) . '&' . $this->extractMarkers($markers);
-        $this->response->setContent($this->twig->render('map.twig', [
+        return new Response($this->twig->render('locations/location.twig', [
             'title' => "Map $name",
             'anchor_href' => "https://www.google.com.au/maps/@$center,17.3z",
             'img_href' => "https://maps.googleapis.com/maps/api/staticmap?$params",
             'location_name' => $name,
             'location_description' => $description,
         ]));
-        return $this->response->send();
     }
 
-    public function indexAction()
+    public function indexAction(): Response
     {
         $locations = $this->locationRepository->findAll();
-        $this->response->setContent($this->twig->render('locations.twig', ['locations' => $locations]));
-        return $this->response->send();
+        return new Response($this->twig->render('locations/index.twig', ['locations' => $locations]));
     }
 
-    private function extractMarkers($markers)
+    private function extractMarkers(array $markers): string
     {
-        $return = [];
-        foreach (explode("\n", $markers) as $marker) {
-            $return[] = htmlentities('markers=' . $marker);
+        $markersParam = [];
+        foreach ($markers as $marker) {
+            $markersParam[] = htmlentities('markers=' . $marker);
         }
-        return implode('&', $return);
+        return implode('&', $markersParam);
     }
 }

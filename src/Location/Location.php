@@ -12,8 +12,8 @@ class Location
     private $capacity = 0;
     /** @var string */
     private $centre;
-    /** @var string */
-    private $markers;
+    /** @var string[] */
+    private $markers = [];
     /** @var string */
     private $name;
     /** @var string */
@@ -94,17 +94,17 @@ class Location
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getMarkers(): string
+    public function getMarkers(): array
     {
         return $this->markers;
     }
 
     /**
-     * @param string $markers
+     * @param string[] $markers
      */
-    public function setMarkers(string $markers)
+    public function setMarkers(array $markers)
     {
         $this->markers = $markers;
     }

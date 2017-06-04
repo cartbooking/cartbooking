@@ -1,0 +1,14 @@
+{% extends "base.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+  <div class="w-section section">
+    <div class="map">
+      <h1>{{ location_name }}</h1>
+      <a target='_blank' href='{{ anchor_href }}'>
+        <img src='{{ img_href }}'>
+      </a>
+    </div>
+    <div class="locDesc">{{ location_description | raw }}</div>
+  </div>
+{% endblock %}
