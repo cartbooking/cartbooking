@@ -9,8 +9,9 @@
 namespace CartBooking\Location;
 
 
+use CartBooking\Location\Coordinate\Latitude;
+use CartBooking\Location\Coordinate\Longitude;
 use CartBooking\Location\Marker\Color;
-use CartBooking\Location\Marker\Coordinate;
 use CartBooking\Location\Marker\Label;
 
 class LocationHydrator
@@ -42,7 +43,7 @@ class LocationHydrator
                 $markers[] = new Marker(
                     new Color($marker['color']),
                     new Label($marker['label']),
-                    new Coordinate((float)$latitude, (float) $longitude)
+                    new Coordinate(new Latitude((float)$latitude), new Longitude((float) $longitude))
                 );
             }
         }

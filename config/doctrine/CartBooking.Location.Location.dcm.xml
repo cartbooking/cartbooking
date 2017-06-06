@@ -10,7 +10,7 @@
         <field name="volunteers" type="integer" />
         <field name="centre" type="string" />
         <field name="path" type="string" />
-        <field name="markers" type="string" />
+        <field name="markers" type="markers" />
         <field name="description" type="string" />
         <field name="zoom" type="integer" />
         <field name="capacity" type="integer" />

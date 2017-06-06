@@ -4,6 +4,8 @@ namespace CartBooking\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
 use CartBooking\Application\EmailService;
+use CartBooking\Infrastructure\Persistence\Doctrine\Type\MarkersType;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
 use Monolog\Handler\StreamHandler;
@@ -127,7 +129,7 @@ class InfrastructureProvider extends InjectorServiceProvider
             ],
             'twig.date.format' => 'Y-m-d',
         ));
-        $this->bind(EntityManager::class,  function (Application $app) use ($initParams) {
+        $this->bind(EntityManager::class, function (Application $app) use ($initParams) {
             $dbParams = [
                 'driver' => 'pdo_mysql',
                 'user' => $initParams['db']['username'],
@@ -135,6 +137,7 @@ class InfrastructureProvider extends InjectorServiceProvider
                 'password' => $initParams['db']['password'],
                 'dbname' => $initParams['db']['name'],
             ];
+            Type::addType(MarkersType::MARKERS, MarkersType::class);
 
             $config = Setup::createXMLMetadataConfiguration([APP_ROOT . '/config/doctrine'], $app['debug']);
             return EntityManager::create($dbParams, $config);

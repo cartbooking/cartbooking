@@ -51,9 +51,7 @@ class RepositoryProvider extends InjectorServiceProvider
         });
         $this->alias('repository.shift', ShiftRepository::class);
 
-        $this->bind(LocationRepository::class, function (Container $app) {
-            return new LocationRepository($app[\CartBooking\Lib\Db\Db::class], new \CartBooking\Location\LocationHydrator(), $this->get(EntityManager::class));
-        });
+        $this->autoBind(LocationRepository::class);
         $this->alias('repository.location', LocationRepository::class);
     }
 }
