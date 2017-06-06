@@ -136,9 +136,3 @@ $html = '<html>
                 </tr>
             </table>
          </html>';
-$email = ServiceLocator::getEmailMessage();
-$email->setTo(['serroba@gmail.com']);
-$email->setBody($html);
-$email->setSubject($subject);
-
-ServiceLocator::getMailer()->send($email);
