@@ -26,7 +26,10 @@
         "symfony/security": "^3.0",
         "symfony/twig-bridge": "^3.3",
         "symfony/yaml": "2.*",
-        "twig/twig": "^2.0"
+        "twig/twig": "^2.0",
+        "league/fractal": "^0.16.0",
+        "lcobucci/jwt": "^3.2",
+        "eloquent/enumeration": "^5.1"
     },
     "autoload": {
         "psr-4": {

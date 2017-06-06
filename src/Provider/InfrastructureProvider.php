@@ -4,6 +4,7 @@ namespace CartBooking\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
 use CartBooking\Application\EmailService;
+use CartBooking\Infrastructure\Persistence\Doctrine\Type\DateTimeImmutableType;
 use CartBooking\Infrastructure\Persistence\Doctrine\Type\MarkersType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
@@ -138,6 +139,7 @@ class InfrastructureProvider extends InjectorServiceProvider
                 'dbname' => $initParams['db']['name'],
             ];
             Type::addType(MarkersType::MARKERS, MarkersType::class);
+            Type::addType(DateTimeImmutableType::DATE_TIME_IMMUTABLE, DateTimeImmutableType::class);
 
             $config = Setup::createXMLMetadataConfiguration([APP_ROOT . '/config/doctrine'], $app['debug']);
             return EntityManager::create($dbParams, $config);

@@ -5,8 +5,10 @@ namespace CartBooking\Provider;
 use Bigcommerce\Injector\InjectorServiceProvider;
 use CartBooking\Booking\BookingRepository;
 use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
+use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineShiftRepository;
+use CartBooking\Location\LocationRepositoryInterface;
 use CartBooking\Publisher\PublisherRepository;
-use CartBooking\Shift\ShiftRepository;
+use CartBooking\Shift\ShiftRepositoryInterface;
 use Pimple\Container;
 
 class RepositoryProvider extends InjectorServiceProvider
@@ -43,11 +45,10 @@ class RepositoryProvider extends InjectorServiceProvider
             return new BookingRepository($app[\CartBooking\Lib\Db\Db::class], new \CartBooking\Booking\BookingHydrator());
         });
         $this->alias('repository.booking', BookingRepository::class);
-        $this->bind(ShiftRepository::class, function (Container $app) {
-            return new ShiftRepository($app[\CartBooking\Lib\Db\Db::class], new \CartBooking\Shift\ShiftHydrator());
-        });
-        $this->alias('repository.shift', ShiftRepository::class);
 
+        $this->alias(ShiftRepositoryInterface::class, DoctrineShiftRepository::class);
+        $this->autoBind(DoctrineShiftRepository::class);
+        $this->alias(LocationRepositoryInterface::class, DoctrineLocationRepository::class);
         $this->autoBind(DoctrineLocationRepository::class);
     }
 }

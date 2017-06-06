@@ -4,9 +4,9 @@ namespace CartBooking\Application\Http;
 
 use CartBooking\Application\EmailService;
 use CartBooking\Booking\BookingRepository;
-use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
+use CartBooking\Location\LocationRepositoryInterface;
 use CartBooking\Publisher\PublisherRepository;
-use CartBooking\Shift\ShiftRepository;
+use CartBooking\Shift\ShiftRepositoryInterface;
 use DateInterval;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,9 +27,9 @@ class CommunicationController
     private $pioneerRepository;
     /** @var BookingRepository */
     private $bookingRepository;
-    /** @var ShiftRepository */
+    /** @var ShiftRepositoryInterface */
     private $shiftRepository;
-    /** @var DoctrineLocationRepository */
+    /** @var LocationRepositoryInterface */
     private $locationRepository;
 
     public function __construct(
@@ -38,9 +38,9 @@ class CommunicationController
         Response $response,
         Twig_Environment $twig,
         BookingRepository $bookingRepository,
-        DoctrineLocationRepository $locationRepository,
+        LocationRepositoryInterface $locationRepository,
         PublisherRepository $pioneerRepository,
-        ShiftRepository $shiftRepository
+        ShiftRepositoryInterface $shiftRepository
     ) {
         $this->emailService = $emailService;
         $this->request = $request;
@@ -72,7 +72,7 @@ class CommunicationController
             $data[$overseer->getId()]['bookings'][] = [
                 'location_name' => $location->getName(),
                 'display_date' => $booking->getDate()->format('F jS'),
-                'display_time' => date('g:ia', strtotime($shift->getStartTime())),
+                'display_time' => $shift->getStartTime()->format('g:ia'),
             ];
         }
         foreach ($data as $datum) {
@@ -98,7 +98,7 @@ class CommunicationController
             $context[$booking->getId()] = [
                 'display_date' => $booking->getDate()->format('D, F jS'),
                 'location_name' => $location->getName(),
-                'display_time' => $shift->getStartTime()
+                'display_time' => $shift->getStartTime()->format('H:i:s')
             ];
         }
         $counter = 0;
@@ -136,7 +136,7 @@ class CommunicationController
             $context['context'][$booking->getId()] = [
                 'display_date' => $booking->getDate()->format('D, F jS'),
                 'location_name' => $location->getName(),
-                'display_time' => $shift->getStartTime(),
+                'display_time' => $shift->getStartTime()->format('H:i:s'),
                 'has_overseer' => $booking->getOverseerId() > 0,
                 'pioneer_gender' => $booking->getPioneerId() > 0 ? $this->pioneerRepository->findById($booking->getPioneerId())->getGender() : null,
                 'second_pioneer_gender' => $booking->getPioneerBId() > 0 ? $this->pioneerRepository->findById($booking->getPioneerBId())->getGender() : null,
