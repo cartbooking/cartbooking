@@ -44,7 +44,6 @@
     <body>
 <?php
 
-include("db.php");
 
 $locName = "SELECT id, name FROM locations WHERE id = ?";
 $locShifts = "SELECT id FROM shifts WHERE location_id = ? ORDER BY location_id";

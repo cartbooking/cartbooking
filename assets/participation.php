@@ -66,7 +66,6 @@
     </head>
     <body>
 <?php
-require ('db.php');
 $pioneer_details = "SELECT id, first_name, last_name from pioneers WHERE inactive != ? and inactive != ? ORDER BY last_name, first_name";
 $month_bookings = "SELECT id FROM bookings WHERE (overseer_id = ? OR pioneer_id = ? OR pioneer_b_id = ?) AND date >= ? AND date < ?";
 $month = date('n');
