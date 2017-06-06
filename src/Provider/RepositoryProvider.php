@@ -49,6 +49,5 @@ class RepositoryProvider extends InjectorServiceProvider
         $this->alias('repository.shift', ShiftRepository::class);
 
         $this->autoBind(DoctrineLocationRepository::class);
-        $this->alias('repository.location', DoctrineLocationRepository::class);
     }
 }

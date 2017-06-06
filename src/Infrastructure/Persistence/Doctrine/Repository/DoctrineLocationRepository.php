@@ -16,9 +16,6 @@ final class DoctrineLocationRepository implements LocationRepositoryInterface
         $this->entityManager = $manager;
     }
 
-    /**
-     * @return \Generator|Location[]
-     */
     public function findAll()
     {
         return $this->entityManager->getRepository(Location::class)->findAll();
