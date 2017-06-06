@@ -2,21 +2,20 @@
 
 namespace CartBooking\Application\Http;
 
-use CartBooking\Location\LocationRepository;
-use Symfony\Component\HttpFoundation\Request;
+use CartBooking\Location\LocationRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
 
 class LocationsController
 {
-    /** @var LocationRepository */
+    /** @var LocationRepositoryInterface */
     private $locationRepository;
     /** @var array */
     private $settings;
     /** @var Twig_Environment */
     private $twig;
 
-    public function __construct(LocationRepository $locationRepository, array $settings, Twig_Environment $twig)
+    public function __construct(LocationRepositoryInterface $locationRepository, array $settings, Twig_Environment $twig)
     {
         $this->locationRepository = $locationRepository;
         $this->settings = $settings;

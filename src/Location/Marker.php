@@ -3,7 +3,6 @@
 namespace CartBooking\Location;
 
 use CartBooking\Location\Marker\Color;
-use CartBooking\Location\Marker\Coordinate;
 use CartBooking\Location\Marker\Label;
 
 class Marker

@@ -1,15 +1,18 @@
 <?php
 
-namespace CartBooking\Location\Marker;
+namespace CartBooking\Location;
+
+use CartBooking\Location\Coordinate\Latitude;
+use CartBooking\Location\Coordinate\Longitude;
 
 class Coordinate
 {
-    /** @var float */
+    /** @var Latitude */
     private $latitude;
-    /** @var float */
+    /** @var Longitude */
     private $longitude;
 
-    public function __construct(float $latitude, float $longitude)
+    public function __construct(Latitude $latitude, Longitude $longitude)
     {
         $this->latitude = $latitude;
         $this->longitude = $longitude;

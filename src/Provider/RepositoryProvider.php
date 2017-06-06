@@ -4,13 +4,10 @@ namespace CartBooking\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
 use CartBooking\Booking\BookingRepository;
-use CartBooking\Location\LocationRepository;
+use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
 use CartBooking\Publisher\PublisherRepository;
 use CartBooking\Shift\ShiftRepository;
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManager;
 use Pimple\Container;
-use Silex\Provider\DoctrineServiceProvider;
 
 class RepositoryProvider extends InjectorServiceProvider
 {
@@ -51,9 +48,6 @@ class RepositoryProvider extends InjectorServiceProvider
         });
         $this->alias('repository.shift', ShiftRepository::class);
 
-        $this->bind(LocationRepository::class, function (Container $app) {
-            return new LocationRepository($app[\CartBooking\Lib\Db\Db::class], new \CartBooking\Location\LocationHydrator(), $this->get(EntityManager::class));
-        });
-        $this->alias('repository.location', LocationRepository::class);
+        $this->autoBind(DoctrineLocationRepository::class);
     }
 }

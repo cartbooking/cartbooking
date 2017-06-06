@@ -2,11 +2,7 @@
 
 namespace CartBooking\Application;
 
-use CartBooking\Booking\BookingRepository;
-use CartBooking\Lib\Db\Db;
-use CartBooking\Location\LocationRepository;
 use CartBooking\Publisher\PublisherRepository;
-use CartBooking\Shift\ShiftRepository;
 use Monolog\Logger;
 use Pimple\Container;
 use Swift_Mailer;

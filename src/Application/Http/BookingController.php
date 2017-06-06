@@ -9,7 +9,7 @@ use CartBooking\Booking\Command\CreateBookingCommand;
 use CartBooking\Booking\Command\DeletePublisherFromBookingCommand;
 use CartBooking\Booking\Exception\InvalidArgumentException;
 use CartBooking\Booking\Exception\InvalidMobilePhone;
-use CartBooking\Location\LocationRepository;
+use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
 use CartBooking\Publisher\PublisherRepository;
 use CartBooking\Shift\Shift;
 use CartBooking\Shift\ShiftRepository;
@@ -26,7 +26,7 @@ class BookingController
     private $request;
     /** @var BookingRepository */
     private $bookingRepository;
-    /** @var LocationRepository */
+    /** @var DoctrineLocationRepository */
     private $locationRepository;
     /** @var PublisherRepository */
     private $pioneerRepository;
@@ -41,7 +41,7 @@ class BookingController
         Request $request,
         BookingRepository $bookingRepository,
         BookingService $bookingService,
-        LocationRepository $locationRepository,
+        DoctrineLocationRepository $locationRepository,
         PublisherRepository $pioneerRepository,
         ShiftRepository $shiftRepository,
         Twig_Environment $twig
