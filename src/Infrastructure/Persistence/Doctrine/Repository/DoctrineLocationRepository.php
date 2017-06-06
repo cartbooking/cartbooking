@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sebastian.machuca
- * Date: 30/4/17
- * Time: 10:23 PM
- */
 
 namespace CartBooking\Infrastructure\Persistence\Doctrine\Repository;
-
 
 use CartBooking\Location\Location;
 use CartBooking\Location\LocationRepositoryInterface;
