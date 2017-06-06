@@ -6,12 +6,14 @@
  * Time: 10:23 PM
  */
 
-namespace CartBooking\Location;
+namespace CartBooking\Infrastructure\Persistence\Doctrine\Repository;
 
 
+use CartBooking\Location\Location;
+use CartBooking\Location\LocationRepositoryInterface;
 use Doctrine\ORM\EntityManager;
 
-class LocationRepository
+final class DoctrineLocationRepository implements LocationRepositoryInterface
 {
     /** @var EntityManager */
     private $entityManager;

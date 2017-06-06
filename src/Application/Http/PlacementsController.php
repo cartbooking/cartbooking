@@ -2,14 +2,9 @@
 
 namespace CartBooking\Application\Http;
 
-use CartBooking\Application\EmailService;
-use CartBooking\Application\ServiceLocator;
 use CartBooking\Booking\BookingRepository;
-use CartBooking\Location\LocationRepository;
-use CartBooking\Publisher\PublisherRepository;
+use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
 use CartBooking\Shift\ShiftRepository;
-use DateInterval;
-use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
@@ -26,7 +21,7 @@ class PlacementsController
     private $bookingRepository;
     /** @var ShiftRepository */
     private $shiftRepository;
-    /** @var LocationRepository */
+    /** @var DoctrineLocationRepository */
     private $locationRepository;
 
     public function __construct(
@@ -34,7 +29,7 @@ class PlacementsController
         Response $response,
         Twig_Environment $twig,
         BookingRepository $bookingRepository,
-        LocationRepository $locationRepository,
+        DoctrineLocationRepository $locationRepository,
         ShiftRepository $shiftRepository
     ) {
         $this->request = $request;

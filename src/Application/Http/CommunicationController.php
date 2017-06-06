@@ -4,7 +4,7 @@ namespace CartBooking\Application\Http;
 
 use CartBooking\Application\EmailService;
 use CartBooking\Booking\BookingRepository;
-use CartBooking\Location\LocationRepository;
+use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
 use CartBooking\Publisher\PublisherRepository;
 use CartBooking\Shift\ShiftRepository;
 use DateInterval;
@@ -29,7 +29,7 @@ class CommunicationController
     private $bookingRepository;
     /** @var ShiftRepository */
     private $shiftRepository;
-    /** @var LocationRepository */
+    /** @var DoctrineLocationRepository */
     private $locationRepository;
 
     public function __construct(
@@ -38,7 +38,7 @@ class CommunicationController
         Response $response,
         Twig_Environment $twig,
         BookingRepository $bookingRepository,
-        LocationRepository $locationRepository,
+        DoctrineLocationRepository $locationRepository,
         PublisherRepository $pioneerRepository,
         ShiftRepository $shiftRepository
     ) {
