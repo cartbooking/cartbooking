@@ -9,6 +9,8 @@
 namespace CartBooking\Shift;
 
 
+use DateTimeImmutable;
+
 class Shift
 {
     /**
@@ -20,11 +22,11 @@ class Shift
      */
     private $day;
     /**
-     * @var string
+     * @var DateTimeImmutable
      */
     private $startTime;
     /**
-     * @var string
+     * @var DateTimeImmutable
      */
     private $endTime;
     /**
@@ -32,7 +34,7 @@ class Shift
      */
     private $id;
 
-    public function __construct(int $id, int $locationId, int $day, string $startTime, string $endTime)
+    public function __construct(int $id, int $locationId, int $day, DateTimeImmutable $startTime, DateTimeImmutable $endTime)
     {
         $this->locationId = $locationId;
         $this->day = $day;
@@ -42,17 +44,17 @@ class Shift
     }
 
     /**
-     * @return string
+     * @return DateTimeImmutable
      */
-    public function getEndTime(): string
+    public function getEndTime(): DateTimeImmutable
     {
         return $this->endTime;
     }
 
     /**
-     * @return string
+     * @return DateTimeImmutable
      */
-    public function getStartTime(): string
+    public function getStartTime(): DateTimeImmutable
     {
         return $this->startTime;
     }

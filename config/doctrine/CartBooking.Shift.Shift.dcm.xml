@@ -1,0 +1,14 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <entity name="CartBooking\Shift\Shift" table="shifts">
+        <id name="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+        <field name="locationId" column="location_id" type="integer" />
+        <field name="day" type="integer" />
+        <field name="startTime" column="start_time" type="date_time_immutable" />
+        <field name="endTime" column="end_time" type="date_time_immutable" />
+    </entity>
+</doctrine-mapping>

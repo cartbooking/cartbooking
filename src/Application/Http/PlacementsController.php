@@ -3,8 +3,8 @@
 namespace CartBooking\Application\Http;
 
 use CartBooking\Booking\BookingRepository;
-use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
-use CartBooking\Shift\ShiftRepository;
+use CartBooking\Location\LocationRepositoryInterface;
+use CartBooking\Shift\ShiftRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
@@ -19,9 +19,9 @@ class PlacementsController
     private $twig;
     /** @var BookingRepository */
     private $bookingRepository;
-    /** @var ShiftRepository */
+    /** @var ShiftRepositoryInterface */
     private $shiftRepository;
-    /** @var DoctrineLocationRepository */
+    /** @var LocationRepositoryInterface */
     private $locationRepository;
 
     public function __construct(
@@ -29,8 +29,8 @@ class PlacementsController
         Response $response,
         Twig_Environment $twig,
         BookingRepository $bookingRepository,
-        DoctrineLocationRepository $locationRepository,
-        ShiftRepository $shiftRepository
+        LocationRepositoryInterface $locationRepository,
+        ShiftRepositoryInterface $shiftRepository
     ) {
         $this->request = $request;
         $this->response = $response;
@@ -57,7 +57,7 @@ class PlacementsController
                     'booking_id' => $booking->getId(),
                     'display_date' => $booking->getDate()->format('M jS'),
                     'location_name' => $location->getName(),
-                    'display_time' => date('g:ia', strtotime($shift->getStartTime()))
+                    'display_time' => $shift->getStartTime()->format('g:ia')
                 ];
             }
         }
@@ -81,7 +81,7 @@ class PlacementsController
             'booking_id' => $booking->getId(),
             'display_date' => $booking->getDate()->format('M jS'),
             'location_name' => $location->getName(),
-            'display_time' => $shift->getStartTime(),
+            'display_time' => $shift->getStartTime()->format('H:i:s'),
         ]));
     }
 

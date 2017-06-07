@@ -12,9 +12,8 @@ use CartBooking\Booking\Exception\InvalidMobilePhone;
 use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
 use CartBooking\Publisher\PublisherRepository;
 use CartBooking\Shift\Shift;
-use CartBooking\Shift\ShiftRepository;
+use CartBooking\Shift\ShiftRepositoryInterface;
 use DateInterval;
-use DateTime;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,7 +29,7 @@ class BookingController
     private $locationRepository;
     /** @var PublisherRepository */
     private $pioneerRepository;
-    /** @var ShiftRepository */
+    /** @var ShiftRepositoryInterface */
     private $shiftRepository;
     /** @var Twig_Environment */
     private $twig;
@@ -43,7 +42,7 @@ class BookingController
         BookingService $bookingService,
         DoctrineLocationRepository $locationRepository,
         PublisherRepository $pioneerRepository,
-        ShiftRepository $shiftRepository,
+        ShiftRepositoryInterface $shiftRepository,
         Twig_Environment $twig
     ) {
         $this->request = $request;
@@ -191,7 +190,7 @@ class BookingController
                     }
                     return [
                         'id' => $shift->getId(),
-                        'start_time' => DateTime::createFromFormat('H:i:s|', $shift->getStartTime()),
+                        'start_time' => $shift->getStartTime(),
                         'booking' => $bookingData
                     ];
                 }, $shifts)
