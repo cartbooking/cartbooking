@@ -9,6 +9,7 @@ use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineShiftRepo
 use CartBooking\Location\LocationRepositoryInterface;
 use CartBooking\Publisher\PublisherRepository;
 use CartBooking\Shift\ShiftRepositoryInterface;
+use Doctrine\ORM\EntityManager;
 use Pimple\Container;
 
 class RepositoryProvider extends InjectorServiceProvider
@@ -36,10 +37,7 @@ class RepositoryProvider extends InjectorServiceProvider
             );
         };
 
-        $this->bind(PublisherRepository::class, function (Container $app) {
-            return new PublisherRepository($app[\CartBooking\Lib\Db\Db::class], new \CartBooking\Publisher\PublisherHydrator());
-        });
-        $this->alias('repository.pioneer', PublisherRepository::class);
+        $this->autoBind(PublisherRepository::class);
 
         $this->bind(BookingRepository::class, function (Container $app) {
             return new BookingRepository($app[\CartBooking\Lib\Db\Db::class], new \CartBooking\Booking\BookingHydrator());

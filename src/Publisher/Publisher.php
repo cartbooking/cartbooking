@@ -2,6 +2,9 @@
 
 namespace CartBooking\Publisher;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 class Publisher
 {
     /**
@@ -15,8 +18,6 @@ class Publisher
 
     private $gender;
 
-    private $congregation;
-
     private $phone;
 
     private $email;
@@ -28,12 +29,13 @@ class Publisher
     /** @var  bool */
     private $inactive;
 
-    /** int[] */
-    private $relatives = [];
+    /** @var ArrayCollection */
+    private $relatives;
 
     public function __construct(int $id)
     {
         $this->id = $id;
+        $this->relatives = new ArrayCollection();
     }
 
     public function getId()
@@ -113,22 +115,6 @@ class Publisher
     /**
      * @return mixed
      */
-    public function getCongregation()
-    {
-        return $this->congregation;
-    }
-
-    /**
-     * @param mixed $congregation
-     */
-    public function setCongregation($congregation)
-    {
-        $this->congregation = $congregation;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getPhone()
     {
         return $this->phone;
@@ -190,10 +176,8 @@ class Publisher
         $this->password = $password;
     }
 
-    /**
-     * @return int[]
-     */
-    public function getRelatives(): array
+    /** @return Publisher[] */
+    public function getRelatives(): Collection
     {
         return $this->relatives;
     }
@@ -201,13 +185,15 @@ class Publisher
     /**
      * @param int[] $relatives
      */
-    public function setRelatives(array $relatives)
+    public function addRelatives(array $relatives)
     {
-        $this->relatives = $relatives;
+        foreach ($relatives as $relative) {
+            $this->relatives->add($relative);
+        }
     }
 
     public function isRelativeTo(Publisher $pioneer): bool
     {
-        return in_array($pioneer->getId(), $this->relatives, true);
+        return $this->relatives->contains($pioneer);
     }
 }
