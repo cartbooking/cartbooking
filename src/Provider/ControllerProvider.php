@@ -3,14 +3,14 @@
 namespace CartBooking\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
-use CartBooking\Application\Http\BookingController;
-use CartBooking\Application\Http\CommunicationController;
-use CartBooking\Application\Http\ExperiencesController;
-use CartBooking\Application\Http\LocationsController;
-use CartBooking\Application\Http\PlacementsController;
-use CartBooking\Application\Http\PublishersController;
-use CartBooking\Application\Http\ReportsController;
-use CartBooking\Application\Http\StatisticsController;
+use CartBooking\Application\Web\BookingController;
+use CartBooking\Application\Web\CommunicationController;
+use CartBooking\Application\Web\ExperiencesController;
+use CartBooking\Application\Web\LocationsController;
+use CartBooking\Application\Web\PlacementsController;
+use CartBooking\Application\Web\PublishersController;
+use CartBooking\Application\Web\ReportsController;
+use CartBooking\Application\Web\StatisticsController;
 use Pimple\Container;
 use Silex\Api\ControllerProviderInterface;
 use Silex\Application;

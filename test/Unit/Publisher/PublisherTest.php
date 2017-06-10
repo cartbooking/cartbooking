@@ -12,7 +12,7 @@ class PublisherTest extends AutoMockingTest
         $publisherA = new Publisher(123);
         $publisherB = new Publisher(455);
         $publisherC = new Publisher(1);
-        $publisherA->setRelatives([$publisherB->getId()]);
+        $publisherA->addRelatives([$publisherB]);
         static::assertTrue($publisherA->isRelativeTo($publisherB));
         static::assertFalse($publisherA->isRelativeTo($publisherC));
         static::assertFalse($publisherB->isRelativeTo($publisherA));

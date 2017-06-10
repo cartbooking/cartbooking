@@ -2,7 +2,7 @@
 
 namespace Test\Unit\Application\Http;
 
-use CartBooking\Application\Http\PublishersController;
+use CartBooking\Application\Web\PublishersController;
 use Symfony\Component\HttpFoundation\Response;
 use Test\AutoMockingTest;
 

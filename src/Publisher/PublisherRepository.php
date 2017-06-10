@@ -2,61 +2,37 @@
 
 namespace CartBooking\Publisher;
 
-use CartBooking\Lib\Db\Db;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\EntityManager;
 
 class PublisherRepository
 {
-    /**
-     * @var Db
-     */
-    private $db;
-    /**
-     * @var PublisherHydrator
-     */
-    private $pioneerHydrator;
+    /** @var EntityManager */
+    private $entityManager;
 
-    public function __construct(Db $db, PublisherHydrator $pioneerHydrator)
+    public function __construct(EntityManager $entityManager)
     {
-        $this->db = $db;
-        $this->pioneerHydrator = $pioneerHydrator;
+        $this->entityManager = $entityManager;
     }
 
     /**
      * @param string $gender
-     * @return Publisher[]|\Generator
+     * @return Publisher[]
      */
     public function findByGender(string $gender)
     {
-        $query = "SELECT * FROM pioneers WHERE gender = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('s', $gender);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-            yield $this->pioneerHydrator->hydrate($row);
-        }
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('gender', $gender));
+        return $this->entityManager->getRepository(Publisher::class)->matching($criteria);
     }
 
     /**
-     * @return \Generator|Publisher[]
+     * @return Publisher[]|ArrayCollection
      */
-    public function findAll()
+    public function findAll(): ArrayCollection
     {
-        $query = "SELECT * FROM pioneers";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-            $query = "SELECT * FROM relationships WHERE publisher_id_1 = ?";
-            $stmt = $this->db->prepare($query);
-            $stmt->bind_param('i', $row['id']);
-            $stmt->execute();
-            $relativesResult = $stmt->get_result();
-            if($relativesResult->num_rows > 0) {
-                $row['relatives'] = $relativesResult->fetch_all(MYSQLI_ASSOC);
-            }
-            yield $this->pioneerHydrator->hydrate($row);
-        }
+        return new ArrayCollection($this->entityManager->getRepository(Publisher::class)->findAll());
     }
 
     /**
@@ -65,42 +41,18 @@ class PublisherRepository
      */
     public function findById(int $id)
     {
-        $query = "SELECT * FROM pioneers WHERE id = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result->num_rows === 0) {
-            return null;
-        }
-        $data = $result->fetch_array(MYSQLI_ASSOC);
-        $query = "SELECT * FROM relationships WHERE publisher_id_1 = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('i', $id);
-        $stmt->execute();
-        $relativesResult = $stmt->get_result();
-        if($relativesResult->num_rows > 0) {
-            $data['relatives'] = $relativesResult->fetch_all(MYSQLI_ASSOC);
-        }
-
-        return $this->pioneerHydrator->hydrate($data);
+        return $this->entityManager->find(Publisher::class, $id);
     }
 
     /**
-     * @param int $phone
+     * @param string $phone
      * @return Publisher|null
      */
-    public function findByPhone(int $phone)
+    public function findByPhone(string $phone)
     {
-        $query = "SELECT * FROM pioneers WHERE phone = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('i', $phone);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result->num_rows === 0) {
-            return null;
-        }
-        return $this->pioneerHydrator->hydrate($result->fetch_array(MYSQLI_ASSOC));
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('phone', $phone));
+        return $this->entityManager->getRepository(Publisher::class)->matching($criteria)->first();
     }
 
     /**
@@ -109,16 +61,10 @@ class PublisherRepository
      */
     public function findByName($name)
     {
-        $query = "SELECT * FROM pioneers WHERE first_name = ? or last_name = ?";
-        $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ss', $name, $name);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $pioneers = [];
-        while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-            $pioneers[] = $this->pioneerHydrator->hydrate($row);
-        }
-        return $pioneers;
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('firstName', $name))
+            ->orWhere(Criteria::expr()->eq('lastName', $name));
+        return $this->entityManager->getRepository(Publisher::class)->matching($criteria)->first();
     }
 
     /**
@@ -126,21 +72,10 @@ class PublisherRepository
      */
     public function findActive()
     {
-        $query = "SELECT * FROM pioneers
-                        WHERE inactive != ? and inactive != ? and email != ?
-                        ORDER BY last_name, first_name";
-        $stmt = $this->db->prepare($query);
-        $inactive = 'y';
-        $deactivated = 'd';
-        $email = '';
-        $stmt->bind_param('sss', $inactive, $deactivated, $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result->num_rows === 0) {
-            yield;
-        }
-        while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-            yield $this->pioneerHydrator->hydrate($row);
-        }
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->eq('inactive', 'y'))
+//            ->andWhere(Criteria::expr()->eq('deactivated', 'd'))
+            ->andWhere(Criteria::expr()->eq('email', ''));
+        return $this->entityManager->getRepository(Publisher::class)->matching($criteria)->first();
     }
 }

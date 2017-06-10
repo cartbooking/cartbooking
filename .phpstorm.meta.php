@@ -37,5 +37,8 @@ namespace PHPSTORM_META {
         \PHPUnit\Framework\TestCase::prophesize('') => [
             "" == "@",
         ],
+        \Doctrine\ORM\EntityManager::find('', '') => [
+            "" == "@",
+        ],
     ];
 }
