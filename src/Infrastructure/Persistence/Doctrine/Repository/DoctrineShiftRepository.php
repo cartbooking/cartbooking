@@ -2,8 +2,8 @@
 
 namespace CartBooking\Infrastructure\Persistence\Doctrine\Repository;
 
-use CartBooking\Shift\Shift;
-use CartBooking\Shift\ShiftRepositoryInterface;
+use CartBooking\Model\Shift\Shift;
+use CartBooking\Model\Shift\ShiftRepositoryInterface;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 

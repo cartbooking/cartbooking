@@ -2,7 +2,7 @@
 
 namespace CartBooking\Application\Web;
 
-use CartBooking\Booking\BookingRepository;
+use CartBooking\Model\Booking\BookingRepository;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -3,7 +3,7 @@
 namespace Test\Unit\Infrastructure\Persistence\Doctrine;
 
 use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
-use CartBooking\Location\Location;
+use CartBooking\Model\Location\Location;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Test\AutoMockingTest;

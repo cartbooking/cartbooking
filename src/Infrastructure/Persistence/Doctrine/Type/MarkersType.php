@@ -2,10 +2,10 @@
 
 namespace CartBooking\Infrastructure\Persistence\Doctrine\Type;
 
-use CartBooking\Location\Coordinate;
-use CartBooking\Location\Coordinate\Latitude;
-use CartBooking\Location\Coordinate\Longitude;
-use CartBooking\Location\Marker;
+use CartBooking\Model\Location\Coordinate;
+use CartBooking\Model\Location\Coordinate\Latitude;
+use CartBooking\Model\Location\Coordinate\Longitude;
+use CartBooking\Model\Location\Marker;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 

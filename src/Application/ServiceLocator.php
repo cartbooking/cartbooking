@@ -2,11 +2,8 @@
 
 namespace CartBooking\Application;
 
-use CartBooking\Publisher\PublisherRepository;
 use Monolog\Logger;
 use Pimple\Container;
-use Swift_Mailer;
-use Swift_Message;
 
 class ServiceLocator
 {

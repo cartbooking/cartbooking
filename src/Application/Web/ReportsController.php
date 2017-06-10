@@ -3,7 +3,7 @@
 namespace CartBooking\Application\Web;
 
 use CartBooking\Lib\Utilities\FileSystem;
-use CartBooking\Publisher\PublisherRepository;
+use CartBooking\Model\Publisher\PublisherRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
 

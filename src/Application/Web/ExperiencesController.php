@@ -2,8 +2,8 @@
 
 namespace CartBooking\Application\Web;
 
-use CartBooking\Booking\BookingRepository;
-use CartBooking\Publisher\PublisherRepository;
+use CartBooking\Model\Booking\BookingRepository;
+use CartBooking\Model\Publisher\PublisherRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

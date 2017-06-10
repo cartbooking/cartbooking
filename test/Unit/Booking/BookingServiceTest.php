@@ -2,15 +2,15 @@
 
 namespace Test\Unit\Booking;
 
-use CartBooking\Booking\Booking;
-use CartBooking\Booking\BookingRepository;
-use CartBooking\Booking\BookingService;
-use CartBooking\Booking\Command\AddPublishersCommand;
-use CartBooking\Booking\Command\CreateBookingCommand;
-use CartBooking\Booking\Command\DeletePublisherFromBookingCommand;
-use CartBooking\Booking\Exception\NotFoundException;
-use CartBooking\Publisher\Publisher;
-use CartBooking\Publisher\PublisherRepository;
+use CartBooking\Model\Booking\Booking;
+use CartBooking\Model\Booking\BookingRepository;
+use CartBooking\Model\Booking\BookingService;
+use CartBooking\Model\Booking\Command\AddPublishersCommand;
+use CartBooking\Model\Booking\Command\CreateBookingCommand;
+use CartBooking\Model\Booking\Command\DeletePublisherFromBookingCommand;
+use CartBooking\Model\Booking\Exception\NotFoundException;
+use CartBooking\Model\Publisher\Publisher;
+use CartBooking\Model\Publisher\PublisherRepository;
 use Prophecy\Argument;
 use Test\AutoMockingTest;
 

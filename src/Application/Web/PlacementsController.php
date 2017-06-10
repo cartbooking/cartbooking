@@ -2,9 +2,9 @@
 
 namespace CartBooking\Application\Web;
 
-use CartBooking\Booking\BookingRepository;
-use CartBooking\Location\LocationRepositoryInterface;
-use CartBooking\Shift\ShiftRepositoryInterface;
+use CartBooking\Model\Booking\BookingRepository;
+use CartBooking\Model\Location\LocationRepositoryInterface;
+use CartBooking\Model\Shift\ShiftRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;

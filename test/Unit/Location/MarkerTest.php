@@ -2,12 +2,12 @@
 
 namespace Test\Unit\Location;
 
-use CartBooking\Location\Coordinate;
-use CartBooking\Location\Coordinate\Latitude;
-use CartBooking\Location\Coordinate\Longitude;
-use CartBooking\Location\Marker;
-use CartBooking\Location\Marker\Color;
-use CartBooking\Location\Marker\Label;
+use CartBooking\Model\Location\Coordinate;
+use CartBooking\Model\Location\Coordinate\Latitude;
+use CartBooking\Model\Location\Coordinate\Longitude;
+use CartBooking\Model\Location\Marker;
+use CartBooking\Model\Location\Marker\Color;
+use CartBooking\Model\Location\Marker\Label;
 use Test\AutoMockingTest;
 
 class MarkerTest extends AutoMockingTest

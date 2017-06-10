@@ -2,8 +2,8 @@
 
 namespace Test\Unit\Booking;
 
-use CartBooking\Booking\Booking;
-use CartBooking\Publisher\Publisher;
+use CartBooking\Model\Booking\Booking;
+use CartBooking\Model\Publisher\Publisher;
 use Test\AutoMockingTest;
 
 class BookingTest extends AutoMockingTest
