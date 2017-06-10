@@ -1,6 +1,6 @@
 <?php
 
-namespace CartBooking\Provider;
+namespace CartBooking\Application\Provider;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;

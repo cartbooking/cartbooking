@@ -1,6 +1,6 @@
 <?php
 
-namespace CartBooking\Provider;
+namespace CartBooking\Application\Provider;
 
 use Bigcommerce\Injector\Adapter\ArrayContainerAdapter;
 use Bigcommerce\Injector\Cache\ArrayServiceCache;
@@ -10,7 +10,6 @@ use Bigcommerce\Injector\Reflection\ParameterInspector;
 use Bigcommerce\Injector\ServiceProvider\BindingClosureFactory;
 use ProxyManager\Factory\LazyLoadingValueHolderFactory;
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 
 class CoreProvider
 {
