@@ -1,6 +1,6 @@
 <?php
 
-namespace CartBooking\Provider;
+namespace CartBooking\Application\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
 use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;

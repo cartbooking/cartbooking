@@ -2,7 +2,7 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                    https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
-    <entity name="CartBooking\Publisher\Publisher" table="pioneers">
+    <entity name="CartBooking\Model\Publisher\Publisher" table="pioneers">
         <id name="id" type="integer">
             <generator strategy="AUTO" />
         </id>
@@ -13,7 +13,7 @@
         <field name="inactive" type="boolean" />
         <field name="password" type="string" />
         <field name="email" type="string" />
-        <many-to-many field="relatives" target-entity="CartBooking\Publisher\Publisher">
+        <many-to-many field="relatives" target-entity="CartBooking\Model\Publisher\Publisher">
             <join-table name="relationships">
                 <join-columns>
                     <join-column name="publisher_id_1" referenced-column-name="id" />
