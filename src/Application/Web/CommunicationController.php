@@ -3,10 +3,10 @@
 namespace CartBooking\Application\Web;
 
 use CartBooking\Application\EmailService;
-use CartBooking\Booking\BookingRepository;
-use CartBooking\Location\LocationRepositoryInterface;
-use CartBooking\Publisher\PublisherRepository;
-use CartBooking\Shift\ShiftRepositoryInterface;
+use CartBooking\Model\Booking\BookingRepository;
+use CartBooking\Model\Location\LocationRepositoryInterface;
+use CartBooking\Model\Publisher\PublisherRepository;
+use CartBooking\Model\Shift\ShiftRepositoryInterface;
 use DateInterval;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;

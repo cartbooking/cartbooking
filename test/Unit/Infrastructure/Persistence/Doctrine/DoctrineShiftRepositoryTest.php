@@ -3,7 +3,7 @@
 namespace Test\Unit\Infrastructure\Persistence\Doctrine;
 
 use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineShiftRepository;
-use CartBooking\Shift\Shift;
+use CartBooking\Model\Shift\Shift;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Prophecy\Argument;

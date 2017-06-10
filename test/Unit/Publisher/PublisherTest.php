@@ -2,7 +2,7 @@
 
 namespace Test\Unit\Publisher;
 
-use CartBooking\Publisher\Publisher;
+use CartBooking\Model\Publisher\Publisher;
 use Test\AutoMockingTest;
 
 class PublisherTest extends AutoMockingTest

@@ -2,8 +2,8 @@
 
 namespace CartBooking\Infrastructure\Persistence\Doctrine\Repository;
 
-use CartBooking\Location\Location;
-use CartBooking\Location\LocationRepositoryInterface;
+use CartBooking\Model\Location\Location;
+use CartBooking\Model\Location\LocationRepositoryInterface;
 use Doctrine\ORM\EntityManager;
 
 final class DoctrineLocationRepository implements LocationRepositoryInterface

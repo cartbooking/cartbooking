@@ -2,7 +2,7 @@
 
 namespace CartBooking\Application\Web;
 
-use CartBooking\Location\LocationRepositoryInterface;
+use CartBooking\Model\Location\LocationRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
 

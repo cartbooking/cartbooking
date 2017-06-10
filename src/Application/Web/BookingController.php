@@ -2,17 +2,17 @@
 
 namespace CartBooking\Application\Web;
 
-use CartBooking\Booking\BookingRepository;
-use CartBooking\Booking\BookingService;
-use CartBooking\Booking\Command\AddPublishersCommand;
-use CartBooking\Booking\Command\CreateBookingCommand;
-use CartBooking\Booking\Command\DeletePublisherFromBookingCommand;
-use CartBooking\Booking\Exception\InvalidArgumentException;
-use CartBooking\Booking\Exception\InvalidMobilePhone;
 use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
-use CartBooking\Publisher\PublisherRepository;
-use CartBooking\Shift\Shift;
-use CartBooking\Shift\ShiftRepositoryInterface;
+use CartBooking\Model\Booking\BookingRepository;
+use CartBooking\Model\Booking\BookingService;
+use CartBooking\Model\Booking\Command\AddPublishersCommand;
+use CartBooking\Model\Booking\Command\CreateBookingCommand;
+use CartBooking\Model\Booking\Command\DeletePublisherFromBookingCommand;
+use CartBooking\Model\Booking\Exception\InvalidArgumentException;
+use CartBooking\Model\Booking\Exception\InvalidMobilePhone;
+use CartBooking\Model\Publisher\PublisherRepository;
+use CartBooking\Model\Shift\Shift;
+use CartBooking\Model\Shift\ShiftRepositoryInterface;
 use DateInterval;
 use DateTimeImmutable;
 use Symfony\Component\HttpFoundation\Request;

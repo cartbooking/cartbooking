@@ -2,8 +2,7 @@
 
 namespace CartBooking\Application;
 
-use CartBooking\Lib\Email\Recipient;
-use CartBooking\Publisher\Publisher;
+use CartBooking\Model\Publisher\Publisher;
 use Swift_Mailer;
 use Swift_Message;
 

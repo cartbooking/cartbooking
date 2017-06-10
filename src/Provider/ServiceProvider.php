@@ -3,8 +3,8 @@
 namespace CartBooking\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
-use CartBooking\Booking\BookingService;
 use CartBooking\Lib\Utilities\FileSystem;
+use CartBooking\Model\Booking\BookingService;
 use Pimple\Container;
 
 class ServiceProvider extends InjectorServiceProvider
