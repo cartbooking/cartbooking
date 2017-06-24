@@ -21,7 +21,7 @@ class BookingService
         $this->publisherRepository = $publisherRepository;
     }
 
-    public function getById(int $bookingId)
+    public function findById(int $bookingId)
     {
         $booking =  $this->bookingRepository->findById($bookingId);
         if ($booking === null) {
@@ -33,7 +33,7 @@ class BookingService
     public function createBooking(CreateBookingCommand $command)
     {
         $publishers = [];
-        $booking = new Booking($this->bookingRepository->nextId(), $command->getShiftId(), $command->getDate());
+        $booking = new Booking(new BookingId(), $command->getShiftId(), $command->getDate());
         foreach ($command->getPublishersIds() as $publisherId) {
             $publisher = $this->publisherRepository->findById($publisherId);
             if ($publisher !== null) {

@@ -35,13 +35,11 @@ class ExperiencesController
     {
         $viewData = [];
         foreach ($this->bookingRepository->findUnseenBookingsComments() as $booking) {
-            $overseer = $this->pioneerRepository->findById($booking->getOverseerId());
             $viewData[] = [
                 'booking_id' => $booking->getId(),
                 'booking_comments' => $booking->getComments(),
                 'date' => $booking->getDate(),
-                'overseer_first_name' => $overseer->getFirstName(),
-                'overseer_last_name' => $overseer->getLastName(),
+                'overseer_full_name' => $booking->getPublishers()->first()->getFullName(),
             ];
         }
         return $this->response->setContent($this->twig->render('experiences.twig', ['view_data' => $viewData]));
@@ -51,7 +49,7 @@ class ExperiencesController
     {
         $booking = $this->bookingRepository->findById($bookingId);
         if ($booking !== null) {
-            $booking->setExperience(false);
+            $booking->dismiss();
         }
         $this->bookingRepository->save($booking);
         return new RedirectResponse('/experiences');

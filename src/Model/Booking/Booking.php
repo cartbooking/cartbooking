@@ -4,70 +4,54 @@ namespace CartBooking\Model\Booking;
 
 use CartBooking\Model\Publisher\Publisher;
 use DateTimeImmutable;
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Booking
 {
-    /**
-     * @var int
-     */
+    /** @var BookingId */
     private $id;
-    /**
-     * @var int
-     */
+    /** @var int */
     private $pioneerId = 0;
-    /**
-     * @var int
-     */
+    /** @var int */
     private $pioneerBId = 0;
-    /**
-     * @var int
-     */
+    /** @var int */
     private $shiftId;
-    /**
-     * @var DateTimeImmutable
-     */
+    /** @var DateTimeImmutable */
     private $date;
-
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $confirmed = false;
-
     /** @var bool */
     private $isFull = false;
-    /**
-     * @var bool If the Booking has been recorded the results
-     */
+    /** @var bool If the Booking has been recorded the results */
     private $recorded = false;
-
     /** @var int */
     private $placements = 0;
     /** @var int */
     private $videos = 0;
     /** @var int  */
     private $requests = 0;
-    /**
-     * @var int
-     */
+    /** @var int */
     private $overseerId = 0;
-
     /** @var string */
     private $comments = '';
+    /** @var bool */
+    private $seen = false;
+    /** @var ArrayCollection */
+    private $publishers;
 
-    /** @var bool  */
-    private $experience = false;
-
-    public function __construct(int $id, int $shiftId, DateTimeImmutable $date)
+    public function __construct(BookingId $id, int $shiftId, DateTimeImmutable $date)
     {
-        $this->id = $id;
         $this->shiftId = $shiftId;
         $this->date = $date;
+        $this->publishers = new ArrayCollection();
+        $this->id = $id;
     }
 
     /**
-     * @return int
+     * @return BookingId
      */
-    public function getId(): int
+    public function getId(): BookingId
     {
         return $this->id;
     }
@@ -106,9 +90,9 @@ class Booking
     }
 
     /**
-     * @return DateTimeImmutable
+     * @return DateTimeInterface
      */
-    public function getDate(): DateTimeImmutable
+    public function getDate(): DateTimeInterface
     {
         return $this->date;
     }
@@ -245,17 +229,22 @@ class Booking
     /**
      * @return bool
      */
-    public function isExperience(): bool
+    public function hasBeenSeen(): bool
     {
-        return $this->experience;
+        return $this->seen;
     }
 
     /**
-     * @param bool $experience
+     * @param bool $seen
      */
-    public function setExperience(bool $experience)
+    public function setSeen(bool $seen)
     {
-        $this->experience = $experience;
+        $this->seen = $seen;
+    }
+
+    public function dismiss()
+    {
+        $this->seen = true;
     }
 
     /**
@@ -273,23 +262,26 @@ class Booking
     public function setPublishers(array $publishers)
     {
         $this->overseerId = 0;
-        $this->pioneerId = 0;
-        $this->pioneerBId = 0;
         foreach ($publishers as $publisher) {
             if ($this->overseerId === 0 && $publisher->isMale()) {
                 $this->overseerId = $publisher->getId();
-            } elseif ($this->pioneerId === 0) {
-                $this->pioneerId = $publisher->getId();
-            } else {
-                $this->pioneerBId = $publisher->getId();
             }
         }
+        $this->publishers = $publishers;
         $this->updateStatus($publishers);
     }
 
     public function getPublishersIds()
     {
         return array_filter([$this->getOverseerId(), $this->getPioneerId(), $this->getPioneerBId()]);
+    }
+
+    /**
+     * @return ArrayCollection|Publisher[]
+     */
+    public function getPublishers()
+    {
+        return $this->publishers;
     }
 
     /**

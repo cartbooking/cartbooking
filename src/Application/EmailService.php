@@ -25,7 +25,7 @@ class EmailService
 
     public function sendEmailTo(Publisher $recipient, string $subject, string $message)
     {
-        $this->message->addTo($recipient->getEmail(), $recipient->getFirstName());
+        $this->message->addTo($recipient->getEmail(), $recipient->getPreferredName());
         $this->message->setSubject($subject);
         $this->message->setBody($message);
         try {

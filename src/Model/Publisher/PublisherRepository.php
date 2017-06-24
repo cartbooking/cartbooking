@@ -62,9 +62,9 @@ class PublisherRepository
     public function findByName($name)
     {
         $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->eq('firstName', $name))
-            ->orWhere(Criteria::expr()->eq('lastName', $name));
-        return $this->entityManager->getRepository(Publisher::class)->matching($criteria)->first();
+        $criteria->where(Criteria::expr()->contains('fullName', $name))
+            ->orWhere(Criteria::expr()->contains('preferredName', $name));
+        return $this->entityManager->getRepository(Publisher::class)->matching($criteria);
     }
 
     /**
@@ -77,5 +77,12 @@ class PublisherRepository
 //            ->andWhere(Criteria::expr()->eq('deactivated', 'd'))
             ->andWhere(Criteria::expr()->eq('email', ''));
         return $this->entityManager->getRepository(Publisher::class)->matching($criteria)->first();
+    }
+
+    public function save(Publisher $publisher)
+    {
+        $this->entityManager->persist($publisher);
+        $this->entityManager->flush();
+        return $publisher->getId();
     }
 }

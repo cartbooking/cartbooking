@@ -1,0 +1,28 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <entity name="CartBooking\Model\Booking\Booking" table="bookings">
+        <id name="id" type="BookingId"/>
+        <field name="shiftId" column="shift_id" type="integer" />
+        <field name="date" type="date" />
+        <field name="confirmed" column="is_confirmed" type="boolean" />
+        <field name="isFull" column="is_full" type="boolean" />
+        <field name="recorded" column="is_recorded" type="boolean" />
+        <field name="placements" type="integer" />
+        <field name="videos" type="integer" />
+        <field name="requests" type="integer" />
+        <field name="comments" type="string" />
+        <field name="seen" column="has_been_seen" type="boolean" />
+        <many-to-many field="publishers" target-entity="CartBooking\Model\Publisher\Publisher">
+            <join-table name="bookings_publishers">
+                <join-columns>
+                    <join-column name="booking_id" referenced-column-name="id" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="publisher_id" referenced-column-name="id" unique="true" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+    </entity>
+</doctrine-mapping>

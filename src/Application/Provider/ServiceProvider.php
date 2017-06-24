@@ -5,6 +5,7 @@ namespace CartBooking\Application\Provider;
 use Bigcommerce\Injector\InjectorServiceProvider;
 use CartBooking\Lib\Utilities\FileSystem;
 use CartBooking\Model\Booking\BookingService;
+use CartBooking\Model\Publisher\PublisherService;
 use Pimple\Container;
 
 class ServiceProvider extends InjectorServiceProvider
@@ -28,5 +29,7 @@ class ServiceProvider extends InjectorServiceProvider
         };
 
         $this->autoBind(BookingService::class);
+        $this->autoBind(PublisherService::class);
+        $this->autoBind(\CartBooking\Application\PublisherService::class);
     }
 }

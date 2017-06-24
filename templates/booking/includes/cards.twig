@@ -1,0 +1,12 @@
+<div class="w-section content-section no-par" id="content">
+  <!--    CARDS  -->
+  <div class="w-container" id="cards-data">
+    <h1 class="date-show"><span class="date-color">{{ select_day|date('j') }}</span> {{ select_day|date('F') }}</h1>
+    <div class="div-movile-cards-container">
+      {% for location in locations %}
+        {% include 'booking/includes/card.twig' %}
+      {% endfor %}
+    </div>
+  </div>
+  <!--    END CARDS -->
+</div>

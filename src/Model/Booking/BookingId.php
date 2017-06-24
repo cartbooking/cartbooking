@@ -6,12 +6,12 @@ use Ramsey\Uuid\Uuid;
 
 class BookingId
 {
-    /** @var Uuid */
+    /** @var string */
     private $uuid;
 
-    public function __construct(Uuid $uuid)
+    public function __construct(string $uuid = '')
     {
-        $this->uuid = $uuid;
+        $this->uuid = $uuid ?? Uuid::uuid4()->toString();
     }
 
     public function __toString()

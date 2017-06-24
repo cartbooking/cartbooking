@@ -3,6 +3,7 @@
 namespace Test\Unit\Booking;
 
 use CartBooking\Model\Booking\Booking;
+use CartBooking\Model\Booking\BookingId;
 use CartBooking\Model\Booking\BookingRepository;
 use CartBooking\Model\Booking\BookingService;
 use CartBooking\Model\Booking\Command\AddPublishersCommand;
@@ -32,11 +33,9 @@ class BookingServiceTest extends AutoMockingTest
         $publisher->isMale()->willReturn(true);
         $publisher->getId()->willReturn($publisherId);
         $command = new CreateBookingCommand(1, '2017-01-01', [$publisherId]);
-        $bookingId = 2;
-        $this->injector->getProphecy(BookingRepository::class)->nextId()->willReturn($bookingId);
         $this->injector->getProphecy(PublisherRepository::class)->findById($publisherId)->willReturn($publisher->reveal());
         $this->injector->getProphecy(BookingRepository::class)->save(Argument::type(Booking::class))->shouldBeCalled();
-        static::assertSame($bookingId, $this->bookingService->createBooking($command));
+        static::assertInstanceOf(BookingId::class, $this->bookingService->createBooking($command));
     }
 
     public function testAddNoPublisher()
@@ -123,7 +122,7 @@ class BookingServiceTest extends AutoMockingTest
         $bookingId = 1;
         $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn(null);
         $this->expectException(NotFoundException::class);
-        $this->bookingService->getById($bookingId);
+        $this->bookingService->findById($bookingId);
     }
 
     public function testGetById()
@@ -131,6 +130,6 @@ class BookingServiceTest extends AutoMockingTest
         $bookingId = 1;
         $booking = $this->prophesize(Booking::class);
         $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn($booking->reveal());
-        static::assertSame($booking->reveal(), $this->bookingService->getById($bookingId));
+        static::assertSame($booking->reveal(), $this->bookingService->findById($bookingId));
     }
 }

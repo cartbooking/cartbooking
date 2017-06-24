@@ -2,7 +2,9 @@
 
 namespace CartBooking\Application\Web;
 
+use CartBooking\Application\PublisherService;
 use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
+use CartBooking\Model\Booking\Booking;
 use CartBooking\Model\Booking\BookingRepository;
 use CartBooking\Model\Booking\BookingService;
 use CartBooking\Model\Booking\Command\AddPublishersCommand;
@@ -35,6 +37,8 @@ class BookingController
     private $twig;
     /** @var BookingService */
     private $bookingService;
+    /** @var PublisherService */
+    private $publisherService;
 
     public function __construct(
         Request $request,
@@ -42,21 +46,23 @@ class BookingController
         BookingService $bookingService,
         DoctrineLocationRepository $locationRepository,
         PublisherRepository $pioneerRepository,
+        PublisherService $publisherService,
         ShiftRepositoryInterface $shiftRepository,
         Twig_Environment $twig
     ) {
-        $this->request = $request;
         $this->bookingRepository = $bookingRepository;
+        $this->bookingService = $bookingService;
         $this->locationRepository = $locationRepository;
         $this->pioneerRepository = $pioneerRepository;
+        $this->publisherService = $publisherService;
+        $this->request = $request;
         $this->shiftRepository = $shiftRepository;
         $this->twig = $twig;
-        $this->bookingService = $bookingService;
     }
 
-    public function indexAction(int $userId): Response
+    public function indexAction(): Response
     {
-
+        $userId = $this->publisherService->getCurrentPublisher()->getId();
         if ($this->request->get('m') !== null) {
             $month = $this->request->get('m');
             if ($month === 'n') {
@@ -105,7 +111,7 @@ class BookingController
             'days' => $days,
             'year' => $year,
             'highlighted' => $highlighted,
-            'shifts' => $this->populateShifts($userId, DateTimeImmutable::createFromFormat('FY|', $month . $year)),
+            'shifts' => $this->populateMyShifts($userId, DateTimeImmutable::createFromFormat('FY|', $month . $year)),
             'select_day' => new DateTimeImmutable($select_date ? "@$select_date": 'now'),
             'cancel_time' => (new DateTimeImmutable('now'))->add(new DateInterval('P1D')),
             'locations' => $this->populateLocations(new DateTimeImmutable($select_date ? "@$select_date": 'now')),
@@ -114,10 +120,11 @@ class BookingController
         ]));
     }
 
-    private function populateShifts(int $userId, DateTimeImmutable $dateTime): array
+    private function populateMyShifts(int $userId, DateTimeImmutable $dateTime): array
     {
         $shifts = [];
-        for ($i = 0; $i < (int)$dateTime->format('t'); ++$i) {
+        $daysOfMonth = (int)$dateTime->format('t');
+        for ($i = 0; $i < $daysOfMonth; ++$i) {
             $day = $dateTime->add(new DateInterval("P{$i}D"));
             $shifts[$i + 1] = [
                 'has_booking' => false,
@@ -137,7 +144,7 @@ class BookingController
     {
         $locations = [];
         foreach ($this->locationRepository->findAll() as $location) {
-            $shifts = $this->shiftRepository->findByDayAndLocation((int)$dateTime->format('w'), $location->getId());
+            $shifts = $this->shiftRepository->findByDayAndLocation($dateTime, $location->getId());
             $locations[] = [
                 'id' => $location->getId(),
                 'name' => $location->getName(),
@@ -152,48 +159,20 @@ class BookingController
                         'pioneer' => ['id' => 0, 'gender' => '', 'name' => '', 'phone' => ''],
                         'pioneer_b' => ['id' => 0, 'gender' => '', 'name' => '', 'phone' => ''],
                         'amount_publishers' => 0,
+                        'publishers' => []
                     ];
-                    if ($booking !== null) {
+                    if ($booking instanceof Booking) {
+                        $bookingData['publishers'] = $booking->getPublishers();
                         $bookingData['id'] = $booking->getId();
                         $bookingData['confirmed'] = $booking->isConfirmed();
                         $bookingData['recorded'] = $booking->isRecorded();
-                        $overseer = $this->pioneerRepository->findById($booking->getOverseerId());
-                        if ($overseer) {
-                            $bookingData['overseer'] = [
-                                'id' => $overseer->getId(),
-                                'gender' => $overseer->getGender(),
-                                'name' => $overseer->getFirstName() . ' ' . $overseer->getLastName(),
-                                'phone' => $overseer->getPhone(),
-                            ];
-                            $bookingData['amount_publishers']++;
-                        }
-                        $pioneer = $this->pioneerRepository->findById($booking->getPioneerId());
-                        if ($pioneer) {
-                            $bookingData['pioneer'] = [
-                                'id' => $pioneer->getId(),
-                                'gender' => $pioneer->getGender(),
-                                'name' => $pioneer->getFirstName() . ' ' . $pioneer->getLastName(),
-                                'phone' => $pioneer->getPhone(),
-                            ];
-                            $bookingData['amount_publishers']++;
-                        }
-                        $pioneerB = $this->pioneerRepository->findById($booking->getPioneerBId());
-                        if ($pioneerB) {
-                            $bookingData['pioneer_b'] = [
-                                'id' => $pioneerB->getId(),
-                                'gender' => $pioneerB->getGender(),
-                                'name' => $pioneerB->getFirstName() . ' ' . $pioneerB->getLastName(),
-                                'phone' => $pioneerB->getPhone(),
-                            ];
-                            $bookingData['amount_publishers']++;
-                        }
                     }
                     return [
                         'id' => $shift->getId(),
                         'start_time' => $shift->getStartTime(),
                         'booking' => $bookingData
                     ];
-                }, $shifts)
+                }, iterator_to_array($shifts))
             ];
         }
         return $locations;
@@ -231,7 +210,7 @@ class BookingController
                 ));
             }
         }
-        $booking = $this->bookingService->getById($bookingId);
+        $booking = $this->bookingService->findById($bookingId);
 
         try {
             return (new Response())->setContent($this->twig->render('booking/result.twig', [

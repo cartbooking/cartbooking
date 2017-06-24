@@ -4,6 +4,8 @@ namespace Test\Unit\Infrastructure\Persistence\Doctrine;
 
 use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineShiftRepository;
 use CartBooking\Model\Shift\Shift;
+use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Prophecy\Argument;
@@ -32,12 +34,12 @@ class DoctrineShiftRepositoryTest extends AutoMockingTest
 
     public function testFindByCriteria()
     {
-        $this->markTestIncomplete('needs to remove the call to iterator_to_array');
         $repository = $this->prophesize(EntityRepository::class);
-        $repository->matching(Argument::any())->willReturn([$this->prophesize(Shift::class)])->shouldBeCalled();
-        $this->injector->getProphecy(EntityManager::class)->getRepository(Shift::class)
-            ->willReturn()
+        $repository->matching(Argument::any())->willReturn(new ArrayCollection([$this->prophesize(Shift::class)]))
             ->shouldBeCalled();
-        $this->repository->findByDayAndLocation(0, 1);
+        $this->injector->getProphecy(EntityManager::class)->getRepository(Shift::class)
+            ->willReturn($repository->reveal())
+            ->shouldBeCalled();
+        $this->repository->findByDayAndLocation(new DateTimeImmutable(), 1);
     }
 }

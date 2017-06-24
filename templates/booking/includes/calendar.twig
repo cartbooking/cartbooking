@@ -1,0 +1,64 @@
+<div class="mobile-section non">
+  <div class="w-clearfix content-cal dt">
+    <div class="calendar-date">
+      <div class="wekk-day-dt">S</div>
+    </div>
+    <div class="calendar-date">
+      <div class="wekk-day-dt">M</div>
+    </div>
+    <div class="calendar-date">
+      <div class="wekk-day-dt">T</div>
+    </div>
+    <div class="calendar-date">
+      <div class="wekk-day-dt">W</div>
+    </div>
+    <div class="calendar-date">
+      <div class="wekk-day-dt">T</div>
+    </div>
+    <div class="calendar-date">
+      <div class="wekk-day-dt">F</div>
+    </div>
+    <div class="calendar-date">
+      <div class="wekk-day-dt">S</div>
+    </div>
+  </div>
+</div>
+<div class="w-clearfix content-cal dt">
+  {% set counter = 1 %}
+  {% for day in 1..first_day_of_month %}
+    <div class="calendar-date"></div>
+    {% set counter = counter + 1 %}
+  {% endfor %}
+  {% for day in 1..days %}
+  <div class="calendar-date">
+    <a id="{{ day }}" href="/booking/?select_date={{ year }}{{ month|date('m') }}{{ day }}" class="
+                date-dt
+                {% if day == select_day|date('d') %}
+                date-selected
+                {% endif %}
+                {% if day == "now"|date('d') %}
+                current-date
+                {% endif %}
+                " data-ix="pull-menu">
+      {{ day  }}
+    </a>
+    {% if shifts[day]['has_booking'] == true %}
+      {% if day < "now"|date('d') %}
+        {% if shifts[day]['is_recorded'] == true %}
+          <div class="myshift placements-recorded"></div>
+        {% else %}
+          <div class="myshift placements-reminder"></div>
+        {% endif %}
+      {% else %}
+        <div class="myshift"></div>
+      {% endif %}
+    {% endif %}
+  </div>
+  {% if counter % 7 == 0 %}
+</div>
+<div class="w-clearfix content-cal dt">
+  {% endif %}
+  {% set counter = counter + 1 %}
+  {% endfor %}
+</div>
+{#END CALENDAR#}

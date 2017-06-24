@@ -47,10 +47,16 @@ class CoreProvider
             $app,
             new BindingClosureFactory(new LazyLoadingValueHolderFactory(), $app[Injector::class])
         );
+        $formServiceProvider = new FormProvider(
+            $app[Injector::class],
+            $app,
+            new BindingClosureFactory(new LazyLoadingValueHolderFactory(), $app[Injector::class])
+        );
 
         $serviceProvider->register($app);
         $repositoryProvider->register($app);
         $infrastructureProvider->register($app);
+        $formServiceProvider->register($app);
     }
 
     public function mount(Application $app)
