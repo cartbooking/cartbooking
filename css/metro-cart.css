@@ -1076,7 +1076,6 @@ form {
 .search {
   background-color: white;
   color: #aeaeae;
-  padding: 15px;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -1084,7 +1083,6 @@ form {
   border-top: 1px solid #dedede;
   border-bottom: 1px solid #dedede;
   border-left: 0;
-  height: 52px;
 }
 .data {
   width: 90%;

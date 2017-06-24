@@ -38,11 +38,7 @@ class RepositoryProvider extends InjectorServiceProvider
 
         $this->autoBind(PublisherRepository::class);
 
-        $this->bind(BookingRepository::class, function (Container $app) {
-            return new BookingRepository($app[\CartBooking\Lib\Db\Db::class], new \CartBooking\Model\Booking\BookingHydrator());
-        });
-        $this->alias('repository.booking', BookingRepository::class);
-
+        $this->autoBind(BookingRepository::class);
         $this->alias(ShiftRepositoryInterface::class, DoctrineShiftRepository::class);
         $this->autoBind(DoctrineShiftRepository::class);
         $this->alias(LocationRepositoryInterface::class, DoctrineLocationRepository::class);

@@ -6,8 +6,8 @@
         <id name="id" type="integer">
             <generator strategy="AUTO" />
         </id>
-        <field name="firstName" column="first_name" type="string" />
-        <field name="lastName" column="last_name" type="string" />
+        <field name="fullName" column="full_name" type="string" />
+        <field name="preferredName" column="preferred_name" type="string" />
         <field name="gender" type="string"/>
         <field name="phone" type="string" />
         <field name="inactive" type="boolean" />

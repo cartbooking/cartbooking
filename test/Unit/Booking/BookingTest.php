@@ -3,6 +3,7 @@
 namespace Test\Unit\Booking;
 
 use CartBooking\Model\Booking\Booking;
+use CartBooking\Model\Booking\BookingId;
 use CartBooking\Model\Publisher\Publisher;
 use Test\AutoMockingTest;
 
@@ -14,7 +15,7 @@ class BookingTest extends AutoMockingTest
     public function setUp()
     {
         parent::setUp();
-        $this->booking = new Booking(1, 1, \DateTimeImmutable::createFromFormat('Y-m-d', '2017-01-01'));
+        $this->booking = new Booking(new BookingId(), 1, \DateTimeImmutable::createFromFormat('Y-m-d', '2017-01-01'));
     }
 
     public function testSetOverseerOnly()
@@ -36,10 +37,9 @@ class BookingTest extends AutoMockingTest
         $pioneer->isMale()->willReturn(false);
         $pioneerId = 1;
         $pioneer->getId()->willReturn($pioneerId);
-        $this->booking->setPublishers([$pioneer->reveal()]);
-        static::assertSame(0, $this->booking->getOverseerId());
-        static::assertSame($pioneerId, $this->booking->getPioneerId());
-        static::assertSame(0, $this->booking->getPioneerBId());
+        $publishers = [$pioneer->reveal()];
+        $this->booking->setPublishers($publishers);
+        static::assertSame($publishers, $this->booking->getPublishers());
     }
 
     public function testSetOverseerAndPublisher()
@@ -53,9 +53,9 @@ class BookingTest extends AutoMockingTest
         $overseer->isRelativeTo($pioneer->reveal())->willReturn(false);
         $pioneer->isMale()->willReturn(false);
         $pioneer->getId()->willReturn($pioneerId);
-        $this->booking->setPublishers([$overseer->reveal(), $pioneer->reveal()]);
-        static::assertSame($overseerId, $this->booking->getOverseerId());
-        static::assertSame($pioneerId, $this->booking->getPioneerId());
+        $publishers = [$overseer->reveal(), $pioneer->reveal()];
+        $this->booking->setPublishers($publishers);
+        static::assertSame($publishers, $this->booking->getPublishers());
         static::assertFalse($this->booking->isConfirmed());
     }
 
@@ -73,10 +73,9 @@ class BookingTest extends AutoMockingTest
         $pioneer->getId()->willReturn($pioneerId);
         $pioneerB->isMale()->willReturn(true);
         $pioneerB->getId()->willReturn($pioneerBId);
-        $this->booking->setPublishers([$overseer->reveal(), $pioneer->reveal(), $pioneerB->reveal()]);
-        static::assertSame($overseerId, $this->booking->getOverseerId());
-        static::assertSame($pioneerId, $this->booking->getPioneerId());
-        static::assertSame($pioneerBId, $this->booking->getPioneerBId());
+        $publishers = [$overseer->reveal(), $pioneer->reveal(), $pioneerB->reveal()];
+        $this->booking->setPublishers($publishers);
+        static::assertSame($publishers, $this->booking->getPublishers());
         static::assertTrue($this->booking->isConfirmed());
     }
 
@@ -91,20 +90,21 @@ class BookingTest extends AutoMockingTest
         $brother->isMale()->willreturn(true);
         $sister->getId()->willReturn($sisterId);
         $sister->isMale()->willReturn(false);
-        $this->booking->setPublishers([$brother->reveal(), $sister->reveal()]);
+        $publishers = [$brother->reveal(), $sister->reveal()];
+        $this->booking->setPublishers($publishers);
         static::assertTrue($this->booking->isConfirmed());
     }
 
     public function testRecorded()
     {
-        $booking = new Booking(1, 1, new \DateTimeImmutable('2000-01-01'));
+        $booking = new Booking(new BookingId(), 1, new \DateTimeImmutable('2000-01-01'));
         $booking->setRecorded(true);
         static::assertTrue($booking->isRecorded());
     }
 
     public function testRecordedInFuture()
     {
-        $booking = new Booking(1, 1, (new \DateTimeImmutable('now'))->add(new \DateInterval('P1D')));
+        $booking = new Booking(new BookingId(), 1, (new \DateTimeImmutable('now'))->add(new \DateInterval('P1D')));
         $booking->setRecorded(true);
         static::assertFalse($booking->isRecorded());
     }

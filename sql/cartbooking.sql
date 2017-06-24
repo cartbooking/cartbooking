@@ -30,11 +30,11 @@ CREATE TABLE IF NOT EXISTS `bookings` (
   `id` int(6) NOT NULL AUTO_INCREMENT,
   `shift_id` int(6) NOT NULL,
   `date` date NOT NULL,
-  `overseer_id` int(6) NOT NULL DEFAULT '0',
-  `pioneer_id` int(6) NOT NULL DEFAULT '0',
-  `pioneer_b_id` int(6) NOT NULL DEFAULT '0',
-  `confirmed` varchar(1) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
-  `full` varchar(1) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
+  `overseer_id` int(6) NOT NULL DEFAULT 0,
+  `pioneer_id` int(6) NOT NULL DEFAULT 0,
+  `pioneer_b_id` int(6) NOT NULL DEFAULT 0,
+  `is_confirmed` TINYINT NOT NULL DEFAULT 0,
+  `is_full` TINYINT NOT NULL DEFAULT 0,
   `recorded` varchar(1) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `placements` int(3) NOT NULL DEFAULT '0',
   `videos` int(3) NOT NULL DEFAULT '0',
@@ -112,8 +112,8 @@ CREATE TABLE IF NOT EXISTS `locations` (
 
 CREATE TABLE IF NOT EXISTS `pioneers` (
   `id` int(6) NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(30) COLLATE latin1_general_ci NOT NULL,
-  `last_name` varchar(30) COLLATE latin1_general_ci NOT NULL,
+  `full_name` varchar(255) COLLATE latin1_general_ci NOT NULL,
+  `preferred_name` varchar(255) COLLATE latin1_general_ci NOT NULL,
   `gender` varchar(1) COLLATE latin1_general_ci NOT NULL,
   `password` VARCHAR(100) NOT NULL,
   `congregation` varchar(50) COLLATE latin1_general_ci NOT NULL,
@@ -171,6 +171,13 @@ CREATE TABLE IF NOT EXISTS `shifts_archive` (
   KEY `start_time` (`start_time`),
   KEY `end_time` (`end_time`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=76 ;
+
+CREATE TABLE bookings_publishers (
+  booking_id varchar(60) not null,
+  publisher_id int not null,
+  FOREIGN KEY (booking_id) REFERENCES bookings (id) ON DELETE CASCADE,
+  FOREIGN KEY (publisher_id) REFERENCES pioneers (id) ON DELETE CASCADE
+);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

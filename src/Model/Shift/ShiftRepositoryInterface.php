@@ -2,6 +2,9 @@
 
 namespace CartBooking\Model\Shift;
 
+use DateTimeImmutable;
+use Doctrine\Common\Collections\Collection;
+
 interface ShiftRepositoryInterface
 {
     /**
@@ -11,9 +14,9 @@ interface ShiftRepositoryInterface
     public function findById(int $id);
 
     /**
-     * @param int $day
+     * @param DateTimeImmutable $day
      * @param int $locationId
-     * @return Shift[]
+     * @return Collection|Shift[]
      */
-    public function findByDayAndLocation(int $day, int $locationId): array;
+    public function findByDayAndLocation(DateTimeImmutable $day, int $locationId): Collection;
 }

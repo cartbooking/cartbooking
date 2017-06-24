@@ -4,8 +4,10 @@ namespace CartBooking\Application\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
 use CartBooking\Application\EmailService;
+use CartBooking\Infrastructure\Persistence\Doctrine\Type\BookingIdType;
 use CartBooking\Infrastructure\Persistence\Doctrine\Type\DateTimeImmutableType;
 use CartBooking\Infrastructure\Persistence\Doctrine\Type\MarkersType;
+use CartBooking\Model\Booking\BookingId;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
@@ -15,14 +17,19 @@ use Pimple\Container;
 use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\LocaleServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
 use Silex\Provider\SessionServiceProvider;
+use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Silex\Provider\ValidatorServiceProvider;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Twig_Environment;
 
 class InfrastructureProvider extends InjectorServiceProvider
@@ -41,6 +48,12 @@ class InfrastructureProvider extends InjectorServiceProvider
     {
         $initParams = $app['initParams'];
 
+        $app->register(new LocaleServiceProvider());
+        $app->register(new ValidatorServiceProvider());
+        $app->register(new TranslationServiceProvider(), [
+            'locale_fallbacks' => ['en'],
+            'translator.domains' => [],
+        ]);
         $this->bind('mailer', Swift_Mailer::class);
         $app['mailer'] = function () use ($initParams) {
             $transport = Swift_SmtpTransport::newInstance($initParams['smtp']['host'], $initParams['smtp']['port']);
@@ -108,12 +121,14 @@ class InfrastructureProvider extends InjectorServiceProvider
         ]);
         $app->register(new DoctrineServiceProvider(), [
             'db.options' => [
-                'driver'   => 'pdo_mysql',
-                'host'      => $initParams['db']['host'],
-                'dbname'    => $initParams['db']['name'],
-                'user'      => $initParams['db']['username'],
-                'password'  => $initParams['db']['password'],
-                'charset'   => 'utf8mb4',
+                'driver' => 'pdo_mysql',
+                'host' => $initParams['db']['host'],
+                'dbname' => $initParams['db']['name'],
+                'user' => $initParams['db']['username'],
+                'password' => $initParams['db']['password'],
+                'charset' => 'utf8mb4',
+                'logging' => true,
+                'profiling' => true,
             ],
         ]);
 
@@ -121,6 +136,7 @@ class InfrastructureProvider extends InjectorServiceProvider
         $app['session.storage.options'] = [
             'cookie_lifetime' => (int) $initParams['session']['lifetime'],
         ];
+        $this->alias(Session::class, 'session');
         $app->register(new TwigServiceProvider(), array(
             'twig.path' => APP_ROOT . '/templates',
             'twig.options' => [
@@ -129,6 +145,10 @@ class InfrastructureProvider extends InjectorServiceProvider
                 'debug' => true,
             ],
             'twig.date.format' => 'Y-m-d',
+            'twig.form.templates' => [
+                'bootstrap_3_layout.html.twig',
+                'bootstrap_3_horizontal_layout.html.twig'
+            ]
         ));
         $this->bind(EntityManager::class, function (Application $app) use ($initParams) {
             $dbParams = [
@@ -140,9 +160,11 @@ class InfrastructureProvider extends InjectorServiceProvider
             ];
             Type::addType(MarkersType::MARKERS, MarkersType::class);
             Type::addType(DateTimeImmutableType::DATE_TIME_IMMUTABLE, DateTimeImmutableType::class);
+            Type::addType(BookingIdType::BOOKING_ID, BookingIdType::class);
 
             $config = Setup::createXMLMetadataConfiguration([APP_ROOT . '/config/doctrine'], $app['debug']);
             return EntityManager::create($dbParams, $config);
         });
+        $this->alias(TokenStorage::class, 'security.token_storage');
     }
 }

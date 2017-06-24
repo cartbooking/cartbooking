@@ -4,6 +4,8 @@ namespace CartBooking\Infrastructure\Persistence\Doctrine\Repository;
 
 use CartBooking\Model\Shift\Shift;
 use CartBooking\Model\Shift\ShiftRepositoryInterface;
+use DateTimeImmutable;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 
@@ -27,15 +29,15 @@ final class DoctrineShiftRepository implements ShiftRepositoryInterface
     }
 
     /**
-     * @param int $day
+     * @param DateTimeImmutable $day
      * @param int $locationId
-     * @return Shift[]
+     * @return Collection|Shift[]
      */
-    public function findByDayAndLocation(int $day, int $locationId): array
+    public function findByDayAndLocation(DateTimeImmutable $day, int $locationId): Collection
     {
         $criteria = Criteria::create()
-            ->where(Criteria::expr()->eq('day', $day))
+            ->where(Criteria::expr()->eq('day', $day->format('w')))
             ->andWhere(Criteria::expr()->eq('locationId', $locationId));
-        return iterator_to_array($this->entityManager->getRepository(Shift::class)->matching($criteria));
+        return $this->entityManager->getRepository(Shift::class)->matching($criteria);
     }
 }

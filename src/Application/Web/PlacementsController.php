@@ -2,6 +2,7 @@
 
 namespace CartBooking\Application\Web;
 
+use CartBooking\Application\PublisherService;
 use CartBooking\Model\Booking\BookingRepository;
 use CartBooking\Model\Location\LocationRepositoryInterface;
 use CartBooking\Model\Shift\ShiftRepositoryInterface;
@@ -23,32 +24,36 @@ class PlacementsController
     private $shiftRepository;
     /** @var LocationRepositoryInterface */
     private $locationRepository;
+    /** @var PublisherService */
+    private $publisherService;
 
     public function __construct(
-        Request $request,
-        Response $response,
-        Twig_Environment $twig,
         BookingRepository $bookingRepository,
         LocationRepositoryInterface $locationRepository,
-        ShiftRepositoryInterface $shiftRepository
+        PublisherService $publisherService,
+        Request $request,
+        Response $response,
+        ShiftRepositoryInterface $shiftRepository,
+        Twig_Environment $twig
     ) {
+        $this->bookingRepository = $bookingRepository;
+        $this->locationRepository = $locationRepository;
         $this->request = $request;
+        $this->publisherService = $publisherService;
         $this->response = $response;
         $this->twig = $twig;
-        $this->bookingRepository = $bookingRepository;
         $this->shiftRepository = $shiftRepository;
-        $this->locationRepository = $locationRepository;
     }
 
     /**
-     * @param int $userId
      * @return Response
      * @throws \UnexpectedValueException
      */
-    public function indexAction(int $userId): Response
+    public function indexAction(): Response
     {
+        $userId = $this->publisherService->getCurrentPublisher()->getId();
         $bookings = [];
-        foreach ($this->bookingRepository->findPendingBookingsForUser($userId) as $booking) {
+        foreach ($this->bookingRepository->findPendingBookingsForUser($userId, new \DateTimeImmutable()) as $booking) {
             $shift = $this->shiftRepository->findById($booking->getShiftId());
             $location = $this->locationRepository->findById($shift->getLocationId());
 
@@ -93,7 +98,6 @@ class PlacementsController
             $booking->setVideos((int)$this->request->get('videos'));
             $booking->setRequests((int)$this->request->get('requests'));
             $booking->setComments((string)$this->request->get('comments'));
-            $booking->setExperience($this->request->get('comments') !== '' ? 'y' : 'n');
             $booking->setRecorded(true);
             $this->bookingRepository->save($booking);
             return $this->response->setContent($this->twig->render('placements/submitted_successfully.twig'));

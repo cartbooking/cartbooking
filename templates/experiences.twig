@@ -8,7 +8,7 @@
                 {% for data in view_data %}
                     <form method="post" action="/experiences/" id="form" name="form" data-name="Form">
                         <br>
-                        {{ data.date | date('Y-m-d') }} - {{ data.overseer_first_name}} {{ data.overseer_last_name }}<br>
+                        {{ data.date | date('Y-m-d') }} - {{ data.overseer_full_name}}<br>
                         {{ data.booking_comments }}<br><br>
                         <input type="hidden" name="dismissed" value="{{ data.booking_id }}" />
                         <input class="w-button" type="submit" name="submit" value="DISMISS">

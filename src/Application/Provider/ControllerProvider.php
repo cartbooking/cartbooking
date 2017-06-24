@@ -17,6 +17,7 @@ use Silex\Application;
 use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 class ControllerProvider extends InjectorServiceProvider implements ControllerProviderInterface
 {
@@ -44,16 +45,15 @@ class ControllerProvider extends InjectorServiceProvider implements ControllerPr
     public function connect(Application $app)
     {
         $controllers = $this->get(ControllerCollection::class);
-        $userId = (int)$this->get(Request::class)->cookies->get('login');
-        $controllers->get('/', function (Application $app) use($userId) {
-            if (!$userId) {
-                return new RedirectResponse('/login.php');
+        $controllers->get('/', function (Application $app) {
+            if ($app['security.token_storage']->getToken() === null) {
+                return new RedirectResponse('/login');
             }
             return new RedirectResponse('/booking');
         });
 
-        $controllers->get('/booking/', function () use ($userId) {
-            return $this->injector->create(BookingController::class)->indexAction($userId);
+        $controllers->get('/booking/', function () {
+            return $this->injector->create(BookingController::class)->indexAction();
         });
         $controllers->post('/booking/', function () {
             return $this->injector->create(BookingController::class)->postAction();
@@ -64,8 +64,8 @@ class ControllerProvider extends InjectorServiceProvider implements ControllerPr
         $controllers->get('/placements/{bookingId}', function ($bookingId) {
             return $this->injector->create(PlacementsController::class)->reportAction((int)$bookingId);
         })->assert('bookingId', '\d+');
-        $controllers->get('/placements/', function () use ($userId) {
-            return $this->injector->create(PlacementsController::class)->indexAction($userId);
+        $controllers->get('/placements/', function () {
+            return $this->injector->create(PlacementsController::class)->indexAction();
         })->bind('/placements');
         $controllers->get('/communication/', function () {
             return $this->injector->create(CommunicationController::class)->indexAction();
@@ -102,11 +102,14 @@ class ControllerProvider extends InjectorServiceProvider implements ControllerPr
         $controllers->get('/publishers/low-participation', function () {
             return $this->injector->create(PublishersController::class)->lowParticipants();
         });
-        $controllers->get('/publishers/', function () {
+        $controllers->post('/publishers/search', function (Request $request) {
+            return $this->injector->create(PublishersController::class)->searchAction($request->get('name'));
+        });
+        $controllers->match('/publishers/', function () {
             return $this->injector->create(PublishersController::class)->indexAction();
         });
-        $controllers->post('/publishers/', function (Request $request) {
-            return $this->injector->create(PublishersController::class)->searchAction($request->get('name'));
+        $controllers->match('/publishers/{publisherId}', function ($publisherId) {
+            return $this->injector->create(PublishersController::class)->editAction($publisherId);
         });
         $controllers->get('/statistics/', function () {
             return $this->injector->create(StatisticsController::class)->indexAction();

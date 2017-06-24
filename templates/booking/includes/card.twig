@@ -1,0 +1,102 @@
+<div class="acc-sectionwrapper" id="{{ location.id }}">
+  <div class="acc-header">
+    <div class="locatin-heading"><div>{{ location.name }}</div></div>
+    {% for shift in location.shifts %}
+      <div class="div-time">
+
+        <a class="w-clearfix w-inline-block user-link" data-ix="accordion" onclick="accordion(20{{ shift.id }}); changeImage(30{{ shift.id }})">
+          <div class="tim-div">
+            <div class="time-of-day">{{ shift.start_time|date('g:ia') }}</div>
+          </div>
+          {% for publisher in shift.booking.publishers %}
+            <div class="user-div">
+              {% if publisher.id == user_id %}
+                <div class="my-shift-dot"></div>
+              {% endif %}
+              {% if publisher.gender == 'm' %}
+                <img class="male" width="32" src="/images/male-02.svg">
+              {% else %}
+                <img class="empty" width="32" src="/images/empty-02.svg">
+              {% endif %}
+            </div>
+          {% endfor %}
+          <div class="user-div">
+            {% if shift.booking.confirmed == true %}
+              <img id="30{{ shift.id }}" width="32" alt="confirmed" src="/images/confirmed-02.svg">
+            {% else %}
+              <img id="30{{ shift.id }}" width="32" alt="unconfirmed" src="/images/empty.png">
+            {% endif %}
+          </div>
+        </a>
+        <div id="20{{ shift.id }}" class="w-form form-confirm">
+          <div class="heightWrapper" id = "heightWrapper20{{ shift.id }}">
+            <form class="form" method="post" action="/booking/" id="form{{ shift.id }}" name="{{ shift.id }}">
+              <input type="hidden" name="booking_id" value="{{ shift.booking.id }}">
+
+              {% for publisher in shift.booking.publishers %}
+                <div class="user-details">
+                  <div class="user-name">{{ publisher.fullName }}</div>
+                  <div class="mobile">
+                    <a href="tel:{{ publisher.phone }}">{{ publisher.phone }}</a>
+                  </div>
+                  {% if select_day > cancel_time %}
+                    <input type="hidden" name="shift" value="{{ shift.id }}" />
+                    <input type="hidden" name="volunteers[]" value="{{ publisher.phone }}"/>
+                    <input type="hidden" name="date" value="{{ select_day|date() }}" />
+                    <button class="w-inline-block delete-shift" type="submit" name="delete" value="{{ publisher.phone }}">
+                      <div>Delete</div>
+                    </button>
+                  {% endif %}
+                  {% if select_day > cancel_time %}
+                    <a href="tel:{{ admin.phone }}">
+                      <div class="w-inline-block delete-shift">
+                        Call to change
+                      </div>
+                    </a>
+                  {% endif %}
+                  {% if true or false %}
+                    <a href="mailto:canadabay@cartbooking.com?cc=example@example.com&subject=Shift%20Change%20Needed&body=%0A%0A%2A%2A%2A%2AType%20your%20message%20above%20this%20line%2A%2A%2A%2A%0AShift%20ID:%20{{ shift.id }}%0ADate:%20{{ select_day|date() }}%0AUser%20ID:%20{{ user_id }}">
+                      <div class="w-inline-block delete-shift">
+                        Email to change
+                      </div>
+                    </a>
+                  {% endif %}
+                </div>
+              {% endfor %}
+
+              {% if select_day >= date() %}
+                {% if location.capacity - shift.booking.amount_publishers > 0 %}
+                  {% for i in 1..(location.capacity - shift.booking.amount_publishers) %}
+                    <div class="text-field-div">
+                      <div class="label">Add another person?</div>
+                      <input class="w-input mobile-text-filled" type="tel" placeholder="Enter mobile number" name="volunteers[]">
+                    </div>
+                  {% endfor %}
+                {% endif %}
+                {% if false and admin %}
+                  <div class="text-field-div">
+                    <div class="label">Add another person?</div>
+                    <input class="w-input mobile-text-filled" type="tel" placeholder="Enter mobile number" name="volunteers[]">
+                  </div>
+                  <input type="hidden" name="shift" value="{{ shift.id }}" />
+                  <input type="hidden" name="date" value="{{ select_day|date() }}" />
+                  <button class="w-button submit-mobile-number proceed" type="submit" name="add" value="add">Add</button>
+                {% endif %}
+
+                <input type="hidden" name="shift" value="{{ shift.id }}" />
+                <input type="hidden" name="date" value="{{ select_day|date() }}" />
+                <input type="hidden" name="user" value="{{ user_id }}" />
+                {% if location.capacity - shift.booking.amount_publishers > 0 %}
+                  <button class="w-button submit-mobile-number proceed" type="submit" name="add" value="volunteer">Volunteer</button>
+                {% endif %}
+              {% elseif shift.booking.confirmed == true and shift.booking.recorded == false %}
+                <a href="/placements/{{ shift.booking.id }}" class="w-button submit-mobile-number report" type="submit">Record Placements</a>
+              {% endif %}
+            </form>
+          </div>
+        </div>
+      </div>
+      <div id="{{ shift.id }}" class="w-form form-confirm"></div>
+    {% endfor %}
+  </div>
+</div>

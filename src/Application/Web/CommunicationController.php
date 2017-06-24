@@ -68,7 +68,7 @@ class CommunicationController
             $shift = $this->shiftRepository->findById($booking->getShiftId());
             $location = $this->locationRepository->findById($shift->getLocationId());
             $data[$overseer->getId()]['overseer'] = $overseer;
-            $data[$overseer->getId()]['first_name'] = $overseer->getFirstName();
+            $data[$overseer->getId()]['first_name'] = $overseer->getPreferredName();
             $data[$overseer->getId()]['bookings'][] = [
                 'location_name' => $location->getName(),
                 'display_date' => $booking->getDate()->format('F jS'),
@@ -104,7 +104,7 @@ class CommunicationController
         $counter = 0;
         if ($context !== []) {
             foreach ($this->pioneerRepository->findByGender('m') as $pioneer) {
-                $context['first_name'] = $pioneer->getFirstName();
+                $context['first_name'] = $pioneer->getPreferredName();
                 $this->emailService->sendEmailTo(
                     $pioneer,
                     'Shift overseers needed',
@@ -145,7 +145,7 @@ class CommunicationController
         $counter = 0;
         if ($context !== []) {
             foreach ($this->pioneerRepository->findActive() as $pioneer) {
-                $context['first_name'] = $pioneer->getFirstName();
+                $context['first_name'] = $pioneer->getPreferredName();
                 $this->emailService->sendEmailTo(
                     $pioneer,
                     'Shift volunteers needed',

@@ -40,7 +40,7 @@ class ReportsController
         $body = '';
         $file = $this->fileSystem->fopen('listBrothers.csv', 'w');
         foreach ($this->pioneerRepository->findByGender('m') as $pioneer) {
-            $row = [$pioneer->getFirstName(), $pioneer->getLastName()];
+            $row = [$pioneer->getFullName(), $pioneer->getPhone(), $pioneer->getEmail()];
             $this->fileSystem->fputcsv($file, $row);
             $body .= implode(',', $row) . PHP_EOL;
         }
@@ -57,7 +57,7 @@ class ReportsController
         $body = '';
         $file = $this->fileSystem->fopen('listInvitees.csv', 'w');
         foreach ($this->pioneerRepository->findActive() as $pioneer) {
-            $row = [$pioneer->getFirstName(), $pioneer->getLastName()];
+            $row = [$pioneer->getFullName(), $pioneer->getPhone(), $pioneer->getEmail()];
             $this->fileSystem->fputcsv($file, $row);
             $body .= implode(',', $row) . PHP_EOL;
         }

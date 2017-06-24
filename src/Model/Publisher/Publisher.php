@@ -7,15 +7,13 @@ use Doctrine\Common\Collections\Collection;
 
 class Publisher
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
-
-    private $firstName;
-
-    private $lastName;
-
+    /** @var string */
+    private $preferredName;
+    /** @var string */
+    private $fullName;
+    /** @var string */
     private $gender;
 
     private $phone;
@@ -32,10 +30,10 @@ class Publisher
     /** @var ArrayCollection */
     private $relatives;
 
-    public function __construct(int $id)
+    public function __construct()
     {
-        $this->id = $id;
         $this->relatives = new ArrayCollection();
+        $this->inactive = false;
     }
 
     public function getId()
@@ -57,38 +55,6 @@ class Publisher
     public function setStatus($status)
     {
         $this->status = $status;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * @param mixed $firstName
-     */
-    public function setFirstName($firstName)
-    {
-        $this->firstName = $firstName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @param mixed $lastName
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
     }
 
     /**
@@ -195,5 +161,37 @@ class Publisher
     public function isRelativeTo(Publisher $pioneer): bool
     {
         return $this->relatives->contains($pioneer);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreferredName(): string
+    {
+        return $this->preferredName;
+    }
+
+    /**
+     * @param string $preferredName
+     */
+    public function setPreferredName(string $preferredName)
+    {
+        $this->preferredName = $preferredName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullName(): string
+    {
+        return $this->fullName;
+    }
+
+    /**
+     * @param string $fullName
+     */
+    public function setFullName(string $fullName)
+    {
+        $this->fullName = $fullName;
     }
 }
