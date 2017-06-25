@@ -24,7 +24,7 @@
             {% if shift.booking.confirmed == true %}
               <img id="30{{ shift.id }}" width="32" alt="confirmed" src="/images/confirmed-02.svg">
             {% else %}
-              <img id="30{{ shift.id }}" width="32" alt="unconfirmed" src="/images/empty.png">
+              <img id="30{{ shift.id }}" width="32" alt="unconfirmed" src="/images/empty.png" title="Needs confirmation">
             {% endif %}
           </div>
         </a>
