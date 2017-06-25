@@ -12,7 +12,7 @@
         <field name="phone" type="string" />
         <field name="inactive" type="boolean" />
         <field name="password" type="string" />
-        <field name="email" type="string" />
+        <field name="email" type="Email" />
         <many-to-many field="relatives" target-entity="CartBooking\Model\Publisher\Publisher">
             <join-table name="relationships">
                 <join-columns>

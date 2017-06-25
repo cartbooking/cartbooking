@@ -1,6 +1,6 @@
 <?php
 
-namespace CartBooking\Application\Web;
+namespace CartBooking\Application\Web\Admin;
 
 use CartBooking\Lib\Utilities\FileSystem;
 use CartBooking\Model\Publisher\PublisherRepository;

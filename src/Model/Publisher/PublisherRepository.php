@@ -73,10 +73,9 @@ class PublisherRepository
     public function findActive()
     {
         $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->eq('inactive', 'y'))
-//            ->andWhere(Criteria::expr()->eq('deactivated', 'd'))
-            ->andWhere(Criteria::expr()->eq('email', ''));
-        return $this->entityManager->getRepository(Publisher::class)->matching($criteria)->first();
+        $criteria->where(Criteria::expr()->eq('inactive', false))
+            ->andWhere(Criteria::expr()->neq('email', ''));
+        return $this->entityManager->getRepository(Publisher::class)->matching($criteria);
     }
 
     public function save(Publisher $publisher)

@@ -2,9 +2,10 @@
 
 namespace CartBooking\Application\Web;
 
-use CartBooking\Application\PublisherService;
+use CartBooking\Application\WebPublisherService;
 use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
 use CartBooking\Model\Booking\Booking;
+use CartBooking\Model\Booking\BookingId;
 use CartBooking\Model\Booking\BookingRepository;
 use CartBooking\Model\Booking\BookingService;
 use CartBooking\Model\Booking\Command\AddPublishersCommand;
@@ -37,7 +38,7 @@ class BookingController
     private $twig;
     /** @var BookingService */
     private $bookingService;
-    /** @var PublisherService */
+    /** @var WebPublisherService */
     private $publisherService;
 
     public function __construct(
@@ -46,7 +47,7 @@ class BookingController
         BookingService $bookingService,
         DoctrineLocationRepository $locationRepository,
         PublisherRepository $pioneerRepository,
-        PublisherService $publisherService,
+        WebPublisherService $publisherService,
         ShiftRepositoryInterface $shiftRepository,
         Twig_Environment $twig
     ) {
@@ -155,9 +156,6 @@ class BookingController
                         'id' => null,
                         'confirmed' => false,
                         'recorded' => false,
-                        'overseer' => ['id' => 0, 'gender' => '', 'name' => '', 'phone' => ''],
-                        'pioneer' => ['id' => 0, 'gender' => '', 'name' => '', 'phone' => ''],
-                        'pioneer_b' => ['id' => 0, 'gender' => '', 'name' => '', 'phone' => ''],
                         'amount_publishers' => 0,
                         'publishers' => []
                     ];
@@ -193,7 +191,7 @@ class BookingController
             ));
         } else {
             if (!empty($this->request->get('booking_id'))) {
-                $bookingId = (int)$this->request->get('booking_id');
+                $bookingId = new BookingId($this->request->get('booking_id'));
                 $this->bookingService->addPublishers(new AddPublishersCommand($bookingId, array_merge(
                     [$this->request->get('user')],
                     $this->mapVolunteersPhoneToId($this->request->get('volunteers', []))

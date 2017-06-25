@@ -1,6 +1,6 @@
 <?php
 
-namespace CartBooking\Application\Web;
+namespace CartBooking\Application\Web\Admin;
 
 use CartBooking\Model\Booking\BookingRepository;
 use CartBooking\Model\Publisher\Command\AddPublisherCommand;
@@ -8,6 +8,7 @@ use CartBooking\Model\Publisher\Command\UpdatePublisherCommand;
 use CartBooking\Model\Publisher\PublisherRepository;
 use CartBooking\Model\Publisher\PublisherService;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -70,7 +71,7 @@ class PublishersController
             $this->session->getFlashBag()->add('info', 'Publisher has been added');
         }
 
-        return (new Response())->setContent($this->twig->render('publishers/index.twig', [
+        return (new Response())->setContent($this->twig->render('admin/publishers/index.twig', [
             'form' => $form->createView()
         ]));
     }
@@ -94,14 +95,14 @@ class PublishersController
             $this->session->getFlashBag()->add('info', 'User has been updated');
             $this->session->getFlashBag()->get('info');
         }
-        return new Response($this->twig->render('publishers/index.twig', [
+        return new Response($this->twig->render('admin/publishers/index.twig', [
             'form' => $form->createView()
         ]));
     }
 
     public function searchAction($name): Response
     {
-        return (new Response())->setContent($this->twig->render('publishers/search.twig', [
+        return (new Response())->setContent($this->twig->render('admin/publishers/search.twig', [
             'publishers' => $this->pioneerRepository->findByName($name),
         ]));
     }
@@ -115,7 +116,7 @@ class PublishersController
                 'name' => $publisher->getFullName(),
             ];
         }
-        return (new Response())->setContent($this->twig->render('publishers/low_participants.twig', [
+        return (new Response())->setContent($this->twig->render('admin/publishers/low_participants.twig', [
             'participants' => count(array_filter($publishersBookings, function (array $data) {
                 return $data['count'] < 5;
             }))
@@ -124,7 +125,7 @@ class PublishersController
 
     public function participation(): Response
     {
-        return (new Response());
+        return new Response();
     }
 
     /**
@@ -134,9 +135,10 @@ class PublishersController
     protected function createPublisherForm($data): \Symfony\Component\Form\FormInterface
     {
         $form = $this->formFactory->createBuilder(FormType::class, $data)
-            ->add('full_name', TextType::class, [
-                'constraints' => [new Assert\NotBlank()]
-            ])->add('email', TextType::class, [
+            ->add('email', EmailType::class, ['constraints' => [new Assert\NotBlank()]])
+            ->add('full_name', TextType::class, ['constraints' => [new Assert\NotBlank()]])
+            ->add('preferred_name', TextType::class, ['constraints' => [new Assert\NotBlank()]])
+            ->add('email', TextType::class, [
                 'constraints' => [new Assert\NotBlank(), new Assert\Email()]
             ])->add('phone', TextType::class, [
                 'constraints' => [new Assert\NotBlank(), new Assert\Length(['min' => 6, 'max' => 11])]

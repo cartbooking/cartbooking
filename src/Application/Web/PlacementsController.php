@@ -2,7 +2,7 @@
 
 namespace CartBooking\Application\Web;
 
-use CartBooking\Application\PublisherService;
+use CartBooking\Application\WebPublisherService;
 use CartBooking\Model\Booking\BookingRepository;
 use CartBooking\Model\Location\LocationRepositoryInterface;
 use CartBooking\Model\Shift\ShiftRepositoryInterface;
@@ -24,13 +24,13 @@ class PlacementsController
     private $shiftRepository;
     /** @var LocationRepositoryInterface */
     private $locationRepository;
-    /** @var PublisherService */
+    /** @var WebPublisherService */
     private $publisherService;
 
     public function __construct(
         BookingRepository $bookingRepository,
         LocationRepositoryInterface $locationRepository,
-        PublisherService $publisherService,
+        WebPublisherService $publisherService,
         Request $request,
         Response $response,
         ShiftRepositoryInterface $shiftRepository,

@@ -150,12 +150,16 @@ class BookingRepository
     }
 
     /**
-     * @param DateTimeImmutable $fromDate
-     * @param DateTimeImmutable $toDate
-     * @return \Generator|Booking[]
+     * @param DateTimeImmutable $dateFrom
+     * @param DateTimeImmutable $dateTo
+     * @return Booking[]|Collection
      */
-    public function findBookingsNeedingVolunteersBetween(DateTimeImmutable $fromDate, DateTimeImmutable $toDate)
+    public function findNonConfirmedBookingsBetween(DateTimeImmutable $dateFrom, DateTimeImmutable $dateTo)
     {
-        return [];
+        $criteria = Criteria::create();
+        $criteria->where(Criteria::expr()->gte('date', $dateFrom));
+        $criteria->andWhere(Criteria::expr()->lte('date', $dateTo));
+        $criteria->andWhere(Criteria::expr()->eq('confirmed', false));
+        return $this->entityManager->getRepository(Booking::class)->matching($criteria);
     }
 }

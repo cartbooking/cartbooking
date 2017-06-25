@@ -12,5 +12,4 @@ $provider->register($app);
 $provider->mount($app);
 \CartBooking\Application\ServiceLocator::setContainer($app);
 $app->boot();
-$token = $app['security.token_storage']->getToken();
 $app->run();
