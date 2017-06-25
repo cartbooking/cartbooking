@@ -162,10 +162,10 @@ class BookingController
                         'publishers' => []
                     ];
                     if ($booking instanceof Booking) {
-                        $bookingData['publishers'] = $booking->getPublishers();
                         $bookingData['id'] = $booking->getId();
                         $bookingData['confirmed'] = $booking->isConfirmed();
                         $bookingData['recorded'] = $booking->isRecorded();
+                        $bookingData['publishers'] = iterator_to_array($booking->getPublishers());
                     }
                     return [
                         'id' => $shift->getId(),
