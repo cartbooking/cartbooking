@@ -2,23 +2,25 @@
 
 namespace CartBooking\Model\Booking\Command;
 
+use CartBooking\Model\Booking\BookingId;
+
 class AddPublishersCommand
 {
-    /** @var int */
+    /** @var BookingId */
     private $bookingId;
     /** @var array */
     private $publishersIds;
 
-    public function __construct(int $bookingId, array $publishersIds)
+    public function __construct(BookingId $bookingId, array $publishersIds)
     {
         $this->bookingId = $bookingId;
         $this->publishersIds = $publishersIds;
     }
 
     /**
-     * @return int
+     * @return BookingId
      */
-    public function getBookingId(): int
+    public function getBookingId(): BookingId
     {
         return $this->bookingId;
     }
