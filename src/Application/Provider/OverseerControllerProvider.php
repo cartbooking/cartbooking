@@ -4,7 +4,7 @@ namespace CartBooking\Application\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
 use CartBooking\Application\Web\Admin\CommunicationController;
-use CartBooking\Application\Web\Admin\LocationControllers;
+use CartBooking\Application\Web\Admin\LocationController;
 use CartBooking\Application\Web\Admin\PublishersController;
 use CartBooking\Application\Web\Admin\ReportsController;
 use CartBooking\Application\Web\Admin\StatisticsController;
@@ -86,10 +86,10 @@ class OverseerControllerProvider extends InjectorServiceProvider implements Cont
             return new RedirectResponse('/');
         });
         $controllers->get('/locations', function () {
-            return $this->injector->create(LocationControllers::class)->indexAction();
+            return $this->injector->create(LocationController::class)->indexAction();
         });
         $controllers->match('/locations/{locationId}', function ($locationId) {
-            return $this->injector->create(LocationControllers::class)->editAction($locationId);
+            return $this->injector->create(LocationController::class)->editAction($locationId);
         });
         return $controllers;
     }

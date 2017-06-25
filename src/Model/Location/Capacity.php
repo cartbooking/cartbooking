@@ -17,6 +17,6 @@ class Capacity
 
     public function capacity()
     {
-        return $this->capacity();
+        return $this->capacity;
     }
 }

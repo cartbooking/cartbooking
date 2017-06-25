@@ -2,13 +2,8 @@
 
 namespace CartBooking\Application\Web\Admin;
 
-use CartBooking\Model\Location\Capacity;
-use CartBooking\Model\Location\Command\UpdateLocationCommand;
-use CartBooking\Model\Location\Description;
 use CartBooking\Model\Location\Location;
-use CartBooking\Model\Location\LocationRepositoryInterface;
 use CartBooking\Model\Location\LocationService;
-use CartBooking\Model\Location\Name;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -20,9 +15,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
 use Twig_Environment;
 
-class LocationControllers
+class LocationController
 {
-    /** @var LocationRepositoryInterface */
+    /** @var LocationService */
     private $locationService;
     /** @var Twig_Environment */
     private $twig;
@@ -62,7 +57,6 @@ class LocationControllers
             }
         }
         return new Response($this->twig->render('admin/locations/location.twig', [
-            'title' => 'Publishers management',
             'form' => $form->createView()
         ]));
     }
