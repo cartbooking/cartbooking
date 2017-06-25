@@ -72,6 +72,11 @@ class Booking
         return $this->overseerId;
     }
 
+    public function hasOverseer()
+    {
+        return $this->overseerId > 0;
+    }
+
     /**
      * @param int $overseerId
      * @internal
@@ -137,14 +142,6 @@ class Booking
         return $this->pioneerBId;
     }
 
-    /**
-     * @param int $pioneerBId
-     * @internal
-     */
-    public function setPioneerBId(int $pioneerBId)
-    {
-        $this->pioneerBId = $pioneerBId;
-    }
 
     /**
      * @return int
@@ -271,9 +268,11 @@ class Booking
         $this->updateStatus($publishers);
     }
 
-    public function getPublishersIds()
+    public function getPublishersIds(): array
     {
-        return array_filter([$this->getOverseerId(), $this->getPioneerId(), $this->getPioneerBId()]);
+        return $this->publishers->map(function (Publisher $publisher) {
+            return $publisher->getId();
+        })->toArray();
     }
 
     /**

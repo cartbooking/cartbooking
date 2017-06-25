@@ -2,6 +2,7 @@
 
 namespace CartBooking\Model\Publisher;
 
+use CartBooking\Lib\Email\Email;
 use CartBooking\Model\Publisher\Command\AddPublisherCommand;
 use CartBooking\Model\Publisher\Command\UpdatePublisherCommand;
 
@@ -24,6 +25,7 @@ class PublisherService
         return [
             'id' => $publisher->getId(),
             'full_name' => $publisher->getFullName(),
+            'preferred_name' => $publisher->getPreferredName(),
             'email' => $publisher->getEmail(),
             'gender' => $publisher->getGender(),
             'phone' => $publisher->getPhone(),
@@ -35,7 +37,7 @@ class PublisherService
         $publisher = $this->publisherRepository->findById($command->getPublisherId());
         $publisher->setFullName($command->getName());
         $publisher->setPhone($command->getPhone());
-        $publisher->setEmail($command->getName());
+        $publisher->setEmail(new Email($command->getEmail()));
         $this->publisherRepository->save($publisher);
     }
 
@@ -46,7 +48,7 @@ class PublisherService
         $publisher->setFullName($command->getFullName());
         $publisher->setGender($command->getGender());
         $publisher->setPhone($command->getPhone());
-        $publisher->setEmail($command->getEmail());
+        $publisher->setEmail(new Email($command->getEmail()));
         return $this->publisherRepository->save($publisher);
     }
 }

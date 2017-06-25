@@ -20,7 +20,7 @@ class Email
     {
         $filteredEmail = filter_var($email, FILTER_SANITIZE_EMAIL);
         if ($filteredEmail === false || $filteredEmail !== $email) {
-            throw new \InvalidArgumentException('No valid communication supplied');
+            throw new \InvalidArgumentException('No valid email supplied' . $email);
         }
         $this->email = $email;
     }

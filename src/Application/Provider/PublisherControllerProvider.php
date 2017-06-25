@@ -4,22 +4,17 @@ namespace CartBooking\Application\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
 use CartBooking\Application\Web\BookingController;
-use CartBooking\Application\Web\CommunicationController;
 use CartBooking\Application\Web\ExperiencesController;
 use CartBooking\Application\Web\LocationsController;
 use CartBooking\Application\Web\PlacementsController;
-use CartBooking\Application\Web\PublishersController;
-use CartBooking\Application\Web\ReportsController;
-use CartBooking\Application\Web\StatisticsController;
 use Pimple\Container;
 use Silex\Api\ControllerProviderInterface;
 use Silex\Application;
 use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
-class ControllerProvider extends InjectorServiceProvider implements ControllerProviderInterface
+class PublisherControllerProvider extends InjectorServiceProvider implements ControllerProviderInterface
 {
 
     /**
@@ -67,20 +62,7 @@ class ControllerProvider extends InjectorServiceProvider implements ControllerPr
         $controllers->get('/placements/', function () {
             return $this->injector->create(PlacementsController::class)->indexAction();
         })->bind('/placements');
-        $controllers->get('/communication/', function () {
-            return $this->injector->create(CommunicationController::class)->indexAction();
-        });
-        $controllers->post('/communication/', function (Request $request) {
-            $controller = $this->injector->create(CommunicationController::class);
-            switch ($request->get('action')) {
-                case 'placement_reminder':
-                    return $controller->sendBookingReminderEmailsAction();
-                case 'volunteer_needed':
-                    return $controller->sendVolunteerNeededEmailsAction();
-                case 'overseer_needed':
-                    return $controller->sendOverseerNeededEmailsAction();
-            }
-        });
+
         $controllers->get('/experiences/', function () {
             return $this->injector->create(ExperiencesController::class)->indexAction();
         });
@@ -99,33 +81,8 @@ class ControllerProvider extends InjectorServiceProvider implements ControllerPr
                 ['settings' => $this->get('initParams')]
             )->indexAction();
         })->bind('/locations');
-        $controllers->get('/publishers/low-participation', function () {
-            return $this->injector->create(PublishersController::class)->lowParticipants();
-        });
-        $controllers->post('/publishers/search', function (Request $request) {
-            return $this->injector->create(PublishersController::class)->searchAction($request->get('name'));
-        });
-        $controllers->match('/publishers/', function () {
-            return $this->injector->create(PublishersController::class)->indexAction();
-        });
-        $controllers->match('/publishers/{publisherId}', function ($publisherId) {
-            return $this->injector->create(PublishersController::class)->editAction($publisherId);
-        });
-        $controllers->get('/statistics/', function () {
-            return $this->injector->create(StatisticsController::class)->indexAction();
-        });
-        $controllers->get('/reports', function () {
-            return $this->injector->create(ReportsController::class)->indexAction();
-        });
-        $controllers->post('/reports', function (Request $request) {
-            if ($request->get('action') === 'List Brothers') {
-                return $this->injector->create(ReportsController::class)->listBrothersAction()->send();
-            }
-            if ($request->get('action') === 'List Invitees') {
-                return $this->injector->create(ReportsController::class)->listInviteesAction()->send();
-            }
-            return new RedirectResponse('/');
-        });
+
+
         $app->get('/login', function(Request $request) use ($app) {
             return $app['twig']->render('login.twig', [
                 'error'         => $app['security.last_error']($request),

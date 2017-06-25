@@ -16,10 +16,6 @@ class Location
     private $markers = [];
     /** @var string */
     private $name;
-    /** @var string */
-    private $path;
-    /**  @var int */
-    private $volunteers;
     /** @var int */
     private $zoom;
 
@@ -45,21 +41,6 @@ class Location
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
-    public function getVolunteers(): int
-    {
-        return $this->volunteers;
-    }
-
-    /**
-     * @param int $volunteers
-     */
-    public function setVolunteers(int $volunteers)
-    {
-        $this->volunteers = $volunteers;
-    }
 
     /**
      * @return string
@@ -75,22 +56,6 @@ class Location
     public function setCentre(string $centre)
     {
         $this->centre = $centre;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-    /**
-     * @param string $path
-     */
-    public function setPath(string $path)
-    {
-        $this->path = $path;
     }
 
     /**
@@ -157,5 +122,11 @@ class Location
         $this->capacity = $capacity;
     }
 
-
+    /**
+     * @param string $name
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+    }
 }

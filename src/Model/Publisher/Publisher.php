@@ -2,6 +2,7 @@
 
 namespace CartBooking\Model\Publisher;
 
+use CartBooking\Lib\Email\Email;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -9,24 +10,20 @@ class Publisher
 {
     /** @var int */
     private $id;
-    /** @var string */
-    private $preferredName;
+    /** @var Email */
+    private $email;
+    /** @var bool */
+    private $inactive;
     /** @var string */
     private $fullName;
     /** @var string */
     private $gender;
-
-    private $phone;
-
-    private $email;
-
-    private $status;
     /** @var string */
     private $password;
-
-    /** @var  bool */
-    private $inactive;
-
+    /** @var string */
+    private $phone;
+    /** @var string */
+    private $preferredName;
     /** @var ArrayCollection */
     private $relatives;
 
@@ -39,22 +36,6 @@ class Publisher
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param mixed $status
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
     }
 
     /**
@@ -95,17 +76,17 @@ class Publisher
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getEmail()
     {
-        return $this->email;
+        return (string)$this->email;
     }
 
     /**
-     * @param string $email
+     * @param Email $email
      */
-    public function setEmail(string $email)
+    public function setEmail(Email $email)
     {
         $this->email = $email;
     }
@@ -168,7 +149,7 @@ class Publisher
      */
     public function getPreferredName(): string
     {
-        return $this->preferredName;
+        return $this->preferredName ?? $this->fullName;
     }
 
     /**

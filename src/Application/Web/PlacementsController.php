@@ -2,7 +2,8 @@
 
 namespace CartBooking\Application\Web;
 
-use CartBooking\Application\PublisherService;
+use CartBooking\Application\WebPublisherService;
+use CartBooking\Model\Booking\BookingId;
 use CartBooking\Model\Booking\BookingRepository;
 use CartBooking\Model\Location\LocationRepositoryInterface;
 use CartBooking\Model\Shift\ShiftRepositoryInterface;
@@ -24,13 +25,13 @@ class PlacementsController
     private $shiftRepository;
     /** @var LocationRepositoryInterface */
     private $locationRepository;
-    /** @var PublisherService */
+    /** @var WebPublisherService */
     private $publisherService;
 
     public function __construct(
         BookingRepository $bookingRepository,
         LocationRepositoryInterface $locationRepository,
-        PublisherService $publisherService,
+        WebPublisherService $publisherService,
         Request $request,
         Response $response,
         ShiftRepositoryInterface $shiftRepository,
@@ -79,7 +80,7 @@ class PlacementsController
      */
     public function reportAction(int $bookingId): Response
     {
-        $booking = $this->bookingRepository->findById($bookingId);
+        $booking = $this->bookingRepository->findById(new BookingId($bookingId));
         $shift = $this->shiftRepository->findById($booking->getShiftId());
         $location = $this->locationRepository->findById($shift->getLocationId());
         return $this->response->setContent($this->twig->render('placements/booking_report.twig', [
@@ -92,7 +93,7 @@ class PlacementsController
 
     public function postAction(): Response
     {
-        $booking = $this->bookingRepository->findById((int)$this->request->get('booking_id'));
+        $booking = $this->bookingRepository->findById(new BookingId($this->request->get('booking_id')));
         if ($booking !== null && $booking->isConfirmed() && !$booking->isRecorded()) {
             $booking->setPlacements((int)$this->request->get('placements'));
             $booking->setVideos((int)$this->request->get('videos'));

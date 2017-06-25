@@ -34,15 +34,14 @@ final class DoctrineLocationRepository implements LocationRepositoryInterface
         return $this->entityManager->find(Location::class, $id);
     }
 
-    public function findCombined()
+    /**
+     * @param Location $location
+     * @return int
+     */
+    public function save(Location $location)
     {
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb->select()->from();
-
-        $dql = 'SELECT l FROM ' . Location::class . ' l JOIN ' .Shift::class. ' s WITH l.id = s.locationId WHERE l.name = :name';
-        $query = $this->entityManager->createQuery($dql);
-        $query->setParameter(':name', 'Wentworth Point');
-        $t = $query->getSQL();
-        return $query->getResult();
+        $this->entityManager->persist($location);
+        $this->entityManager->flush();
+        return $location->getId();
     }
 }

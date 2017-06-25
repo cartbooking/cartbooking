@@ -5,35 +5,11 @@
             <p>Dear {{ first_name }},</p>
             <p>There are some shifts over the next two weeks that require more volunteers. Brothers are especially needed as many shifts require an overseer.</p>
             <p>Please take some time to view the below shifts at <a href="http://cartbooking.com">cartbooking.com</a> to see if you can help:</p>
-            <table width='490' style='font-size: 14px; color: #4a4a4a;' border='0'>
+            <ul>
                 {% for data in context %}
-                    {% if data.pioneer_gender is empty %}
-                        {% set pioneer_bg = '#e0e0e0' %}
-                    {% else %}
-                        {% set pioneer_bg = pioneer_gender == 'm' ? '#79b9ed' : '#fbbbfc' %}
-                    {% endif %}
-
-                    {% if data.second_pioneer_gender is empty %}
-                        {% set second_pioneer_bg = '#e0e0e0' %}
-                    {% else %}
-                        {% set second_pioneer_bg = second_pioneer_gender == 'm' ? '#79b9ed' : '#fbbbfc' %}
-                    {% endif %}
-                <tr>
-                    <td width='400'>
-                        {{ data.display_date }} - {{ data.location_name }}, {{ data.display_time }}
-                    </td>
-                    <td>
-                        <div style='width: 18px; height: 18px; background-color: {{ data.has_overseer ? '#79b9ed' : '#e0e0e0' }}  ; border-radius: 9px;'></div>
-                    </td>
-                    <td>
-                        <div style='width: 18px; height: 18px; background-color: {{ pioneer_bg }}; border-radius: 9px;'></div>
-                    </td>
-                    <td>
-                        <div style='width: 18px; height: 18px; background-color: {{ second_pioneer_bg }}; border-radius: 9px;'></div>
-                    </td>
-                </tr>
+                    <li>{{ data.display_date }} - {{ data.location_name }}, {{ data.display_time }}</li>
                 {% endfor %}
-            </table>
+            </ul>
             <p>Thank you for your willing spirit!</p>
         </td>
     </tr>

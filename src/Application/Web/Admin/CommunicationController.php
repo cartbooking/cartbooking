@@ -1,6 +1,6 @@
 <?php
 
-namespace CartBooking\Application\Web;
+namespace CartBooking\Application\Web\Admin;
 
 use CartBooking\Application\EmailService;
 use CartBooking\Model\Booking\BookingRepository;
@@ -54,7 +54,7 @@ class CommunicationController
 
     public function indexAction(): Response
     {
-        return $this->response->setContent($this->twig->render('communication.twig'));
+        return $this->response->setContent($this->twig->render('admin/communication/index.twig'));
     }
 
     public function sendBookingReminderEmailsAction(): Response
@@ -62,27 +62,24 @@ class CommunicationController
         $subject = 'Reminder to record placements';
         $dateTo = (new DateTimeImmutable())->sub(new DateInterval('P1D'));
         $sent = 0;
-        $data = [];
         foreach ($this->bookingRepository->findNonRecordedBookingsOlderThan($dateTo) as $booking) {
-            $overseer = $this->pioneerRepository->findById($booking->getOverseerId());
             $shift = $this->shiftRepository->findById($booking->getShiftId());
             $location = $this->locationRepository->findById($shift->getLocationId());
-            $data[$overseer->getId()]['overseer'] = $overseer;
-            $data[$overseer->getId()]['first_name'] = $overseer->getPreferredName();
-            $data[$overseer->getId()]['bookings'][] = [
-                'location_name' => $location->getName(),
-                'display_date' => $booking->getDate()->format('F jS'),
-                'display_time' => $shift->getStartTime()->format('g:ia'),
-            ];
+            foreach ($booking->getPublishers() as $publisher) {
+                $this->emailService->sendEmailTo(
+                    $publisher,
+                    $subject,
+                    $this->twig->render('emails/placement_reminder.twig', [
+                        'first_name' => $publisher->getPreferredName(),
+                        'location_name' => $location->getName(),
+                        'display_date' => $booking->getDate()->format('F jS'),
+                        'display_time' => $shift->getStartTime()->format('g:ia'),
+                    ])
+                );
+                $sent++;
+            }
         }
-        foreach ($data as $datum) {
-            $this->emailService->sendEmailTo(
-                $datum['overseer'],
-                $subject,
-                $this->twig->render('emails/placement_reminder.twig', $datum)
-            );
-        }
-        return $this->response->setContent($this->twig->render('communication/placements_reminders.twig', [
+        return $this->response->setContent($this->twig->render('admin/communication/placements_reminders.twig', [
             'sent' => $sent,
         ]));
     }
@@ -130,16 +127,13 @@ class CommunicationController
         $from = new DateTimeImmutable();
         $to = (new DateTimeImmutable())->add(new DateInterval('P14D'));
         $context = [];
-        foreach ($this->bookingRepository->findBookingsNeedingVolunteersBetween($from, $to) as $booking) {
+        foreach ($this->bookingRepository->findNonConfirmedBookingsBetween($from, $to) as $booking) {
             $shift = $this->shiftRepository->findById($booking->getShiftId());
             $location = $this->locationRepository->findById($shift->getLocationId());
-            $context['context'][$booking->getId()] = [
+            $context['context'][(string)$booking->getId()] = [
                 'display_date' => $booking->getDate()->format('D, F jS'),
                 'location_name' => $location->getName(),
                 'display_time' => $shift->getStartTime()->format('H:i:s'),
-                'has_overseer' => $booking->getOverseerId() > 0,
-                'pioneer_gender' => $booking->getPioneerId() > 0 ? $this->pioneerRepository->findById($booking->getPioneerId())->getGender() : null,
-                'second_pioneer_gender' => $booking->getPioneerBId() > 0 ? $this->pioneerRepository->findById($booking->getPioneerBId())->getGender() : null,
             ];
         }
         $counter = 0;
@@ -156,7 +150,7 @@ class CommunicationController
         }
         return $this->response->setContent(
             $this->twig->render(
-                'communication/emails_sent.twig',
+                'admin/communication/emails_sent.twig',
                 [
                     'title' => 'Volunteers request emails',
                     'amount_email_sent' => $counter,
