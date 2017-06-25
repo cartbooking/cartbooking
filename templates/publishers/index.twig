@@ -7,8 +7,8 @@
             <div class="login-div" id="container">
                 <img class="leaf" src="/images/leaf-11.svg">
                 <div class="sign-in-text">Publishers</div>
-                {% for message in app.session.get('info') %}
-                    <div class="flash-info">{{ message }}</div>
+                {% for message in app.session.flashbag.get('info') %}
+                    <div class="flash-info alert alert-success">{{ message }}</div>
                 {% endfor %}
                 {% include 'publishers/search_form.twig' %}
                 <div class="data" id="results"></div>
