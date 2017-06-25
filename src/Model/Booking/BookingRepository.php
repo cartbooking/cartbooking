@@ -27,10 +27,10 @@ class BookingRepository
     }
 
     /**
-     * @param int $id
+     * @param BookingId $id
      * @return Booking|null
      */
-    public function findById(int $id)
+    public function findById(BookingId $id)
     {
         return $this->entityManager->find(Booking::class, $id);
     }

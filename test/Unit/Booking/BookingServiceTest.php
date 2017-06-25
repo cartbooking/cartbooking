@@ -40,7 +40,7 @@ class BookingServiceTest extends AutoMockingTest
 
     public function testAddNoPublisher()
     {
-        $bookingId = 123;
+        $bookingId = new BookingId();
         $publishersIds = [1];
         $command = new AddPublishersCommand($bookingId, $publishersIds);
         $booking = $this->prophesize(Booking::class);
@@ -55,7 +55,7 @@ class BookingServiceTest extends AutoMockingTest
 
     public function testAddPublisher()
     {
-        $bookingId = 123;
+        $bookingId = new BookingId();
         $overseerId = 1;
         $publisherId = 2;
         $overseer = $this->prophesize(Publisher::class);
@@ -73,14 +73,14 @@ class BookingServiceTest extends AutoMockingTest
 
     public function testAddPublisherDoesNothingIfNotBooking()
     {
-        $bookingId = 1;
+        $bookingId = new BookingId();
         $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn(null);
         static::assertEmpty($this->bookingService->addPublishers(new AddPublishersCommand($bookingId, [1])));
     }
 
     public function testRemovePublisherSimple()
     {
-        $bookingId = 1;
+        $bookingId = new BookingId();
         $publisherId = 1;
         $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->shouldBeCalled();
         static::assertEmpty($this->bookingService->removePublishers(
@@ -90,7 +90,7 @@ class BookingServiceTest extends AutoMockingTest
 
     public function testRemovingPublisherNonInBooking()
     {
-        $bookingId = 1;
+        $bookingId = new BookingId();
         $publisherId = 1;
         $booking = $this->prophesize(Booking::class);
         $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn($booking->reveal());
@@ -106,7 +106,7 @@ class BookingServiceTest extends AutoMockingTest
         $publisherId = 2;
         $overseer = $this->prophesize(Publisher::class);
         $publisher = $this->prophesize(Publisher::class);
-        $bookingId = 1;
+        $bookingId = new BookingId();
         $booking = $this->prophesize(Booking::class);
         $booking->getPublishersIds()->willReturn([$overseerId, $publisherId]);
         $booking->setPublishers([$overseer->reveal()])->shouldBeCalled();
@@ -119,7 +119,7 @@ class BookingServiceTest extends AutoMockingTest
 
     public function testGetByIdThrowsException()
     {
-        $bookingId = 1;
+        $bookingId = new BookingId();
         $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn(null);
         $this->expectException(NotFoundException::class);
         $this->bookingService->findById($bookingId);
@@ -127,7 +127,7 @@ class BookingServiceTest extends AutoMockingTest
 
     public function testGetById()
     {
-        $bookingId = 1;
+        $bookingId = new BookingId();
         $booking = $this->prophesize(Booking::class);
         $this->injector->getProphecy(BookingRepository::class)->findById($bookingId)->willReturn($booking->reveal());
         static::assertSame($booking->reveal(), $this->bookingService->findById($bookingId));

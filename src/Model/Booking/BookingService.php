@@ -21,7 +21,7 @@ class BookingService
         $this->publisherRepository = $publisherRepository;
     }
 
-    public function findById(int $bookingId)
+    public function findById(BookingId $bookingId)
     {
         $booking =  $this->bookingRepository->findById($bookingId);
         if ($booking === null) {

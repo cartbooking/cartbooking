@@ -2,23 +2,25 @@
 
 namespace CartBooking\Model\Booking\Command;
 
+use CartBooking\Model\Booking\BookingId;
+
 class DeletePublisherFromBookingCommand
 {
-    /** @var int */
+    /** @var BookingId */
     private $bookingId;
     /** @var int[] */
     private $publisherId;
 
-    public function __construct(int $bookingId, int $publisherId)
+    public function __construct(BookingId $bookingId, int $publisherId)
     {
         $this->bookingId = $bookingId;
         $this->publisherId = $publisherId;
     }
 
     /**
-     * @return int
+     * @return BookingId
      */
-    public function getBookingId(): int
+    public function getBookingId(): BookingId
     {
         return $this->bookingId;
     }

@@ -11,7 +11,7 @@ class BookingId
 
     public function __construct(string $uuid = '')
     {
-        $this->uuid = $uuid ?? Uuid::uuid4()->toString();
+        $this->uuid = $uuid !== '' ? $uuid : Uuid::uuid4()->toString();
     }
 
     public function __toString()

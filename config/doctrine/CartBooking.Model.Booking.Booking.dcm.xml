@@ -3,7 +3,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                    https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
     <entity name="CartBooking\Model\Booking\Booking" table="bookings">
-        <id name="id" type="BookingId"/>
+        <id name="id" column="id" type="booking_id"/>
         <field name="shiftId" column="shift_id" type="integer" />
         <field name="date" type="date" />
         <field name="confirmed" column="is_confirmed" type="boolean" />

@@ -8,7 +8,7 @@ use Doctrine\DBAL\Types\GuidType;
 
 class BookingIdType extends GuidType
 {
-    const BOOKING_ID = 'BookingId';
+    const BOOKING_ID = 'booking_id';
 
     public function getName()
     {
