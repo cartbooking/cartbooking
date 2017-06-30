@@ -3,10 +3,10 @@
 namespace CartBooking\Application\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
-use CartBooking\Application\Web\BookingController;
-use CartBooking\Application\Web\ExperiencesController;
-use CartBooking\Application\Web\LocationsController;
-use CartBooking\Application\Web\PlacementsController;
+use CartBooking\Application\Web\Front\BookingController;
+use CartBooking\Application\Web\Front\ExperiencesController;
+use CartBooking\Application\Web\Front\LocationsController;
+use CartBooking\Application\Web\Front\PlacementsController;
 use Pimple\Container;
 use Silex\Api\ControllerProviderInterface;
 use Silex\Application;
@@ -14,7 +14,7 @@ use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class PublisherControllerProvider extends InjectorServiceProvider implements ControllerProviderInterface
+class FrontControllerProvider extends InjectorServiceProvider implements ControllerProviderInterface
 {
 
     /**
@@ -49,7 +49,7 @@ class PublisherControllerProvider extends InjectorServiceProvider implements Con
 
         $controllers->get('/booking/', function () {
             return $this->injector->create(BookingController::class)->indexAction();
-        });
+        })->bind('bookings');
         $controllers->post('/booking/', function () {
             return $this->injector->create(BookingController::class)->postAction();
         });
@@ -61,11 +61,11 @@ class PublisherControllerProvider extends InjectorServiceProvider implements Con
         })->assert('bookingId', '\d+');
         $controllers->get('/placements/', function () {
             return $this->injector->create(PlacementsController::class)->indexAction();
-        })->bind('/placements');
+        })->bind('placements');
 
         $controllers->get('/experiences/', function () {
             return $this->injector->create(ExperiencesController::class)->indexAction();
-        });
+        })->bind('experiences');
         $controllers->post('/experiences/', function (Request $request) {
             return $this->injector->create(ExperiencesController::class)->postAction((int)$request->get('dismissed'));
         });
@@ -80,7 +80,7 @@ class PublisherControllerProvider extends InjectorServiceProvider implements Con
                 LocationsController::class,
                 ['settings' => $this->get('initParams')]
             )->indexAction();
-        })->bind('/locations');
+        })->bind('locations');
 
 
         $app->get('/login', function(Request $request) use ($app) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace CartBooking\Application\Web;
+namespace CartBooking\Application\Web\Front;
 
 use CartBooking\Model\Location\LocationRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;

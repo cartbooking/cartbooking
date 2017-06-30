@@ -67,7 +67,7 @@ class StatisticsController
             $month = $nextMonth;
             $bookings = $unconfirmed = $monthPlacements = $monthVideos = $monthRequests = 0 ;
         }
-        return $this->response->setContent($this->twig->render('statistics.twig', [
+        return $this->response->setContent($this->twig->render('admin/statistics/index.twig', [
             'title' => 'Montly Statistics',
             'statistics' => $statistics,
         ]));

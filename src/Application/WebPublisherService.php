@@ -22,7 +22,7 @@ class WebPublisherService
         $this->publisherService = $publisherService;
     }
 
-    public function getCurrentPublisher()
+    public function getCurrentUser()
     {
         $token = $this->tokenStorage->getToken();
         if ($token !== null) {
