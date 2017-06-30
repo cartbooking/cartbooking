@@ -1,6 +1,6 @@
 <?php
 
-namespace CartBooking\Application\Web;
+namespace CartBooking\Application\Web\Front;
 
 use CartBooking\Application\WebPublisherService;
 use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
@@ -63,7 +63,7 @@ class BookingController
 
     public function indexAction(): Response
     {
-        $userId = $this->publisherService->getCurrentPublisher()->getId();
+        $userId = $this->publisherService->getCurrentUser()->getId();
         if ($this->request->get('m') !== null) {
             $month = $this->request->get('m');
             if ($month === 'n') {

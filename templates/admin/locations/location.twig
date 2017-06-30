@@ -1,8 +1,8 @@
-{% extends "base.twig" %}
+{% extends "admin/base.twig" %}
 
 {% block title %}Locations Management{% endblock %}
 {% block content %}
-  <div class="w-section section">
+  <div class="container-fluid">
     {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
     {{ form_start(form) }}
     {{ form_widget(form) }}

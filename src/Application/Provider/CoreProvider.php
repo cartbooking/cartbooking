@@ -61,7 +61,7 @@ class CoreProvider
 
     public function mount(Application $app)
     {
-        $controllerProvider = new PublisherControllerProvider(
+        $controllerProvider = new FrontControllerProvider(
             $app[Injector::class],
             $app,
             new BindingClosureFactory(new LazyLoadingValueHolderFactory(), $app[Injector::class])
@@ -69,7 +69,7 @@ class CoreProvider
         $controllerProvider->register($app);
         $app->mount('/', $controllerProvider);
 
-        $overseerControllerProvider = new OverseerControllerProvider(
+        $overseerControllerProvider = new AdminControllerProvider(
             $app[Injector::class],
             $app,
             new BindingClosureFactory(new LazyLoadingValueHolderFactory(), $app[Injector::class])

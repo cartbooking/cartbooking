@@ -25,10 +25,14 @@ class ReportsController
 
     /**
      * @return Response
+     * @throws \Twig_Error_Syntax
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Loader
+     * @throws \InvalidArgumentException
      */
     public function indexAction(): Response
     {
-        return (new Response($this->twig->render('reports.twig')));
+        return new Response($this->twig->render('admin/reports/index.twig'));
     }
 
     public function listBrothersAction(): Response

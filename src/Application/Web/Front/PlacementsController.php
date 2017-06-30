@@ -1,6 +1,6 @@
 <?php
 
-namespace CartBooking\Application\Web;
+namespace CartBooking\Application\Web\Front;
 
 use CartBooking\Application\WebPublisherService;
 use CartBooking\Model\Booking\BookingId;
@@ -52,7 +52,7 @@ class PlacementsController
      */
     public function indexAction(): Response
     {
-        $userId = $this->publisherService->getCurrentPublisher()->getId();
+        $userId = $this->publisherService->getCurrentUser()->getId();
         $bookings = [];
         foreach ($this->bookingRepository->findPendingBookingsForUser($userId, new \DateTimeImmutable()) as $booking) {
             $shift = $this->shiftRepository->findById($booking->getShiftId());

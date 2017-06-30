@@ -1,0 +1,18 @@
+{% extends "admin/base.twig" %}
+{% block title %}Metropolitan Witnessing{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+            <div class="input-group">
+                <form method="post" action="{{ path('admin/reports') }}" id="brothersReport" name="brothers-report" >
+                    <button type="submit" class="btn btn-primary"  name="action" >List Brothers</button>
+                </form>
+            </div>
+            <div class="input-group">
+                <form method="post" action="{{ path('admin/reports') }}" id="inviteesReport" name="invitees-report" >
+                    <button class="btn btn-primary"  type="submit" name="action" >List Invitees</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

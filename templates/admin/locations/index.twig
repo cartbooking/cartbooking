@@ -2,17 +2,15 @@
 
 {% block title %}Location Maps{% endblock %}
 {% block content %}
-  <div class="w-section section">
-    <div class="content-mobile-number"><img class="carty" src="/images/happy-13.svg">
-      <div class="login-div"><img class="leaf" src="/images/leaf-11.svg">
-        {% for location in locations %}
-          <div class="w-form">
-            <a href="/admin/locations/{{ location.getId }}" class="w-button submit-mobile-number sign-in">
-              {{ location.getName }}
-            </a>
-          </div>
-        {% endfor %}
-      </div>
-    </div>
+  <div class="container-fluid">
+    <ul>
+      {% for location in locations %}
+        <li>
+          <a href="/admin/locations/{{ location.getId }}" class="w-button submit-mobile-number sign-in">
+            {{ location.getName }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
   </div>
 {% endblock %}

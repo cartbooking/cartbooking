@@ -8,7 +8,6 @@ use CartBooking\Infrastructure\Persistence\Doctrine\Type\BookingIdType;
 use CartBooking\Infrastructure\Persistence\Doctrine\Type\DateTimeImmutableType;
 use CartBooking\Infrastructure\Persistence\Doctrine\Type\EmailType;
 use CartBooking\Infrastructure\Persistence\Doctrine\Type\MarkersType;
-use CartBooking\Model\Booking\BookingId;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
