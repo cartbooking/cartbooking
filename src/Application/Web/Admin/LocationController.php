@@ -46,7 +46,7 @@ class LocationController
         $form = $this->formFactory->createBuilder(FormType::class, $location)
             ->add('name', TextType::class, ['constraints' => [new Assert\NotBlank()]])
             ->add('capacity', NumberType::class, ['constraints' => [new Assert\NotBlank()]])
-            ->add('description', TextareaType::class, ['constraints' => [new Assert\NotBlank()]])
+            ->add('description', TextareaType::class, ['constraints' => [new Assert\NotBlank()], 'attr' => ['rows' => 10]])
             ->add('submit', SubmitType::class)
             ->getForm();
         $form->handleRequest($this->request);

@@ -1,6 +1,6 @@
 <?php
 
-namespace CartBooking\Application\Web;
+namespace CartBooking\Application\Web\Front;
 
 use CartBooking\Application\WebPublisherService;
 use CartBooking\Infrastructure\Persistence\Doctrine\Repository\DoctrineLocationRepository;
@@ -63,7 +63,7 @@ class BookingController
 
     public function indexAction(): Response
     {
-        $userId = $this->publisherService->getCurrentPublisher()->getId();
+        $userId = $this->publisherService->getCurrentUser()->getId();
         if ($this->request->get('m') !== null) {
             $month = $this->request->get('m');
             if ($month === 'n') {
@@ -94,28 +94,28 @@ class BookingController
         }
         $days = date('t', strtotime('1st ' . $month . ' ' . $year . ''));
         if ($month === date('F')) {
-            $new_month = 'n';
+            $newMonth = 'n';
         } else {
-            $new_month = '';
+            $newMonth = '';
         }
         $firstDayOfTheMonth = (int)date('w', strtotime('1st ' . $month . ' ' . $year . ''));
         if ($this->request->get('select_date') !== null) {
-            $select_date = strtotime($this->request->get('select_date'));
+            $selectDate = strtotime($this->request->get('select_date'));
         } else {
-            $select_date = strtotime('' . $month . ' ' . $highlighted . ', ' . $year . '');
+            $selectDate = strtotime('' . $month . ' ' . $highlighted . ', ' . $year . '');
         }
         return (new Response())->setContent($this->twig->render('booking/index.twig', [
             'title' => "$month Calendar",
             'month' => $month,
-            'new_month' => $new_month,
+            'new_month' => $newMonth,
             'first_day_of_month' => $firstDayOfTheMonth,
             'days' => $days,
             'year' => $year,
             'highlighted' => $highlighted,
             'shifts' => $this->populateMyShifts($userId, DateTimeImmutable::createFromFormat('FY|', $month . $year)),
-            'select_day' => new DateTimeImmutable($select_date ? "@$select_date": 'now'),
+            'select_day' => new DateTimeImmutable($selectDate ? "@$selectDate": 'now'),
             'cancel_time' => (new DateTimeImmutable('now'))->add(new DateInterval('P1D')),
-            'locations' => $this->populateLocations(new DateTimeImmutable($select_date ? "@$select_date": 'now')),
+            'locations' => $this->populateLocations(new DateTimeImmutable($selectDate ? "@$selectDate": 'now')),
             'user_id' => $userId,
             'admin' => ['phone' => '0457406625']
         ]));

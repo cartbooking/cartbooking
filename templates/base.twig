@@ -43,9 +43,12 @@
       <div class="w-container">
         <nav class="w-nav-menu menu-background" role="navigation">
           <a class="w-nav-link nav-link" href="/">Home</a>
-          <a class="w-nav-link nav-link" href="/placements">Record placements</a>
-          <a class="w-nav-link nav-link" href="/locations">Maps</a>
-          <a class="w-nav-link nav-link" href="/logout">Sign out</a>
+          <a class="w-nav-link nav-link" href="{{ path('placements') }}">Record placements</a>
+          <a class="w-nav-link nav-link" href="{{ path('locations') }}">Maps</a>
+          {% if is_granted('ROLE_ADMIN') %}
+            <a class="w-nav-link nav-link" href="{{ path('admin/locations') }}">Admin</a>
+          {% endif %}
+          <a class="w-nav-link nav-link" href="{{ path('logout') }}">Sign out</a>
         </nav>
         <div class="w-nav-button menu-bt">
           <div class="w-icon-nav-menu"></div>

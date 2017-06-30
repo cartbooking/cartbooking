@@ -15,7 +15,7 @@ use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class OverseerControllerProvider extends InjectorServiceProvider implements ControllerProviderInterface
+class AdminControllerProvider extends InjectorServiceProvider implements ControllerProviderInterface
 {
 
     /**
@@ -48,10 +48,10 @@ class OverseerControllerProvider extends InjectorServiceProvider implements Cont
         });
         $controllers->post('/publishers/search', function (Request $request) {
             return $this->injector->create(PublishersController::class)->searchAction($request->get('name'));
-        });
+        })->bind('admin/publishers/search');
         $controllers->match('/publishers/', function () {
             return $this->injector->create(PublishersController::class)->indexAction();
-        });
+        })->method('GET')->bind('admin/publishers');
         $controllers->match('/publishers/{publisherId}', function ($publisherId) {
             return $this->injector->create(PublishersController::class)->editAction($publisherId);
         });
@@ -72,10 +72,10 @@ class OverseerControllerProvider extends InjectorServiceProvider implements Cont
         });
         $controllers->get('/statistics/', function () {
             return $this->injector->create(StatisticsController::class)->indexAction();
-        });
+        })->bind('admin/statistics');
         $controllers->get('/reports', function () {
             return $this->injector->create(ReportsController::class)->indexAction();
-        });
+        })->bind('admin/reports');
         $controllers->post('/reports', function (Request $request) {
             if ($request->get('action') === 'List Brothers') {
                 return $this->injector->create(ReportsController::class)->listBrothersAction()->send();
@@ -87,7 +87,7 @@ class OverseerControllerProvider extends InjectorServiceProvider implements Cont
         });
         $controllers->get('/locations', function () {
             return $this->injector->create(LocationController::class)->indexAction();
-        });
+        })->bind('admin/locations');
         $controllers->match('/locations/{locationId}', function ($locationId) {
             return $this->injector->create(LocationController::class)->editAction($locationId);
         });
