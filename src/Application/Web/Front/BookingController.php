@@ -100,9 +100,9 @@ class BookingController
         }
         $firstDayOfTheMonth = (int)date('w', strtotime('1st ' . $month . ' ' . $year . ''));
         if ($this->request->get('select_date') !== null) {
-            $selectDate = strtotime($this->request->get('select_date'));
+            $selectDate = new DateTimeImmutable($this->request->get('select_date'));
         } else {
-            $selectDate = strtotime('' . $month . ' ' . $highlighted . ', ' . $year . '');
+            $selectDate = new DateTimeImmutable('now');
         }
         return (new Response())->setContent($this->twig->render('booking/index.twig', [
             'title' => "$month Calendar",
@@ -113,9 +113,9 @@ class BookingController
             'year' => $year,
             'highlighted' => $highlighted,
             'shifts' => $this->populateMyShifts($userId, DateTimeImmutable::createFromFormat('FY|', $month . $year)),
-            'select_day' => new DateTimeImmutable($selectDate ? "@$selectDate": 'now'),
+            'select_day' => $selectDate,
             'cancel_time' => (new DateTimeImmutable('now'))->add(new DateInterval('P1D')),
-            'locations' => $this->populateLocations(new DateTimeImmutable($selectDate ? "@$selectDate": 'now')),
+            'locations' => $this->populateLocations($selectDate),
             'user_id' => $userId,
             'admin' => ['phone' => '0457406625']
         ]));

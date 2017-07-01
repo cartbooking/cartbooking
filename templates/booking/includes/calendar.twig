@@ -31,7 +31,7 @@
   {% endfor %}
   {% for day in 1..days %}
   <div class="calendar-date">
-    <a id="{{ day }}" href="/booking/?select_date={{ year }}{{ month|date('m') }}{{ day }}" class="
+    <a id="{{ day }}" href="/booking/?select_date={{ year }}{{ month|date('m') }}{{ "%02d"|format(day) }}" class="
                 date-dt
                 {% if day == select_day|date('d') %}
                 date-selected
