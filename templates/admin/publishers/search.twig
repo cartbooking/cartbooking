@@ -1,27 +1,20 @@
 {% extends "admin/base.twig" %}
 {% block title %}Publisher Details{% endblock %}
 {% block content %}
-    <div class="w-section section">
-        <div class="content-mobile-number">
-            <img class="carty" src="/images/happy-13.svg">
-            <div class="login-div" id="container">
-                <img class="leaf" src="/images/leaf-11.svg">
-                <div class="sign-in-text">Publishers</div>
-                {% include 'admin/publishers/search_form.twig' %}
-                <hr><br>
-                {% for publisher in publishers %}
-                    <div class='searchResults'>
-                        <a href="/admin/publishers/{{ publisher.id }}">
-                            <div>{{ publisher.getFullName }} - {{ publisher.getPhone }}</div>
-                        </a>
-                    </div>
-                {% else %}
-                    <div class='searchResults'>
-                        No results
-                    </div>
-                {% endfor %}
-                <div class="data" id="results"></div>
-            </div>
-        </div>
+    <div class="container-fluid">
+        {% include 'admin/publishers/search_form.twig' %}
+        <hr><br>
+      {% for publisher in publishers %}
+          <div class='searchResults'>
+              <a href="/admin/publishers/{{ publisher.id }}">
+                  <div>{{ publisher.getFullName }} - {{ publisher.getPhone }}</div>
+              </a>
+          </div>
+      {% else %}
+          <div class='searchResults'>
+              No results
+          </div>
+      {% endfor %}
+        <div class="data" id="results"></div>
     </div>
 {% endblock %}

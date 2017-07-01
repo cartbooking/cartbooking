@@ -4,6 +4,7 @@ namespace CartBooking\Model\Publisher;
 
 use CartBooking\Lib\Email\Email;
 use CartBooking\Model\Publisher\Command\AddPublisherCommand;
+use CartBooking\Model\Publisher\Command\UpdatePasswordCommand;
 use CartBooking\Model\Publisher\Command\UpdatePublisherCommand;
 
 class PublisherService
@@ -38,6 +39,13 @@ class PublisherService
         $publisher->setFullName($command->getName());
         $publisher->setPhone($command->getPhone());
         $publisher->setEmail(new Email($command->getEmail()));
+        $this->publisherRepository->save($publisher);
+    }
+
+    public function updatePublisherPassword(UpdatePasswordCommand $command)
+    {
+        $publisher = $this->publisherRepository->findById($command->getPublisherId());
+        $publisher->setPassword($command->getPassword());
         $this->publisherRepository->save($publisher);
     }
 

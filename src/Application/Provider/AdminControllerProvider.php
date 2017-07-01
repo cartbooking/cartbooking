@@ -3,6 +3,7 @@
 namespace CartBooking\Application\Provider;
 
 use Bigcommerce\Injector\InjectorServiceProvider;
+use CartBooking\Application\Web\Admin\AccountController;
 use CartBooking\Application\Web\Admin\CommunicationController;
 use CartBooking\Application\Web\Admin\LocationController;
 use CartBooking\Application\Web\Admin\PublishersController;
@@ -91,6 +92,9 @@ class AdminControllerProvider extends InjectorServiceProvider implements Control
         $controllers->match('/locations/{locationId}', function ($locationId) {
             return $this->injector->create(LocationController::class)->editAction($locationId);
         });
+        $controllers->match('/account', function () {
+            return $this->injector->create(AccountController::class)->indexAction();
+        })->bind('admin/account');
         return $controllers;
     }
 }

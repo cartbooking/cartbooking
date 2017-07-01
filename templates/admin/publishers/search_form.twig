@@ -1,9 +1,12 @@
-<form method="post" action="{{ path('admin/publishers/search') }}">
-  <div class="textSearch">
-    <input type="hidden" name="action" value="search">
-    <input type="search" class="form-control" id="name" placeholder="Search a publisher" name="name">
-    <button class="search" type="submit">
-      <img src="/images/search.svg">
-    </button>
+<div class="panel panel-default">
+  <div class="panel-heading">Search for a publisher</div>
+  <div class="panel-body">
+    <form method="post" action="{{ path('admin/publishers/search') }}" class="input-group">
+      <input type="hidden" name="action" value="search">
+      <input type="search" class="form-control" id="name" placeholder="Search a publisher" name="name">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Search</button>
+      </span>
+    </form>
   </div>
-</form>
+</div>
