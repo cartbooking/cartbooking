@@ -25,19 +25,7 @@ class RepositoryProvider extends InjectorServiceProvider
      */
     public function register(Container $app)
     {
-        $initParams = $app['initParams'];
-
-        $app[\CartBooking\Lib\Db\Db::class] = function () use ($initParams) {
-            return new \CartBooking\Lib\Db\Db(
-                new \CartBooking\Lib\Db\Host($initParams['db']['host']),
-                new \CartBooking\Lib\Db\Name($initParams['db']['name']),
-                new \CartBooking\Lib\Db\Username($initParams['db']['username']),
-                new \CartBooking\Lib\Db\Password($initParams['db']['password'])
-            );
-        };
-
         $this->autoBind(PublisherRepository::class);
-
         $this->autoBind(BookingRepository::class);
         $this->alias(ShiftRepositoryInterface::class, DoctrineShiftRepository::class);
         $this->autoBind(DoctrineShiftRepository::class);

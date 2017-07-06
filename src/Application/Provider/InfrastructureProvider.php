@@ -122,10 +122,10 @@ class InfrastructureProvider extends InjectorServiceProvider
         $app->register(new DoctrineServiceProvider(), [
             'db.options' => [
                 'driver' => 'pdo_mysql',
-                'host' => $initParams['db']['host'],
-                'dbname' => $initParams['db']['name'],
-                'user' => $initParams['db']['username'],
-                'password' => $initParams['db']['password'],
+                'host' => $_SERVER['DB_HOST'],
+                'dbname' => $_SERVER['DB_NAME'],
+                'user' => $_SERVER['DB_USERNAME'],
+                'password' => $_SERVER['DB_PASSWORD'],
                 'charset' => 'utf8mb4',
                 'logging' => true,
                 'profiling' => true,
@@ -150,13 +150,13 @@ class InfrastructureProvider extends InjectorServiceProvider
                 'bootstrap_3_horizontal_layout.html.twig'
             ]
         ));
-        $this->bind(EntityManager::class, function (Application $app) use ($initParams) {
+        $this->bind(EntityManager::class, function (Application $app) {
             $dbParams = [
                 'driver' => 'pdo_mysql',
-                'user' => $initParams['db']['username'],
-                'host' => $initParams['db']['host'],
-                'password' => $initParams['db']['password'],
-                'dbname' => $initParams['db']['name'],
+                'user' => $_SERVER['DB_USERNAME'],
+                'host' => $_SERVER['DB_HOST'],
+                'password' => $_SERVER['DB_PASSWORD'],
+                'dbname' => $_SERVER['DB_NAME'],
             ];
             Type::addType(MarkersType::MARKERS, MarkersType::class);
             Type::addType(DateTimeImmutableType::DATE_TIME_IMMUTABLE, DateTimeImmutableType::class);
