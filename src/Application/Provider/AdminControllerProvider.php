@@ -52,7 +52,7 @@ class AdminControllerProvider extends InjectorServiceProvider implements Control
         })->bind('admin/publishers/search');
         $controllers->match('/publishers/', function () {
             return $this->injector->create(PublishersController::class)->indexAction();
-        })->method('GET')->bind('admin/publishers');
+        })->bind('admin/publishers');
         $controllers->match('/publishers/{publisherId}', function ($publisherId) {
             return $this->injector->create(PublishersController::class)->editAction($publisherId);
         });

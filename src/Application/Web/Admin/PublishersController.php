@@ -4,6 +4,7 @@ namespace CartBooking\Application\Web\Admin;
 
 use CartBooking\Model\Booking\BookingRepository;
 use CartBooking\Model\Publisher\Command\AddPublisherCommand;
+use CartBooking\Model\Publisher\Command\UpdatePasswordCommand;
 use CartBooking\Model\Publisher\Command\UpdatePublisherCommand;
 use CartBooking\Model\Publisher\PublisherRepository;
 use CartBooking\Model\Publisher\PublisherService;
@@ -61,13 +62,14 @@ class PublishersController
         $form->handleRequest($this->request);
         if ($form->isValid()) {
             $data = $form->getData();
-            $this->publisherService->addPublisher(new AddPublisherCommand(
+            $publisherId = $this->publisherService->addPublisher(new AddPublisherCommand(
                 $data['full_name'],
                 $data['full_name'],
                 $data['email'],
                 $data['phone'],
                 $data['gender']
             ));
+            $this->publisherService->updatePublisherPassword(new UpdatePasswordCommand($publisherId, 'password1'));
             $this->session->getFlashBag()->add('info', 'Publisher has been added');
         }
 

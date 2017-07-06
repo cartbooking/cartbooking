@@ -49,7 +49,7 @@ class PublisherService
         $this->publisherRepository->save($publisher);
     }
 
-    public function addPublisher(AddPublisherCommand $command)
+    public function addPublisher(AddPublisherCommand $command): int
     {
         $publisher = new Publisher();
         $publisher->setPreferredName($command->getPreferredName());

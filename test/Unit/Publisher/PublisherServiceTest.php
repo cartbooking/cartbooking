@@ -51,7 +51,14 @@ class PublisherServiceTest extends AutoMockingTest
         $phone = '0404404';
         $email = 'email@test.com';
         $gender = 'm';
-        $this->injector->getProphecy(PublisherRepository::class)->save(Argument::type(Publisher::class))->shouldBeCalled();
-        static::assertEmpty($this->publisherService->addPublisher(new AddPublisherCommand($fullName, $fullName, $email, $phone, $gender)));
+        $publisherId = 1;
+        $this->injector->getProphecy(PublisherRepository::class)
+            ->save(Argument::type(Publisher::class))
+            ->shouldBeCalled()
+            ->willReturn($publisherId);
+        static::assertSame(
+            $publisherId,
+            $this->publisherService->addPublisher(new AddPublisherCommand($fullName, $fullName, $email, $phone, $gender))
+        );
     }
 }
