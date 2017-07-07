@@ -95,7 +95,6 @@ class PublishersController
                 $data['email']
             ));
             $this->session->getFlashBag()->add('info', 'User has been updated');
-            $this->session->getFlashBag()->get('info');
         }
         return new Response($this->twig->render('admin/publishers/index.twig', [
             'form' => $form->createView()

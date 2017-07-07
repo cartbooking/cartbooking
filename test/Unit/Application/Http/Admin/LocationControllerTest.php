@@ -12,6 +12,8 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Test\AutoMockingTest;
 
 class LocationControllerTest extends AutoMockingTest
@@ -61,6 +63,8 @@ class LocationControllerTest extends AutoMockingTest
         $this->injector->getProphecy(LocationService::class)->save($location->reveal())->shouldBeCalled();
         $this->injector->getProphecy(FormFactory::class)->createBuilder(FormType::class, $location->reveal())
             ->willReturn($formBuilder);
+        $this->injector->getProphecy(Session::class)->getFlashBag()
+            ->willReturn($this->prophesize(FlashBagInterface::class)->reveal());
         static::assertInstanceOf(Response::class, $this->controller->editAction($locationId));
     }
 }

@@ -3,6 +3,9 @@
 {% block title %}Locations Management{% endblock %}
 {% block content %}
   <div class="container-fluid">
+    {% for message in app.session.flashbag.get('info') %}
+      <div class="flash-info alert alert-success">{{ message }}</div>
+    {% endfor %}
     {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
     {{ form_start(form) }}
     {{ form_widget(form) }}

@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Validator\Constraints as Assert;
 use Twig_Environment;
 
@@ -25,13 +26,21 @@ class LocationController
     private $formFactory;
     /** @var Request */
     private $request;
+    /** @var Session */
+    private $session;
 
-    public function __construct(FormFactory $formFactory, LocationService $locationService, Request $request, Twig_Environment $twig)
-    {
+    public function __construct(
+        FormFactory $formFactory,
+        LocationService $locationService,
+        Request $request,
+        Session $session,
+        Twig_Environment $twig
+    ) {
         $this->formFactory = $formFactory;
         $this->locationService = $locationService;
         $this->twig = $twig;
         $this->request = $request;
+        $this->session = $session;
     }
 
     public function indexAction(): Response
@@ -54,6 +63,7 @@ class LocationController
             $data = $form->getData();
             if ($data instanceof Location) {
                 $this->locationService->save($location);
+                $this->session->getFlashBag()->add('info', 'Location has been updated');
             }
         }
         return new Response($this->twig->render('admin/locations/location.twig', [

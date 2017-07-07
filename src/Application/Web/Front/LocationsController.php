@@ -3,6 +3,7 @@
 namespace CartBooking\Application\Web\Front;
 
 use CartBooking\Model\Location\LocationRepositoryInterface;
+use League\CommonMark\CommonMarkConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Twig_Environment;
 
