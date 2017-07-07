@@ -2,6 +2,10 @@
 
 namespace CartBooking\Application\Provider;
 
+use Aptoma\Twig\Extension\MarkdownEngine\GitHubMarkdownEngine;
+use Aptoma\Twig\Extension\MarkdownEngine\MichelfMarkdownEngine;
+use Aptoma\Twig\Extension\MarkdownExtension;
+use Aptoma\Twig\TokenParser\MarkdownTokenParser;
 use Bigcommerce\Injector\InjectorServiceProvider;
 use CartBooking\Application\EmailService;
 use CartBooking\Infrastructure\Persistence\Doctrine\Type\BookingIdType;
@@ -43,6 +47,8 @@ class InfrastructureProvider extends InjectorServiceProvider
      *
      * @param Container $app
      * @return void
+     * @throws \Exception
+     * @throws \InvalidArgumentException
      */
     public function register(Container $app)
     {
@@ -81,7 +87,6 @@ class InfrastructureProvider extends InjectorServiceProvider
 
 
 
-        $this->alias(Twig_Environment::class, 'twig');
         $this->alias( Request::class, 'request');
         $app['request'] = function () {
             return new \Symfony\Component\HttpFoundation\Request($_GET, $_REQUEST, [], $_COOKIE, $_FILES, $_SERVER);
@@ -137,6 +142,7 @@ class InfrastructureProvider extends InjectorServiceProvider
             'cookie_lifetime' => (int) $initParams['session']['lifetime'],
         ];
         $this->alias(Session::class, 'session');
+        $this->alias(Twig_Environment::class, 'twig');
         $app->register(new TwigServiceProvider(), array(
             'twig.path' => APP_ROOT . '/templates',
             'twig.options' => [
@@ -150,6 +156,13 @@ class InfrastructureProvider extends InjectorServiceProvider
                 'bootstrap_3_horizontal_layout.html.twig'
             ]
         ));
+
+        $app->extend('twig', function (Twig_Environment $twig, Container $app) {
+            $engine = new MichelfMarkdownEngine();
+            $twig->addExtension(new MarkdownExtension($engine));
+            $twig->addTokenParser(new MarkdownTokenParser($engine));
+            return $twig;
+        });
         $this->bind(EntityManager::class, function (Application $app) {
             $dbParams = [
                 'driver' => 'pdo_mysql',

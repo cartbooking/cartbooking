@@ -9,6 +9,17 @@
         <img src='{{ img_href }}'>
       </a>
     </div>
-    <div class="locDesc">{{ location_description | raw }}</div>
+    <div class="row">
+      <div class="locDesc">
+        <div class="panel panel-default">
+          <div class="panel-heading">Relevant Information</div>
+          <div class="panel-body">
+            {% markdown %}
+            {{ location_description }}
+            {% endmarkdown %}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock %}
