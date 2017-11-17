@@ -1,0 +1,88 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: CartBooking API
+  license:
+    name: GPLv3
+servers:
+  - url: https://api.cartbooking.com/
+paths:
+  /bookings:
+    get:
+      summary: List collection of bookings
+      tags:
+        - bookings
+      responses:
+        '200':
+          description: A paged array of bookings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bookings'
+  /locations:
+    get:
+      summary: List collection of locations
+      tags:
+        - locations
+      responses:
+        '200':
+          description: A collection of locations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locations'
+  /publishers:
+    get:
+      summary: List a collection of publishers
+      operationId: listPublishers
+      tags:
+        - publishers
+      responses:
+        '200':
+          description: A paged array of publishers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Publishers'
+components:
+  schemas:
+    Booking:
+      properties:
+        id:
+          type: string
+          format: uuid
+        shift_id:
+          type: integer
+        publishers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Publisher"
+    Bookings:
+      type: array
+      items:
+        $ref: "#/components/schemas/Booking"
+    Location:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        capacity:
+          type: integer
+    Locations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Location'
+    Publisher:
+      required:
+        - id
+        - full_name
+      properties:
+        id:
+          type: integer
+        full_name:
+          type: string
+    Publishers:
+      type: array
+      items:
+        $ref: "#/components/schemas/Publisher"
