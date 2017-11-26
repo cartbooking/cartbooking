@@ -110,16 +110,21 @@ class BookingRepository
     }
 
     /**
-     * @param DateTimeImmutable $fromDate
-     * @param DateTimeImmutable $toDate
+     * @param DateTimeImmutable $from
+     * @param DateTimeImmutable $to
      * @return Collection|Booking[]
      */
-    public function findByDateBetween(DateTimeImmutable $fromDate, DateTimeImmutable $toDate)
+    public function findByDateBetween(DateTimeImmutable $from, DateTimeImmutable $to)
     {
         $criteria = Criteria::create();
-        $criteria->where(Criteria::expr()->gte('date', $fromDate));
-        $criteria->andWhere(Criteria::expr()->lte('date', $toDate));
+        $criteria->where(Criteria::expr()->gte('date', $from));
+        $criteria->andWhere(Criteria::expr()->lte('date', $to));
         return $this->entityManager->getRepository(Booking::class)->matching($criteria);
+    }
+
+    public function findAll()
+    {
+        return $this->entityManager->getRepository(Booking::class)->findAll();
     }
 
     /**

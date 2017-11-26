@@ -8,6 +8,7 @@ use CartBooking\Model\Publisher\Publisher;
 use CartBooking\Model\Publisher\PublisherRepository;
 use CartBooking\Model\Publisher\PublisherService;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class WebPublisherService
 {
@@ -25,13 +26,13 @@ class WebPublisherService
         $this->publisherService = $publisherService;
     }
 
-    public function getCurrentUser()
+    public function getCurrentUser(): Publisher
     {
         $token = $this->tokenStorage->getToken();
-        if ($token !== null) {
-            return $this->publisherRepository->findByPhone($token->getUsername());
+        if ($token === null) {
+            throw new AuthenticationException();
         }
-        return null;
+        return $this->publisherRepository->findByPhone($token->getUsername());
     }
 
     public function updateUser(Publisher $publisher)
