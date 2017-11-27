@@ -15,6 +15,7 @@ use CartBooking\Infrastructure\Persistence\Doctrine\Type\MarkersType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
+use League\Fractal\Manager;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple\Container;
@@ -160,7 +161,7 @@ class InfrastructureProvider extends InjectorServiceProvider
         $app->extend('twig', function (Twig_Environment $twig, Container $app) {
             $engine = new MichelfMarkdownEngine();
             $twig->addExtension(new MarkdownExtension($engine));
-            $twig->addTokenParser(new MarkdownTokenParser($engine));
+            $twig->addTokenParser(new MarkdownTokenParser());
             return $twig;
         });
         $this->bind(EntityManager::class, function (Application $app) {
@@ -180,5 +181,10 @@ class InfrastructureProvider extends InjectorServiceProvider
             return EntityManager::create($dbParams, $config);
         });
         $this->alias(TokenStorage::class, 'security.token_storage');
+        $this->bind(Manager::class, function (Application $app) {
+            $manager = new Manager();
+            $manager->parseIncludes($this->get(Request::class)->get('includes', []));
+            return $manager;
+        });
     }
 }

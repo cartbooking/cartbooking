@@ -7,6 +7,9 @@ use CartBooking\Model\Booking\Command\CreateBookingCommand;
 use CartBooking\Model\Booking\Command\DeletePublisherFromBookingCommand;
 use CartBooking\Model\Booking\Exception\NotFoundException;
 use CartBooking\Model\Publisher\PublisherRepository;
+use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class BookingService
 {
@@ -21,13 +24,22 @@ class BookingService
         $this->publisherRepository = $publisherRepository;
     }
 
-    public function findById(BookingId $bookingId)
+    public function findById(BookingId $bookingId): Booking
     {
         $booking =  $this->bookingRepository->findById($bookingId);
         if ($booking === null) {
             throw new NotFoundException();
         }
         return $booking;
+    }
+
+    public function findByRange(DateTimeImmutable $from, DateTimeImmutable $to): Collection
+    {
+//        $arrayCollection = new ArrayCollection($this->bookingRepository->findAll());
+//        $t = $arrayCollection->count();
+//        return $arrayCollection;
+
+        return $this->bookingRepository->findByDateBetween($from, $to);
     }
 
     public function createBooking(CreateBookingCommand $command)

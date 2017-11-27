@@ -3,6 +3,7 @@
 namespace CartBooking\Model\Publisher;
 
 use CartBooking\Lib\Email\Email;
+use CartBooking\Model\Booking\Booking;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -26,6 +27,8 @@ class Publisher
     private $preferredName;
     /** @var ArrayCollection */
     private $relatives;
+    /** @var Booking[] */
+    private $bookings = [];
 
     public function __construct()
     {
@@ -46,7 +49,7 @@ class Publisher
         return $this->gender;
     }
 
-    public function isMale()
+    public function isMale(): bool
     {
         return $this->getGender() === 'm';
     }
@@ -78,7 +81,7 @@ class Publisher
     /**
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return (string)$this->email;
     }
@@ -174,5 +177,21 @@ class Publisher
     public function setFullName(string $fullName)
     {
         $this->fullName = $fullName;
+    }
+
+    /**
+     * @return Booking[]
+     */
+    public function getBookings(): array
+    {
+        return $this->bookings;
+    }
+
+    /**
+     * @param Booking[] $bookings
+     */
+    public function setBookings(array $bookings)
+    {
+        $this->bookings = $bookings;
     }
 }

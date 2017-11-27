@@ -74,8 +74,14 @@ class CoreProvider
             $app,
             new BindingClosureFactory(new LazyLoadingValueHolderFactory(), $app[Injector::class])
         );
+        $apiControllerProvider = new ApiControllerProvider(
+            $app[Injector::class],
+            $app,
+            new BindingClosureFactory(new LazyLoadingValueHolderFactory(), $app[Injector::class])
+        );
         $overseerControllerProvider->register($app);
         $app->mount('/admin', $overseerControllerProvider);
+        $app->mount('/api', $apiControllerProvider);
     }
 
 }
